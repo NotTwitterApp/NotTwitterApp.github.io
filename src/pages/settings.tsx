@@ -475,22 +475,23 @@ function SettingsLinkRow({
   meta?: string;
 }): JSX.Element {
   return (
-    <Link href={href}>
-      <a className='hover-card block outline-none focus-visible:ring-2 focus-visible:ring-main-accent'>
-        <SettingsRow
-          title={title}
-          description={description}
-          childrenClassName='flex justify-end'
-        >
-          <span className='flex min-w-0 items-center justify-end gap-3 text-[15px] font-bold text-light-secondary dark:text-dark-secondary'>
-            {meta && <span className='truncate'>{meta}</span>}
-            <CustomIcon
-              className='h-4 w-4 shrink-0'
-              iconName='TwitterChevronRightIcon'
-            />
-          </span>
-        </SettingsRow>
-      </a>
+    <Link
+      href={href}
+      className='hover-card block outline-none focus-visible:ring-2 focus-visible:ring-main-accent'
+    >
+      <SettingsRow
+        title={title}
+        description={description}
+        childrenClassName='flex justify-end'
+      >
+        <span className='flex min-w-0 items-center justify-end gap-3 text-[15px] font-bold text-light-secondary dark:text-dark-secondary'>
+          {meta && <span className='truncate'>{meta}</span>}
+          <CustomIcon
+            className='h-4 w-4 shrink-0'
+            iconName='TwitterChevronRightIcon'
+          />
+        </span>
+      </SettingsRow>
     </Link>
   );
 }
@@ -1266,16 +1267,16 @@ export default function Settings(): JSX.Element {
           title='Privacy policy'
           description='Read how Not Twitter uses browser storage and Bluesky data.'
         >
-          <Link href='/privacy'>
-            <a className={secondaryButtonClassName}>View policy</a>
+          <Link href='/privacy' className={secondaryButtonClassName}>
+            View policy
           </Link>
         </SettingsRow>
         <SettingsRow
           title='Help Center'
           description='Read frontend-specific help for messages, notices, errors, and Bluesky support links.'
         >
-          <Link href='/help-center'>
-            <a className={secondaryButtonClassName}>Open help</a>
+          <Link href='/help-center' className={secondaryButtonClassName}>
+            Open help
           </Link>
         </SettingsRow>
         <SettingsRow

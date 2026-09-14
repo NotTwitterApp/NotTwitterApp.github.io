@@ -62,22 +62,22 @@ export function UserFollowStats({
                  dark:[&>a>div]:text-dark-primary'
     >
       {allStats.map(([title, link, move, stats], index) => (
-        <Link href={link} key={title}>
-          <a
-            className='hover-animation mt-0.5 mb-[3px] flex h-4 items-center gap-1 border-b 
-                       border-b-transparent outline-none hover:border-b-light-primary 
-                       focus-visible:border-b-light-primary dark:hover:border-b-dark-primary
-                       dark:focus-visible:border-b-dark-primary'
-            title={`${exactNumber.format(stats)} ${title}`}
-          >
-            <NumberStats
-              move={move}
-              stats={stats}
-              alwaysShowStats
-              label={formatNumber(stats)}
-            />
-            <p>{index === 1 && stats > 1 ? `${title}s` : title}</p>
-          </a>
+        <Link
+          href={link}
+          key={title}
+          className='hover-animation mt-0.5 mb-[3px] flex h-4 items-center gap-1 border-b 
+                     border-b-transparent outline-none hover:border-b-light-primary 
+                     focus-visible:border-b-light-primary dark:hover:border-b-dark-primary
+                     dark:focus-visible:border-b-dark-primary'
+          title={`${exactNumber.format(stats)} ${title}`}
+        >
+          <NumberStats
+            move={move}
+            stats={stats}
+            alwaysShowStats
+            label={formatNumber(stats)}
+          />
+          <p>{index === 1 && stats > 1 ? `${title}s` : title}</p>
         </Link>
       ))}
     </div>

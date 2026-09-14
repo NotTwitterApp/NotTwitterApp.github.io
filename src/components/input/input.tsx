@@ -845,8 +845,11 @@ export function Input({
             {snapshot.threadItems.length
               ? 'Your Thread was sent'
               : 'Your Tweet was sent'}
-            <Link href={getTweetPath(rootTweet.id, username)}>
-              <a className='custom-underline font-bold'>View</a>
+            <Link
+              href={getTweetPath(rootTweet.id, username)}
+              className='custom-underline font-bold'
+            >
+              View
             </Link>
           </span>
         ),
@@ -1289,10 +1292,11 @@ export function Input({
           {...fromTop}
         >
           Replying to{' '}
-          <Link href={getUserPath(parent?.username as string)}>
-            <a className='custom-underline text-main-accent'>
-              {parent?.username as string}
-            </a>
+          <Link
+            href={getUserPath(parent?.username as string)}
+            className='custom-underline text-main-accent'
+          >
+            {parent?.username as string}
           </Link>
         </motion.p>
       )}

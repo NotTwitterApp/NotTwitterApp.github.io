@@ -213,21 +213,21 @@ export function TweetText({
               }
             }}
             key={`${part.value}-${index}`}
+            className={entityClassName}
+            onClick={stopEntityClick}
           >
-            <a className={entityClassName} onClick={stopEntityClick}>
-              {part.value}
-            </a>
+            {part.value}
           </Link>
         ) : part.type === 'mention' ? (
           <Link
             href={getUserPath(part.username)}
             key={`${part.value}-${index}`}
+            className={entityClassName}
+            onClick={stopEntityClick}
           >
-            <a className={entityClassName} onClick={stopEntityClick}>
-              {formatAtprotoDisplayIdentifier(part.username, {
-                hideBskySocialSuffix
-              })}
-            </a>
+            {formatAtprotoDisplayIdentifier(part.username, {
+              hideBskySocialSuffix
+            })}
           </Link>
         ) : (
           <span key={`${part.value}-${index}`}>{part.value}</span>

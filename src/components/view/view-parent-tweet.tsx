@@ -34,8 +34,11 @@ export function ViewParentTweet({
                      text-light-secondary dark:text-dark-secondary'
         >
           This Tweet was deleted by the Tweet author.{' '}
-          <Link href='/help-center/articles/tweet-tombstones-and-notices'>
-            <a className='custom-underline text-main-accent'>Learn more</a>
+          <Link
+            href='/help-center/articles/tweet-tombstones-and-notices'
+            className='custom-underline text-main-accent'
+          >
+            Learn more
           </Link>
         </p>
       </div>

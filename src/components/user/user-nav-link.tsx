@@ -54,34 +54,34 @@ export function UserNavLink({
       );
 
   return (
-    <Link href={userPath} scroll={false}>
-      <a
+    <Link
+      href={userPath}
+      scroll={false}
+      className={cn(
+        `accent-tab hover-card group/tab relative flex h-[53px] items-center justify-center
+         text-[15px] font-bold outline-none transition-[max-width,padding] duration-150`,
+        interactiveClass,
+        minWidthClass
+      )}
+      role='tab'
+      aria-selected={active}
+      aria-label={name}
+      data-profile-tab={path || 'tweets'}
+      data-profile-tab-path={userPath}
+      draggable={false}
+      title={name}
+    >
+      <span
         className={cn(
-          `accent-tab hover-card group/tab relative flex h-[53px] items-center justify-center
-           text-[15px] font-bold outline-none transition-[max-width,padding] duration-150`,
-          interactiveClass,
-          minWidthClass
+          'text-center leading-5',
+          !stationary && 'whitespace-nowrap'
         )}
-        role='tab'
-        aria-selected={active}
-        aria-label={name}
-        data-profile-tab={path || 'tweets'}
-        data-profile-tab-path={userPath}
-        draggable={false}
-        title={name}
       >
-        <span
-          className={cn(
-            'text-center leading-5',
-            !stationary && 'whitespace-nowrap'
-          )}
-        >
-          {name}
-        </span>
-        {active && (
-          <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
-        )}
-      </a>
+        {name}
+      </span>
+      {active && (
+        <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
+      )}
     </Link>
   );
 }

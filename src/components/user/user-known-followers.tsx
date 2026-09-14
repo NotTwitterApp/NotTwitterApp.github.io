@@ -84,44 +84,43 @@ export function UserKnownFollowers({
   const displayedFollowers = knownFollowers.slice(0, 3);
 
   return (
-    <Link href={getUserTabPath(username, 'followers_you_follow')}>
-      <a
-        className={cn(
-          `accent-tab flex max-w-full items-center gap-2 text-[13px] leading-4
-           text-light-secondary outline-none hover:underline focus-visible:underline
-           dark:text-dark-secondary`,
-          className
-        )}
-        aria-label='Followers you know'
-      >
-        {displayedFollowers.length > 0 && (
-          <span className='flex shrink-0 -space-x-1.5' aria-hidden>
-            {displayedFollowers.map(({ id, name, photoURL }, index) => (
-              <span
-                className='profile-picture relative flex h-5 w-5 overflow-hidden border-2
-                           border-main-background bg-main-background dark:border-main-background'
-                style={{ zIndex: displayedFollowers.length - index }}
-                key={id}
-              >
-                <NextImage
-                  useSkeleton
-                  imgClassName='profile-picture'
-                  width={20}
-                  height={20}
-                  src={photoURL}
-                  alt={name}
-                />
-              </span>
-            ))}
-          </span>
-        )}
-        <span className='min-w-0'>
-          <KnownFollowersText
-            knownFollowers={knownFollowers}
-            knownFollowersCount={knownFollowersCount}
-          />
+    <Link
+      href={getUserTabPath(username, 'followers_you_follow')}
+      className={cn(
+        `accent-tab flex max-w-full items-center gap-2 text-[13px] leading-4
+         text-light-secondary outline-none hover:underline focus-visible:underline
+         dark:text-dark-secondary`,
+        className
+      )}
+      aria-label='Followers you know'
+    >
+      {displayedFollowers.length > 0 && (
+        <span className='flex shrink-0 -space-x-1.5' aria-hidden>
+          {displayedFollowers.map(({ id, name, photoURL }, index) => (
+            <span
+              className='profile-picture relative flex h-5 w-5 overflow-hidden border-2
+                         border-main-background bg-main-background dark:border-main-background'
+              style={{ zIndex: displayedFollowers.length - index }}
+              key={id}
+            >
+              <NextImage
+                useSkeleton
+                imgClassName='profile-picture'
+                width={20}
+                height={20}
+                src={photoURL}
+                alt={name}
+              />
+            </span>
+          ))}
         </span>
-      </a>
+      )}
+      <span className='min-w-0'>
+        <KnownFollowersText
+          knownFollowers={knownFollowers}
+          knownFollowersCount={knownFollowersCount}
+        />
+      </span>
     </Link>
   );
 }

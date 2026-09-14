@@ -214,15 +214,16 @@ export default function Privacy(): JSX.Element {
           </p>
           <p>
             For frontend-specific messages and errors, use the{' '}
-            <Link href='/help-center'>
-              <a className='custom-underline text-main-accent'>Help Center</a>
+            <Link
+              href='/help-center'
+              className='custom-underline text-main-accent'
+            >
+              Help Center
             </Link>
             .
           </p>
-          <Link href='/'>
-            <a className='custom-underline text-main-accent'>
-              Return to Not Twitter
-            </a>
+          <Link href='/' className='custom-underline text-main-accent'>
+            Return to Not Twitter
           </Link>
         </PrivacySection>
       </article>

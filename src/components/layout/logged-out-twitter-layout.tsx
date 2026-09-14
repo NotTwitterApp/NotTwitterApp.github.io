@@ -125,29 +125,29 @@ function LoggedOutTopBar(): JSX.Element {
   return (
     <header className='border-b border-[#ccd6dd] bg-white'>
       <nav className='mx-auto flex h-14 w-full max-w-[1280px] items-center px-6'>
-        <Link href='/'>
-          <a className='main-tab text-[#1da1f2]' aria-label='Not Twitter'>
-            <CustomIcon className='h-[31px] w-[31px]' iconName='TwitterIcon' />
-          </a>
+        <Link
+          href='/'
+          className='main-tab text-[#1da1f2]'
+          aria-label='Not Twitter'
+        >
+          <CustomIcon className='h-[31px] w-[31px]' iconName='TwitterIcon' />
         </Link>
         <LoggedOutSearch />
         <div className='ml-auto flex items-center gap-3'>
-          <Link href='/'>
-            <a
-              className='main-tab hidden min-w-[87px] rounded-full border border-[#1da1f2] px-4 py-1.5
-                         text-center text-[15px] font-bold leading-5 text-[#1da1f2] transition
-                         hover:bg-[#1da1f2]/10 sm:block'
-            >
-              Log in
-            </a>
+          <Link
+            href='/'
+            className='main-tab hidden min-w-[87px] rounded-full border border-[#1da1f2] px-4 py-1.5
+                       text-center text-[15px] font-bold leading-5 text-[#1da1f2] transition
+                       hover:bg-[#1da1f2]/10 sm:block'
+          >
+            Log in
           </Link>
-          <Link href='/'>
-            <a
-              className='main-tab min-w-[97px] rounded-full bg-[#1da1f2] px-4 py-2 text-center
-                         text-[15px] font-bold leading-5 text-white transition hover:bg-[#1a91da]'
-            >
-              Sign up
-            </a>
+          <Link
+            href='/'
+            className='main-tab min-w-[97px] rounded-full bg-[#1da1f2] px-4 py-2 text-center
+                       text-[15px] font-bold leading-5 text-white transition hover:bg-[#1a91da]'
+          >
+            Sign up
           </Link>
           <button
             className='main-tab hidden rounded-full p-2 text-[#1da1f2] transition hover:bg-[#1da1f2]/10 sm:block'
@@ -166,36 +166,30 @@ function LoggedOutProfileSidebar(): JSX.Element {
   return (
     <header className='hidden w-20 shrink-0 justify-end md:flex lg:w-24 xl:w-[330px]'>
       <div className='sticky top-0 flex h-screen w-20 flex-col px-3 py-3 xl:w-[275px]'>
-        <Link href='/'>
-          <a
-            className='main-tab mb-4 flex h-[50px] w-[50px] items-center justify-center rounded-full
-                       text-twitter-icon transition hover:bg-dark-primary/10'
-            aria-label='Not Twitter'
-          >
-            <CustomIcon className='h-[30px] w-[30px]' iconName='TwitterIcon' />
-          </a>
+        <Link
+          href='/'
+          className='main-tab mb-4 flex h-[50px] w-[50px] items-center justify-center rounded-full
+                     text-twitter-icon transition hover:bg-dark-primary/10'
+          aria-label='Not Twitter'
+        >
+          <CustomIcon className='h-[30px] w-[30px]' iconName='TwitterIcon' />
         </Link>
         <nav className='flex flex-col gap-2'>
-          <Link href='/explore'>
-            <a
-              className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
-                         text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
-            >
-              <HeroIcon className='h-[27px] w-[27px]' iconName='HashtagIcon' />
-              <span className='hidden xl:block'>Explore</span>
-            </a>
+          <Link
+            href='/explore'
+            className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
+                       text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
+          >
+            <HeroIcon className='h-[27px] w-[27px]' iconName='HashtagIcon' />
+            <span className='hidden xl:block'>Explore</span>
           </Link>
-          <Link href='/settings'>
-            <a
-              className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
-                         text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
-            >
-              <HeroIcon
-                className='h-[27px] w-[27px]'
-                iconName='Cog6ToothIcon'
-              />
-              <span className='hidden xl:block'>Settings</span>
-            </a>
+          <Link
+            href='/settings'
+            className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
+                       text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
+          >
+            <HeroIcon className='h-[27px] w-[27px]' iconName='Cog6ToothIcon' />
+            <span className='hidden xl:block'>Settings</span>
           </Link>
         </nav>
       </div>
@@ -268,8 +262,8 @@ function LoggedOutSignupCard({
       </div>
       <p className='mt-3 text-[13px] leading-4 text-dark-secondary'>
         By signing in, you agree to the{' '}
-        <Link href='/privacy'>
-          <a className='custom-underline text-main-accent'>Privacy Policy</a>
+        <Link href='/privacy' className='custom-underline text-main-accent'>
+          Privacy Policy
         </Link>
         .
       </p>
@@ -304,34 +298,37 @@ function LoggedOutWhatsHappening(): JSX.Element {
               category,
               url
             }) => (
-              <Link href={url} key={`${kind}-${rank}-${query}`}>
-                <a className='hover-animation flex flex-col gap-0.5 px-4 py-3 hover:bg-white/[0.03]'>
-                  <p className='text-[13px] leading-4 text-dark-secondary'>
-                    {kind === 'topic'
-                      ? category
-                        ? `${category} · Trending`
-                        : 'Trending'
-                      : 'Suggested feed'}
+              <Link
+                href={url}
+                key={`${kind}-${rank}-${query}`}
+                className='hover-animation flex flex-col gap-0.5 px-4 py-3 hover:bg-white/[0.03]'
+              >
+                <p className='text-[13px] leading-4 text-dark-secondary'>
+                  {kind === 'topic'
+                    ? category
+                      ? `${category} · Trending`
+                      : 'Trending'
+                    : 'Suggested feed'}
+                </p>
+                <p className='text-[15px] font-bold leading-5'>
+                  {displayName || name}
+                </p>
+                {description && (
+                  <p
+                    className='overflow-hidden text-[13px] leading-4 text-dark-secondary [display:-webkit-box]
+                               [-webkit-box-orient:vertical] [-webkit-line-clamp:2]'
+                  >
+                    {description}
                   </p>
-                  <p className='text-[15px] font-bold leading-5'>
-                    {displayName || name}
-                  </p>
-                  {description && (
-                    <p
-                      className='overflow-hidden text-[13px] leading-4 text-dark-secondary [display:-webkit-box]
-                                 [-webkit-box-orient:vertical] [-webkit-line-clamp:2]'
-                    >
-                      {description}
-                    </p>
-                  )}
-                </a>
+                )}
               </Link>
             )
           )}
-          <Link href='/explore'>
-            <a className='hover-animation block px-4 py-4 text-[15px] leading-5 text-main-accent hover:bg-white/[0.03]'>
-              Show more
-            </a>
+          <Link
+            href='/explore'
+            className='hover-animation block px-4 py-4 text-[15px] leading-5 text-main-accent hover:bg-white/[0.03]'
+          >
+            Show more
           </Link>
         </>
       ) : (
@@ -347,11 +344,11 @@ function LoggedOutPublicFooter(): JSX.Element {
   return (
     <footer className='px-4 text-[13px] leading-4 text-dark-secondary'>
       <nav className='flex flex-wrap gap-x-3 gap-y-1'>
-        <Link href='/privacy'>
-          <a className='custom-underline'>Privacy Policy</a>
+        <Link href='/privacy' className='custom-underline'>
+          Privacy Policy
         </Link>
-        <Link href='/help-center'>
-          <a className='custom-underline'>Help Center</a>
+        <Link href='/help-center' className='custom-underline'>
+          Help Center
         </Link>
         <a
           className='custom-underline'

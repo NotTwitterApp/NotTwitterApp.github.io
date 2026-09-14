@@ -35,25 +35,24 @@ function SettingsNavRow({
   active?: boolean;
 }): JSX.Element {
   return (
-    <Link href={href}>
-      <a
-        className={cn(
-          `flex min-h-[78px] items-center justify-between border-r-4 border-b
-           border-r-transparent border-light-border px-6 text-[19px] font-bold
-           leading-6 transition hover:bg-light-primary/5
-           dark:border-b-dark-border dark:hover:bg-dark-primary/5`,
-          active &&
-            `border-r-main-accent bg-light-primary/[0.035]
-             dark:bg-dark-primary/[0.055]`
-        )}
-        aria-current={active ? 'page' : undefined}
-      >
-        <span className='min-w-0 truncate'>{title}</span>
-        <CustomIcon
-          className='ml-4 h-6 w-6 shrink-0 text-light-secondary dark:text-dark-secondary'
-          iconName='TwitterChevronRightIcon'
-        />
-      </a>
+    <Link
+      href={href}
+      className={cn(
+        `flex min-h-[78px] items-center justify-between border-r-4 border-b
+         border-r-transparent border-light-border px-6 text-[19px] font-bold
+         leading-6 transition hover:bg-light-primary/5
+         dark:border-b-dark-border dark:hover:bg-dark-primary/5`,
+        active &&
+          `border-r-main-accent bg-light-primary/[0.035]
+           dark:bg-dark-primary/[0.055]`
+      )}
+      aria-current={active ? 'page' : undefined}
+    >
+      <span className='min-w-0 truncate'>{title}</span>
+      <CustomIcon
+        className='ml-4 h-6 w-6 shrink-0 text-light-secondary dark:text-dark-secondary'
+        iconName='TwitterChevronRightIcon'
+      />
     </Link>
   );
 }

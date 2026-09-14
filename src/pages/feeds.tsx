@@ -150,27 +150,28 @@ function StatusPill({
 
 function FixedFeedRow({ feed }: { feed: FixedFeed }): JSX.Element {
   return (
-    <Link href={feed.href}>
-      <a className='accent-tab hover-card flex min-h-[72px] items-center gap-3 border-b border-light-border px-4 py-3 outline-none dark:border-dark-border'>
-        <FeedAvatar
-          avatar={feed.feed?.avatar}
-          name={feed.title}
-          iconName={feed.iconName}
-        />
-        <div className='min-w-0 flex-1'>
-          <div className='flex min-w-0 items-center gap-2'>
-            <p className='truncate text-[15px] font-bold'>{feed.title}</p>
-            <StatusPill>Fixed</StatusPill>
-          </div>
-          <p className='mt-0.5 truncate text-sm text-light-secondary dark:text-dark-secondary'>
-            {feed.description}
-          </p>
+    <Link
+      href={feed.href}
+      className='accent-tab hover-card flex min-h-[72px] items-center gap-3 border-b border-light-border px-4 py-3 outline-none dark:border-dark-border'
+    >
+      <FeedAvatar
+        avatar={feed.feed?.avatar}
+        name={feed.title}
+        iconName={feed.iconName}
+      />
+      <div className='min-w-0 flex-1'>
+        <div className='flex min-w-0 items-center gap-2'>
+          <p className='truncate text-[15px] font-bold'>{feed.title}</p>
+          <StatusPill>Fixed</StatusPill>
         </div>
-        <HeroIcon
-          className='h-5 w-5 shrink-0 text-light-secondary dark:text-dark-secondary'
-          iconName='ChevronRightIcon'
-        />
-      </a>
+        <p className='mt-0.5 truncate text-sm text-light-secondary dark:text-dark-secondary'>
+          {feed.description}
+        </p>
+      </div>
+      <HeroIcon
+        className='h-5 w-5 shrink-0 text-light-secondary dark:text-dark-secondary'
+        iconName='ChevronRightIcon'
+      />
     </Link>
   );
 }
@@ -221,10 +222,11 @@ function SavedFeedRow({
     >
       <FeedAvatar avatar={feed.avatar} name={feed.displayName} />
       <div className='min-w-0 flex-1'>
-        <Link href={feed.href}>
-          <a className='accent-tab block truncate text-[15px] font-bold outline-none hover:underline'>
-            {feed.displayName}
-          </a>
+        <Link
+          href={feed.href}
+          className='accent-tab block truncate text-[15px] font-bold outline-none hover:underline'
+        >
+          {feed.displayName}
         </Link>
         <p className='mt-0.5 truncate text-sm text-light-secondary dark:text-dark-secondary'>
           {getFeedMeta(feed, hideBskySocialSuffix)}
@@ -319,10 +321,11 @@ function SearchFeedRow({
       <FeedAvatar avatar={feed.avatar} name={feed.displayName} />
       <div className='min-w-0 flex-1'>
         <div className='flex min-w-0 items-center gap-2'>
-          <Link href={feed.href}>
-            <a className='accent-tab block truncate text-[15px] font-bold outline-none hover:underline'>
-              {feed.displayName}
-            </a>
+          <Link
+            href={feed.href}
+            className='accent-tab block truncate text-[15px] font-bold outline-none hover:underline'
+          >
+            {feed.displayName}
           </Link>
           {feed.saved && <StatusPill accent>Added</StatusPill>}
         </div>
@@ -573,14 +576,13 @@ export default function Feeds(): JSX.Element {
             <MobileSidebar />
             <h2 className='truncate text-xl font-bold'>Feeds</h2>
           </div>
-          <Link href={{ pathname: '/settings', query: { section: 'content' } }}>
-            <a
-              className='custom-button dark-bg-tab group relative p-2 hover:bg-light-primary/10 active:bg-light-primary/20 dark:hover:bg-dark-primary/10 dark:active:bg-dark-primary/20'
-              aria-label='Content preferences'
-            >
-              <HeroIcon className='h-5 w-5' iconName='Cog6ToothIcon' />
-              <ToolTip tip='Content preferences' />
-            </a>
+          <Link
+            href={{ pathname: '/settings', query: { section: 'content' } }}
+            className='custom-button dark-bg-tab group relative p-2 hover:bg-light-primary/10 active:bg-light-primary/20 dark:hover:bg-dark-primary/10 dark:active:bg-dark-primary/20'
+            aria-label='Content preferences'
+          >
+            <HeroIcon className='h-5 w-5' iconName='Cog6ToothIcon' />
+            <ToolTip tip='Content preferences' />
           </Link>
         </div>
       </header>

@@ -101,16 +101,15 @@ function ExploreSearchHeader(): JSX.Element {
     >
       <MobileSidebar />
       <SearchBar className='min-w-0 flex-1 bg-transparent p-0' sticky={false} />
-      <Link href='/interests'>
-        <a
-          className='custom-button main-tab group relative p-2 hover:bg-light-primary/10
-                     active:bg-light-primary/20 dark:hover:bg-dark-primary/10
-                     dark:active:bg-dark-primary/20'
-          aria-label='Interests'
-        >
-          <HeroIcon className='h-5 w-5' iconName='Cog8ToothIcon' />
-          <ToolTip tip='Interests' />
-        </a>
+      <Link
+        href='/interests'
+        className='custom-button main-tab group relative p-2 hover:bg-light-primary/10
+                   active:bg-light-primary/20 dark:hover:bg-dark-primary/10
+                   dark:active:bg-dark-primary/20'
+        aria-label='Interests'
+      >
+        <HeroIcon className='h-5 w-5' iconName='Cog8ToothIcon' />
+        <ToolTip tip='Interests' />
       </Link>
     </header>
   );
@@ -138,21 +137,18 @@ function SearchTabs({
             }}
             shallow
             key={value}
+            className={cn(
+              `accent-tab hover-card relative flex h-[53px] flex-1 items-center justify-center
+               text-[15px] font-bold outline-none`,
+              active
+                ? 'text-light-primary dark:text-dark-primary'
+                : 'text-light-secondary dark:text-dark-secondary'
+            )}
           >
-            <a
-              className={cn(
-                `accent-tab hover-card relative flex h-[53px] flex-1 items-center justify-center
-                 text-[15px] font-bold outline-none`,
-                active
-                  ? 'text-light-primary dark:text-dark-primary'
-                  : 'text-light-secondary dark:text-dark-secondary'
-              )}
-            >
-              <span>{label}</span>
-              {active && (
-                <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
-              )}
-            </a>
+            <span>{label}</span>
+            {active && (
+              <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
+            )}
           </Link>
         );
       })}
@@ -192,27 +188,26 @@ function DiscoverTabs(): JSX.Element {
       className='flex h-[53px] border-b border-light-border dark:border-dark-border'
       aria-label='Explore feeds'
     >
-      <Link href='/explore' shallow>
-        <a
-          className='accent-tab hover-card relative flex flex-1 items-center justify-center
-                     text-[15px] font-bold text-light-primary outline-none dark:text-dark-primary'
-          aria-current='page'
-        >
-          Discover
-          <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
-        </a>
+      <Link
+        href='/explore'
+        shallow
+        className='accent-tab hover-card relative flex flex-1 items-center justify-center
+                   text-[15px] font-bold text-light-primary outline-none dark:text-dark-primary'
+        aria-current='page'
+      >
+        Discover
+        <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
       </Link>
-      <Link href='/feeds'>
-        <a
-          className='accent-tab hover-card flex flex-1 items-center justify-center gap-1.5
-                     text-[15px] font-bold text-light-secondary outline-none dark:text-dark-secondary'
-        >
-          <span>Feeds</span>
-          <HeroIcon
-            className='h-4 w-4 text-main-accent'
-            iconName='SparklesIcon'
-          />
-        </a>
+      <Link
+        href='/feeds'
+        className='accent-tab hover-card flex flex-1 items-center justify-center gap-1.5
+                   text-[15px] font-bold text-light-secondary outline-none dark:text-dark-secondary'
+      >
+        <span>Feeds</span>
+        <HeroIcon
+          className='h-4 w-4 text-main-accent'
+          iconName='SparklesIcon'
+        />
       </Link>
     </nav>
   );
@@ -372,10 +367,9 @@ function SearchResults({
               query: getTabQuery(searchQuery, 'user', query)
             }}
             shallow
+            className='accent-tab hover-card block px-4 py-3 text-main-accent'
           >
-            <a className='accent-tab hover-card block px-4 py-3 text-main-accent'>
-              View all
-            </a>
+            View all
           </Link>
         </motion.div>
       )}

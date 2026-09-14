@@ -58,10 +58,8 @@ function TombstoneLink({
 
   if (isInternal)
     return (
-      <Link href={href}>
-        <a className={className} onClick={stopTweetNavigation}>
-          {children}
-        </a>
+      <Link href={href} className={className} onClick={stopTweetNavigation}>
+        {children}
       </Link>
     );
 

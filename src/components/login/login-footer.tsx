@@ -27,8 +27,8 @@ export function LoginFooter(): JSX.Element {
             {label}
           </a>
         ) : (
-          <Link href={href} key={href}>
-            <a className='custom-underline'>{label}</a>
+          <Link href={href} key={href} className='custom-underline'>
+            {label}
           </Link>
         )
       )}

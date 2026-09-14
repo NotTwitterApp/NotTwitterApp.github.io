@@ -292,18 +292,18 @@ export function MobileSidebarModal({
               </div>
               <div className='text-secondary flex gap-5'>
                 {allStats.map(([id, label, stat]) => (
-                  <Link href={`${userLink}/${id}`} key={id}>
-                    <a
-                      className='hover-animation flex h-4 items-center gap-1 border-b border-b-transparent 
-                                 outline-none hover:border-b-light-primary focus-visible:border-b-light-primary
-                                 dark:hover:border-b-dark-primary dark:focus-visible:border-b-dark-primary'
-                      title={`${exactNumber.format(stat)} ${label}`}
-                    >
-                      <p className='font-bold'>{formatNumber(stat)}</p>
-                      <p className='text-light-secondary dark:text-dark-secondary'>
-                        {label}
-                      </p>
-                    </a>
+                  <Link
+                    href={`${userLink}/${id}`}
+                    key={id}
+                    className='hover-animation flex h-4 items-center gap-1 border-b border-b-transparent 
+                               outline-none hover:border-b-light-primary focus-visible:border-b-light-primary
+                               dark:hover:border-b-dark-primary dark:focus-visible:border-b-dark-primary'
+                    title={`${exactNumber.format(stat)} ${label}`}
+                  >
+                    <p className='font-bold'>{formatNumber(stat)}</p>
+                    <p className='text-light-secondary dark:text-dark-secondary'>
+                      {label}
+                    </p>
                   </Link>
                 ))}
               </div>

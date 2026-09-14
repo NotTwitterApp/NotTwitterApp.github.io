@@ -24,24 +24,24 @@ function cleanQuery(query: ParsedUrlQueryInput): ParsedUrlQueryInput {
 
 function FilterLink({ label, active, query }: FilterOption): JSX.Element {
   return (
-    <Link href={{ pathname: '/explore', query: cleanQuery(query) }} shallow>
-      <a
-        className={cn(
-          'accent-tab flex items-center justify-between rounded-md py-1 text-[15px]',
-          active
-            ? 'font-bold text-light-primary dark:text-dark-primary'
-            : 'text-light-secondary dark:text-dark-secondary'
-        )}
-      >
-        <span>{label}</span>
-        {active && (
-          <HeroIcon
-            solid
-            className='h-5 w-5 text-main-accent'
-            iconName='CheckIcon'
-          />
-        )}
-      </a>
+    <Link
+      href={{ pathname: '/explore', query: cleanQuery(query) }}
+      shallow
+      className={cn(
+        'accent-tab flex items-center justify-between rounded-md py-1 text-[15px]',
+        active
+          ? 'font-bold text-light-primary dark:text-dark-primary'
+          : 'text-light-secondary dark:text-dark-secondary'
+      )}
+    >
+      <span>{label}</span>
+      {active && (
+        <HeroIcon
+          solid
+          className='h-5 w-5 text-main-accent'
+          iconName='CheckIcon'
+        />
+      )}
     </Link>
   );
 }

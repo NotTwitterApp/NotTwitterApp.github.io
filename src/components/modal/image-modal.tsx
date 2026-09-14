@@ -508,10 +508,11 @@ function ConversationTweet({
         {parent && (
           <p className={cn('mt-3', mediaModalSecondaryText)}>
             Replying to{' '}
-            <Link href={getUserPath(parent.username)}>
-              <a className='custom-underline text-main-accent'>
-                {parentDisplayUsername}
-              </a>
+            <Link
+              href={getUserPath(parent.username)}
+              className='custom-underline text-main-accent'
+            >
+              {parentDisplayUsername}
             </Link>
           </p>
         )}
@@ -521,15 +522,14 @@ function ConversationTweet({
             text={text}
           />
         )}
-        <Link href={tweetLink}>
-          <a
-            className={cn(
-              'custom-underline mt-4 block text-[15px] leading-5',
-              mediaModalSecondaryText
-            )}
-          >
-            {formatDate(createdAt, 'full')} · Twitter Web App
-          </a>
+        <Link
+          href={tweetLink}
+          className={cn(
+            'custom-underline mt-4 block text-[15px] leading-5',
+            mediaModalSecondaryText
+          )}
+        >
+          {formatDate(createdAt, 'full')}· Twitter Web App
         </Link>
         <MediaTweetStatsRow tweet={tweet} />
         <ConversationActionBar tweet={tweet} root={root} onReply={onReply} />
@@ -574,10 +574,11 @@ function ConversationTweet({
               {!root && (
                 <>
                   <i>·</i>
-                  <Link href={tweetLink}>
-                    <a className='custom-underline whitespace-nowrap'>
-                      {formatDate(createdAt, 'tweet')}
-                    </a>
+                  <Link
+                    href={tweetLink}
+                    className='custom-underline whitespace-nowrap'
+                  >
+                    {formatDate(createdAt, 'tweet')}
                   </Link>
                 </>
               )}
@@ -586,10 +587,11 @@ function ConversationTweet({
           {parent && (
             <p className={cn('mt-1', mediaModalSecondaryText)}>
               Replying to{' '}
-              <Link href={getUserPath(parent.username)}>
-                <a className='custom-underline text-main-accent'>
-                  {parentDisplayUsername}
-                </a>
+              <Link
+                href={getUserPath(parent.username)}
+                className='custom-underline text-main-accent'
+              >
+                {parentDisplayUsername}
               </Link>
             </p>
           )}
@@ -611,15 +613,14 @@ function ConversationTweet({
             />
           )}
           {root && (
-            <Link href={tweetLink}>
-              <a
-                className={cn(
-                  'custom-underline mt-3 block text-[15px]',
-                  mediaModalSecondaryText
-                )}
-              >
-                {formatDate(createdAt, 'full')}
-              </a>
+            <Link
+              href={tweetLink}
+              className={cn(
+                'custom-underline mt-3 block text-[15px]',
+                mediaModalSecondaryText
+              )}
+            >
+              {formatDate(createdAt, 'full')}
             </Link>
           )}
           <ConversationActionBar tweet={tweet} root={root} onReply={onReply} />

@@ -356,21 +356,22 @@ function NotificationsTabs({
         const active = activeTab === value;
 
         return (
-          <Link href={getNotificationsPath(value)} scroll={false} key={value}>
-            <a
-              className={cn(
-                `accent-tab hover-card relative flex flex-1 items-center justify-center
-                 text-[15px] font-bold outline-none`,
-                active
-                  ? 'text-light-primary dark:text-dark-primary'
-                  : 'text-light-secondary dark:text-dark-secondary'
-              )}
-            >
-              <span>{label}</span>
-              {active && (
-                <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
-              )}
-            </a>
+          <Link
+            href={getNotificationsPath(value)}
+            scroll={false}
+            key={value}
+            className={cn(
+              `accent-tab hover-card relative flex flex-1 items-center justify-center
+               text-[15px] font-bold outline-none`,
+              active
+                ? 'text-light-primary dark:text-dark-primary'
+                : 'text-light-secondary dark:text-dark-secondary'
+            )}
+          >
+            <span>{label}</span>
+            {active && (
+              <i className='absolute bottom-0 h-1 w-14 rounded-full bg-main-accent' />
+            )}
           </Link>
         );
       })}
@@ -559,17 +560,16 @@ function ActivityNotificationRow({
         </div>
         <GroupedNotificationText group={group} />
         {group.reason !== 'subscribed-post' && text && (
-          <Link href={targetHref}>
-            <a
-              className='mt-3 block rounded-sm text-light-secondary outline-none
-                         focus-visible:ring-2 focus-visible:ring-main-accent/80 dark:text-dark-secondary'
-            >
-              <TweetText
-                className='text-[15px] leading-5'
-                text={text}
-                disableLinks
-              />
-            </a>
+          <Link
+            href={targetHref}
+            className='mt-3 block rounded-sm text-light-secondary outline-none
+                       focus-visible:ring-2 focus-visible:ring-main-accent/80 dark:text-dark-secondary'
+          >
+            <TweetText
+              className='text-[15px] leading-5'
+              text={text}
+              disableLinks
+            />
           </Link>
         )}
       </div>
@@ -594,13 +594,12 @@ function MentionContext({
       <p className='text-[15px] leading-5 text-light-secondary dark:text-dark-secondary'>
         Replying to{' '}
         {viewerUsername ? (
-          <Link href={getUserPath(viewerUsername)}>
-            <a
-              className='rounded-sm text-main-accent outline-none
-                         focus-visible:ring-2 focus-visible:ring-main-accent/80'
-            >
-              {displayViewerUsername}
-            </a>
+          <Link
+            href={getUserPath(viewerUsername)}
+            className='rounded-sm text-main-accent outline-none
+                       focus-visible:ring-2 focus-visible:ring-main-accent/80'
+          >
+            {displayViewerUsername}
           </Link>
         ) : (
           'you'
@@ -1167,18 +1166,17 @@ export default function Notifications(): JSX.Element {
         <div className='flex h-[53px] items-center justify-between px-4'>
           <div className='flex min-w-0 items-center gap-4'>
             {activeTab === 'tweets' ? (
-              <Link href={getNotificationsPath()}>
-                <a
-                  className='rounded-full p-2 transition hover:bg-light-primary/10
-                             focus-visible:bg-light-primary/10 dark:hover:bg-dark-primary/10
-                             dark:focus-visible:bg-dark-primary/10'
-                  aria-label='Back to notifications'
-                >
-                  <CustomIcon
-                    className='h-5 w-5'
-                    iconName='TwitterArrowLeftIcon'
-                  />
-                </a>
+              <Link
+                href={getNotificationsPath()}
+                className='rounded-full p-2 transition hover:bg-light-primary/10
+                           focus-visible:bg-light-primary/10 dark:hover:bg-dark-primary/10
+                           dark:focus-visible:bg-dark-primary/10'
+                aria-label='Back to notifications'
+              >
+                <CustomIcon
+                  className='h-5 w-5'
+                  iconName='TwitterArrowLeftIcon'
+                />
               </Link>
             ) : (
               <MobileSidebar />

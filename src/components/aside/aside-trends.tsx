@@ -53,33 +53,34 @@ export function AsideTrends({ inTrendsPage }: AsideTrendsProps): JSX.Element {
               category,
               url
             }) => (
-              <Link href={url} key={`${kind}-${rank}-${query}`}>
-                <a className='hover-animation accent-tab hover-card relative flex flex-col gap-0.5'>
+              <Link
+                href={url}
+                key={`${kind}-${rank}-${query}`}
+                className='hover-animation accent-tab hover-card relative flex flex-col gap-0.5'
+              >
+                <p className='text-sm text-light-secondary dark:text-dark-secondary'>
+                  {kind === 'topic'
+                    ? category
+                      ? `${category} · Trending`
+                      : 'Trending'
+                    : 'Suggested feed'}
+                </p>
+                <p className='font-bold'>{displayName || name}</p>
+                {(description || kind === 'suggested') && (
                   <p className='text-sm text-light-secondary dark:text-dark-secondary'>
-                    {kind === 'topic'
-                      ? category
-                        ? `${category} · Trending`
-                        : 'Trending'
-                      : 'Suggested feed'}
+                    {description ?? 'Suggested feed'}
                   </p>
-                  <p className='font-bold'>{displayName || name}</p>
-                  {(description || kind === 'suggested') && (
-                    <p className='text-sm text-light-secondary dark:text-dark-secondary'>
-                      {description ?? 'Suggested feed'}
-                    </p>
-                  )}
-                </a>
+                )}
               </Link>
             )
           )}
           {!inTrendsPage && (
-            <Link href='/explore'>
-              <a
-                className='custom-button accent-tab hover-card block w-full rounded-2xl
-                           rounded-t-none text-center text-main-accent'
-              >
-                Show more
-              </a>
+            <Link
+              href='/explore'
+              className='custom-button accent-tab hover-card block w-full rounded-2xl
+                         rounded-t-none text-center text-main-accent'
+            >
+              Show more
             </Link>
           )}
         </motion.div>

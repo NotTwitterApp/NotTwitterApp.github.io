@@ -23,17 +23,16 @@ export function UserUsername({
   });
 
   return (
-    <Link href={getUserPath(username)}>
-      <a
-        className={cn(
-          'truncate text-light-secondary dark:text-dark-secondary',
-          className,
-          disableLink && 'pointer-events-none'
-        )}
-        tabIndex={-1}
-      >
-        {displayUsername}
-      </a>
+    <Link
+      href={getUserPath(username)}
+      className={cn(
+        'truncate text-light-secondary dark:text-dark-secondary',
+        className,
+        disableLink && 'pointer-events-none'
+      )}
+      tabIndex={-1}
+    >
+      {displayUsername}
     </Link>
   );
 }

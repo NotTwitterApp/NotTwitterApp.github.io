@@ -71,14 +71,13 @@ export function Sidebar(): JSX.Element {
           )}
         >
           <h1 className={cn(isMobile ? 'hidden' : 'flex')}>
-            <Link href='/home'>
-              <a
-                className='custom-button main-tab text-accent-blue transition hover:bg-light-primary/10 
-                           focus-visible:bg-accent-blue/10 focus-visible:!ring-accent-blue/80
-                           dark:text-twitter-icon dark:hover:bg-dark-primary/10'
-              >
-                <CustomIcon className='h-7 w-7' iconName='TwitterIcon' />
-              </a>
+            <Link
+              href='/home'
+              className='custom-button main-tab text-accent-blue transition hover:bg-light-primary/10 
+                         focus-visible:bg-accent-blue/10 focus-visible:!ring-accent-blue/80
+                         dark:text-twitter-icon dark:hover:bg-dark-primary/10'
+            >
+              <CustomIcon className='h-7 w-7' iconName='TwitterIcon' />
             </Link>
           </h1>
           <nav

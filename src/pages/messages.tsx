@@ -435,18 +435,17 @@ function MessageAvatar({
   if (!username) return avatar;
 
   return (
-    <Link href={getUserPath(username)}>
-      <a
-        className={cn(
-          'blur-picture profile-picture flex shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-main-accent/80',
-          className
-        )}
-        aria-label={`Go to ${alt}'s profile`}
-        onClick={(event): void => event.stopPropagation()}
-        title='Go to profile'
-      >
-        {avatar}
-      </a>
+    <Link
+      href={getUserPath(username)}
+      className={cn(
+        'blur-picture profile-picture flex shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-main-accent/80',
+        className
+      )}
+      aria-label={`Go to ${alt}'s profile`}
+      onClick={(event): void => event.stopPropagation()}
+      title='Go to profile'
+    >
+      {avatar}
     </Link>
   );
 }
@@ -869,8 +868,11 @@ function MessageRequestsPanel({
         <p className='max-w-[330px] text-[15px] leading-5 text-light-secondary dark:text-dark-secondary'>
           Message requests from people you don&apos;t follow live here. To reply
           to their messages, you need to accept the request.{' '}
-          <Link href='/help-center/articles/messages-and-chat-settings'>
-            <a className='font-bold underline'>Learn more</a>
+          <Link
+            href='/help-center/articles/messages-and-chat-settings'
+            className='font-bold underline'
+          >
+            Learn more
           </Link>
         </p>
         <div className='mt-11 border-t border-light-border dark:border-dark-border' />
@@ -1015,8 +1017,11 @@ function ChatSettingsPanel({
           </h2>
           <p className='mt-1 text-[15px] leading-5 text-light-secondary dark:text-dark-secondary'>
             People you follow will always be able to message you.{' '}
-            <Link href='/help-center/articles/messages-and-chat-settings'>
-              <a className='font-normal text-main-accent'>Learn more</a>
+            <Link
+              href='/help-center/articles/messages-and-chat-settings'
+              className='font-normal text-main-accent'
+            >
+              Learn more
             </Link>
           </p>
           <div className='mt-2'>
@@ -1261,39 +1266,35 @@ function ConversationInfo({
     <div className='min-h-0 flex-1 overflow-y-auto'>
       <InfoSection title='People'>
         {convo.members.map((member) => (
-          <Link href={getUserPath(member.username)} key={member.id}>
-            <a
-              className='hover-card flex min-h-[80px] w-full items-center gap-3 px-4 text-left
-                         outline-none focus-visible:ring-2 focus-visible:ring-main-accent/80'
-              aria-label={`Go to ${member.name}'s profile`}
-              title='Go to profile'
-            >
-              <MessageAvatar
-                src={member.photoURL}
-                alt={member.name}
-                size={48}
-              />
-              <div className='min-w-0 flex-1'>
-                <div className='flex min-w-0 items-center gap-1'>
-                  <p className='truncate font-bold'>{member.name}</p>
-                  {member.verified && (
-                    <CustomIcon
-                      className='h-4 w-4 shrink-0'
-                      iconName='TwitterVerifiedIcon'
-                    />
-                  )}
-                </div>
-                <p className='truncate text-[15px] text-light-secondary dark:text-dark-secondary'>
-                  {formatAtprotoDisplayIdentifier(member.username, {
-                    hideBskySocialSuffix
-                  })}
-                </p>
+          <Link
+            href={getUserPath(member.username)}
+            key={member.id}
+            className='hover-card flex min-h-[80px] w-full items-center gap-3 px-4 text-left
+                       outline-none focus-visible:ring-2 focus-visible:ring-main-accent/80'
+            aria-label={`Go to ${member.name}'s profile`}
+            title='Go to profile'
+          >
+            <MessageAvatar src={member.photoURL} alt={member.name} size={48} />
+            <div className='min-w-0 flex-1'>
+              <div className='flex min-w-0 items-center gap-1'>
+                <p className='truncate font-bold'>{member.name}</p>
+                {member.verified && (
+                  <CustomIcon
+                    className='h-4 w-4 shrink-0'
+                    iconName='TwitterVerifiedIcon'
+                  />
+                )}
               </div>
-              <CustomIcon
-                className='h-5 w-5 shrink-0 text-light-secondary dark:text-dark-secondary'
-                iconName='TwitterChevronRightIcon'
-              />
-            </a>
+              <p className='truncate text-[15px] text-light-secondary dark:text-dark-secondary'>
+                {formatAtprotoDisplayIdentifier(member.username, {
+                  hideBskySocialSuffix
+                })}
+              </p>
+            </div>
+            <CustomIcon
+              className='h-5 w-5 shrink-0 text-light-secondary dark:text-dark-secondary'
+              iconName='TwitterChevronRightIcon'
+            />
           </Link>
         ))}
       </InfoSection>
@@ -2906,8 +2907,11 @@ export default function Messages(): JSX.Element {
                         Message requests from people you don&apos;t follow live
                         here. To reply to their messages, you need to accept the
                         request.{' '}
-                        <Link href='/help-center/articles/messages-and-chat-settings'>
-                          <a className='font-bold underline'>Learn more</a>
+                        <Link
+                          href='/help-center/articles/messages-and-chat-settings'
+                          className='font-bold underline'
+                        >
+                          Learn more
                         </Link>
                       </>
                     ) : (

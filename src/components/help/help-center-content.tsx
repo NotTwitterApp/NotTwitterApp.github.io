@@ -442,10 +442,11 @@ function InternalLink({
   className
 }: HelpLinkProps): JSX.Element {
   return (
-    <Link href={href}>
-      <a className={cn('custom-underline text-[#1da1f2]', className)}>
-        {children}
-      </a>
+    <Link
+      href={href}
+      className={cn('custom-underline text-[#1da1f2]', className)}
+    >
+      {children}
     </Link>
   );
 }
@@ -454,26 +455,29 @@ function HelpHeader(): JSX.Element {
   return (
     <header className='fixed top-0 z-[1000] w-full bg-white text-[#14171a] shadow-[0_1px_0_rgba(0,0,0,0.08)] dark:bg-main-background dark:text-main-primary dark:shadow-[0_1px_0_rgba(255,255,255,0.14)]'>
       <div className='mx-auto flex h-24 w-full max-w-[1441px] items-center px-5 md:px-8 lg:px-12'>
-        <Link href='/help-center'>
-          <a className='main-tab flex min-w-0 items-center gap-2 rounded-sm'>
-            <CustomIcon
-              className='h-7 w-7 shrink-0 text-[#1d9bf0]'
-              iconName='TwitterIcon'
-            />
-            <span className='truncate text-2xl font-bold leading-8 tracking-[0.12px]'>
-              Help Center
-            </span>
-          </a>
+        <Link
+          href='/help-center'
+          className='main-tab flex min-w-0 items-center gap-2 rounded-sm'
+        >
+          <CustomIcon
+            className='h-7 w-7 shrink-0 text-[#1d9bf0]'
+            iconName='TwitterIcon'
+          />
+          <span className='truncate text-2xl font-bold leading-8 tracking-[0.12px]'>
+            Help Center
+          </span>
         </Link>
         <nav
           className='ml-auto hidden h-full items-center gap-1 xl:flex'
           aria-label='Help Center navigation'
         >
           {HELP_CATEGORIES.map(({ id, title }) => (
-            <Link href={`/help-center#${id}`} key={id}>
-              <a className='main-tab flex h-full items-center px-3 text-[15px] font-bold leading-6 text-[#314351] hover:text-[#14171a] dark:text-main-secondary dark:hover:text-main-primary'>
-                {title}
-              </a>
+            <Link
+              href={`/help-center#${id}`}
+              key={id}
+              className='main-tab flex h-full items-center px-3 text-[15px] font-bold leading-6 text-[#314351] hover:text-[#14171a] dark:text-main-secondary dark:hover:text-main-primary'
+            >
+              {title}
             </Link>
           ))}
           <HelpHeaderDropdown
@@ -504,19 +508,21 @@ function HelpHeader(): JSX.Element {
           >
             Contact Us
           </a>
-          <Link href='/help-center'>
-            <a className='main-tab ml-2 flex h-11 w-11 items-center justify-center rounded-full text-[#314351] hover:bg-[#f3f7fa] hover:text-[#14171a] dark:text-main-secondary dark:hover:bg-white/10 dark:hover:text-main-primary'>
-              <span className='sr-only'>Search</span>
-              <HeroIcon className='h-6 w-6' iconName='MagnifyingGlassIcon' />
-            </a>
+          <Link
+            href='/help-center'
+            className='main-tab ml-2 flex h-11 w-11 items-center justify-center rounded-full text-[#314351] hover:bg-[#f3f7fa] hover:text-[#14171a] dark:text-main-secondary dark:hover:bg-white/10 dark:hover:text-main-primary'
+          >
+            <span className='sr-only'>Search</span>
+            <HeroIcon className='h-6 w-6' iconName='MagnifyingGlassIcon' />
           </Link>
         </nav>
         <nav className='ml-auto flex items-center gap-2 xl:hidden'>
-          <Link href='/help-center'>
-            <a className='main-tab flex h-11 w-11 items-center justify-center rounded-full text-[#314351] hover:bg-[#f3f7fa] dark:text-main-secondary dark:hover:bg-white/10'>
-              <span className='sr-only'>Search</span>
-              <HeroIcon className='h-6 w-6' iconName='MagnifyingGlassIcon' />
-            </a>
+          <Link
+            href='/help-center'
+            className='main-tab flex h-11 w-11 items-center justify-center rounded-full text-[#314351] hover:bg-[#f3f7fa] dark:text-main-secondary dark:hover:bg-white/10'
+          >
+            <span className='sr-only'>Search</span>
+            <HeroIcon className='h-6 w-6' iconName='MagnifyingGlassIcon' />
           </Link>
           <a
             className='main-tab rounded-full bg-[#14171a] px-4 py-2 text-sm font-bold text-white dark:bg-main-primary dark:text-main-background'
@@ -565,10 +571,12 @@ function HelpHeaderDropdown({
               {label}
             </a>
           ) : (
-            <Link href={href} key={href}>
-              <a className='block px-6 py-3 text-[15px] font-bold leading-6 text-[#314351] hover:bg-[#f3f7fa] hover:text-[#14171a] dark:text-main-secondary dark:hover:bg-white/10'>
-                {label}
-              </a>
+            <Link
+              href={href}
+              key={href}
+              className='block px-6 py-3 text-[15px] font-bold leading-6 text-[#314351] hover:bg-[#f3f7fa] hover:text-[#14171a] dark:text-main-secondary dark:hover:bg-white/10'
+            >
+              {label}
             </Link>
           )
         )}
@@ -659,10 +667,11 @@ function HelpFooter(): JSX.Element {
                       {label}
                     </a>
                   ) : (
-                    <Link href={href}>
-                      <a className='custom-underline text-white/80 hover:text-white'>
-                        {label}
-                      </a>
+                    <Link
+                      href={href}
+                      className='custom-underline text-white/80 hover:text-white'
+                    >
+                      {label}
                     </Link>
                   )}
                 </li>
@@ -674,8 +683,8 @@ function HelpFooter(): JSX.Element {
       <div className='mx-auto mt-8 flex max-w-[1441px] flex-wrap gap-x-5 gap-y-2 border-t border-white/20 pt-5 text-sm leading-5 text-white/80'>
         <HelpThemeSwitcher />
         <span>© 2026 Not Twitter</span>
-        <Link href='/privacy'>
-          <a className='custom-underline hover:text-white'>Privacy</a>
+        <Link href='/privacy' className='custom-underline hover:text-white'>
+          Privacy
         </Link>
         <a
           className='custom-underline hover:text-white'
@@ -1018,14 +1027,16 @@ function DoorwayCard({
             />
           </a>
         ) : (
-          <Link href={href} key={href}>
-            <a className='flex min-h-[72px] items-center justify-between gap-4 border-b border-[#d3dce3] p-6 text-[17px] font-bold leading-6 text-[#067acc] last:border-b-0 hover:text-[#024e9a] dark:border-dark-border dark:text-[#1d9bf0]'>
-              <span>{label}</span>
-              <HeroIcon
-                className='h-5 w-5 shrink-0'
-                iconName='ChevronRightIcon'
-              />
-            </a>
+          <Link
+            href={href}
+            key={href}
+            className='flex min-h-[72px] items-center justify-between gap-4 border-b border-[#d3dce3] p-6 text-[17px] font-bold leading-6 text-[#067acc] last:border-b-0 hover:text-[#024e9a] dark:border-dark-border dark:text-[#1d9bf0]'
+          >
+            <span>{label}</span>
+            <HeroIcon
+              className='h-5 w-5 shrink-0'
+              iconName='ChevronRightIcon'
+            />
           </Link>
         )
       )}
@@ -1065,35 +1076,34 @@ function ArticleCard({
   image?: boolean;
 }): JSX.Element {
   return (
-    <Link href={getHelpArticlePath(article.slug)}>
-      <a
-        className={cn(
-          'group block overflow-hidden rounded border border-[#d3dce3] bg-white transition hover:border-[#1d9bf0] dark:border-dark-border dark:bg-main-sidebar-background',
-          image
-            ? 'w-[315px] shrink-0 shadow-[0_0_8px_rgba(20,23,26,0.2)] hover:shadow-[0_0_12px_rgba(20,23,26,0.35)] sm:w-[375px]'
-            : 'p-6'
+    <Link
+      href={getHelpArticlePath(article.slug)}
+      className={cn(
+        'group block overflow-hidden rounded border border-[#d3dce3] bg-white transition hover:border-[#1d9bf0] dark:border-dark-border dark:bg-main-sidebar-background',
+        image
+          ? 'w-[315px] shrink-0 shadow-[0_0_8px_rgba(20,23,26,0.2)] hover:shadow-[0_0_12px_rgba(20,23,26,0.35)] sm:w-[375px]'
+          : 'p-6'
+      )}
+    >
+      {image && (
+        <div
+          className='h-40 bg-[#1d9bf0] bg-cover bg-center'
+          style={{ backgroundImage: `url(${HELP_CARD_IMAGE})` }}
+        />
+      )}
+      <div className={image ? 'p-6' : ''}>
+        {eyebrow && (
+          <span className='text-sm font-bold leading-5 text-[#637888] dark:text-main-secondary'>
+            {eyebrow}
+          </span>
         )}
-      >
-        {image && (
-          <div
-            className='h-40 bg-[#1d9bf0] bg-cover bg-center'
-            style={{ backgroundImage: `url(${HELP_CARD_IMAGE})` }}
-          />
-        )}
-        <div className={image ? 'p-6' : ''}>
-          {eyebrow && (
-            <span className='text-sm font-bold leading-5 text-[#637888] dark:text-main-secondary'>
-              {eyebrow}
-            </span>
-          )}
-          <h3 className='mt-1 text-xl font-bold leading-7 text-[#14171a] group-hover:text-[#067acc] dark:text-main-primary dark:group-hover:text-[#1d9bf0]'>
-            {article.title}
-          </h3>
-          <p className='mt-2 text-[15px] leading-6 text-[#637888] dark:text-main-secondary'>
-            {article.description}
-          </p>
-        </div>
-      </a>
+        <h3 className='mt-1 text-xl font-bold leading-7 text-[#14171a] group-hover:text-[#067acc] dark:text-main-primary dark:group-hover:text-[#1d9bf0]'>
+          {article.title}
+        </h3>
+        <p className='mt-2 text-[15px] leading-6 text-[#637888] dark:text-main-secondary'>
+          {article.description}
+        </p>
+      </div>
     </Link>
   );
 }
@@ -1130,19 +1140,21 @@ export function HelpArticlePage({
               className='flex flex-wrap items-center gap-2 text-sm font-bold leading-5 text-[#314351] dark:text-main-secondary'
               aria-label='Breadcrumb'
             >
-              <Link href='/help-center'>
-                <a className='custom-underline hover:text-[#14171a] dark:hover:text-main-primary'>
-                  Help Center
-                </a>
+              <Link
+                href='/help-center'
+                className='custom-underline hover:text-[#14171a] dark:hover:text-main-primary'
+              >
+                Help Center
               </Link>
               <HeroIcon
                 className='h-4 w-4 rotate-90 text-[#8196a7]'
                 iconName='ChevronDownIcon'
               />
-              <Link href={`/help-center#${category.id}`}>
-                <a className='custom-underline hover:text-[#14171a] dark:hover:text-main-primary'>
-                  {category.title}
-                </a>
+              <Link
+                href={`/help-center#${category.id}`}
+                className='custom-underline hover:text-[#14171a] dark:hover:text-main-primary'
+              >
+                {category.title}
               </Link>
               <HeroIcon
                 className='h-4 w-4 rotate-90 text-[#8196a7]'

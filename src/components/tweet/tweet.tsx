@@ -313,10 +313,9 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
                 <TweetStatus type='tweet'>
                   <Link
                     href={profileUsername ? getUserPath(profileUsername) : '#'}
+                    className='custom-underline truncate'
                   >
-                    <a className='custom-underline truncate'>
-                      {userId === profileId ? 'You' : profileName} Retweeted
-                    </a>
+                    {userId === profileId ? 'You' : profileName}Retweeted
                   </Link>
                 </TweetStatus>
               )
@@ -372,10 +371,11 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
                 )}
               >
                 Replying to{' '}
-                <Link href={getUserPath(parentUsername)}>
-                  <a className='custom-underline text-main-accent'>
-                    {parentDisplayUsername}
-                  </a>
+                <Link
+                  href={getUserPath(parentUsername)}
+                  className='custom-underline text-main-accent'
+                >
+                  {parentDisplayUsername}
                 </Link>
               </p>
             )}

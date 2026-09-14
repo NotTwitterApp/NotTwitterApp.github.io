@@ -77,8 +77,8 @@ export default function NotFound(): JSX.Element {
             </h1>
             <p className='mt-[70px] text-[20px] leading-7 text-[#14171a]'>
               Why not try a{' '}
-              <Link href='/explore'>
-                <a className='custom-underline text-[#1da1f2]'>search</a>
+              <Link href='/explore' className='custom-underline text-[#1da1f2]'>
+                search
               </Link>{' '}
               to find something else?
             </p>
