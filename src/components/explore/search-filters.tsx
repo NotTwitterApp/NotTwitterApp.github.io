@@ -30,7 +30,7 @@ function FilterLink({ label, active, query }: FilterOption): JSX.Element {
             ? 'font-bold text-light-primary dark:text-dark-primary'
             : 'text-light-secondary dark:text-dark-secondary'
         )}
-      > 
+      >
         <span>{label}</span>
         {active && (
           <HeroIcon
