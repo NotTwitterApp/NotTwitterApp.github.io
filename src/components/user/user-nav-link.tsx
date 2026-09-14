@@ -4,6 +4,8 @@ import cn from 'clsx';
 import { getUserTabPath } from '@lib/routes';
 import { getProfileRouteId, getProfileRouteView } from '@lib/static-routes';
 
+import type { JSX } from 'react';
+
 type UserNavLinkProps = {
   name: string;
   path: string;
@@ -30,10 +32,10 @@ export function UserNavLink({
   const minWidthClass = stationary
     ? 'min-w-0'
     : path === 'with_replies'
-    ? 'min-w-[152px]'
-    : path === 'starter-packs'
-    ? 'min-w-[136px]'
-    : 'min-w-[96px]';
+      ? 'min-w-[152px]'
+      : path === 'starter-packs'
+        ? 'min-w-[136px]'
+        : 'min-w-[96px]';
   const interactiveClass = stationary
     ? cn(
         'min-w-0 flex-1 px-2 transition-colors duration-150',

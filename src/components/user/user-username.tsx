@@ -4,6 +4,8 @@ import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
 import { useTheme } from '@lib/context/theme-context';
 import { getUserPath } from '@lib/routes';
 
+import type { JSX } from 'react';
+
 type UserUsernameProps = {
   username: string;
   className?: string;

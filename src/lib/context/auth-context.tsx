@@ -5,7 +5,8 @@ import {
   createContext,
   useMemo,
   useCallback,
-  useRef
+  useRef,
+  type JSX
 } from 'react';
 import {
   DEFAULT_PROFILE_COVER_URL,
@@ -136,9 +137,8 @@ export function AuthContextProvider({
 
           randomUsername = `${normalizeName as string}${randomInt}`;
 
-          const { checkUsernameAvailability } = await import(
-            '@lib/atproto/utils'
-          );
+          const { checkUsernameAvailability } =
+            await import('@lib/atproto/utils');
           const isUsernameAvailable =
             await checkUsernameAvailability(randomUsername);
 
@@ -194,8 +194,7 @@ export function AuthContextProvider({
           const newUser = (await getDoc(doc(usersCollection, uid))).data();
           if (active && generation === authGeneration) setUser(newUser as User);
         } catch (error) {
-          if (active && generation === authGeneration)
-            setError(error as Error);
+          if (active && generation === authGeneration) setError(error as Error);
         }
       } else {
         const userData = userSnapshot.data();
@@ -262,41 +261,50 @@ export function AuthContextProvider({
     };
   }, [syncAccounts]);
 
-  const signInWithBluesky = useCallback(async (identifier: string) => {
-    try {
-      setError(null);
-      const { api } = await loadAuthRuntime();
-      await api.signInWithBluesky(auth, identifier);
-      syncAccounts();
-    } catch (error) {
-      setError(error as Error);
-      throw error;
-    }
-  }, [syncAccounts]);
+  const signInWithBluesky = useCallback(
+    async (identifier: string) => {
+      try {
+        setError(null);
+        const { api } = await loadAuthRuntime();
+        await api.signInWithBluesky(auth, identifier);
+        syncAccounts();
+      } catch (error) {
+        setError(error as Error);
+        throw error;
+      }
+    },
+    [syncAccounts]
+  );
 
-  const switchBlueskyAccount = useCallback(async (id: string) => {
-    try {
-      setError(null);
-      const { api } = await loadAuthRuntime();
-      await api.switchBlueskyAccount(auth, id);
-      syncAccounts();
-    } catch (error) {
-      setError(error as Error);
-      throw error;
-    }
-  }, [syncAccounts]);
+  const switchBlueskyAccount = useCallback(
+    async (id: string) => {
+      try {
+        setError(null);
+        const { api } = await loadAuthRuntime();
+        await api.switchBlueskyAccount(auth, id);
+        syncAccounts();
+      } catch (error) {
+        setError(error as Error);
+        throw error;
+      }
+    },
+    [syncAccounts]
+  );
 
-  const removeBlueskyAccount = useCallback(async (id: string) => {
-    try {
-      setError(null);
-      const { api } = await loadAuthRuntime();
-      await api.removeBlueskyAccount(auth, id);
-      syncAccounts();
-    } catch (error) {
-      setError(error as Error);
-      throw error;
-    }
-  }, [syncAccounts]);
+  const removeBlueskyAccount = useCallback(
+    async (id: string) => {
+      try {
+        setError(null);
+        const { api } = await loadAuthRuntime();
+        await api.removeBlueskyAccount(auth, id);
+        syncAccounts();
+      } catch (error) {
+        setError(error as Error);
+        throw error;
+      }
+    },
+    [syncAccounts]
+  );
 
   const signOut = useCallback(async (): Promise<void> => {
     try {

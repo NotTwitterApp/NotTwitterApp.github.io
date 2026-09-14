@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { AnimatePresence } from 'framer-motion';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -70,7 +70,7 @@ export default function UserLikes(): JSX.Element {
   );
 }
 
-UserLikes.getLayout = (page: ReactElement): ReactNode => (
+UserLikes.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

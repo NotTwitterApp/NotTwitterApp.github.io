@@ -11,7 +11,7 @@ import { AsideTrends } from '@components/aside/aside-trends';
 import { Button } from '@components/ui/button';
 import { ToolTip } from '@components/ui/tooltip';
 import { HeroIcon } from '@components/ui/hero-icon';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function Bookmarks(): JSX.Element {
   const routeBack = useRouteBack();
@@ -33,7 +33,7 @@ export default function Bookmarks(): JSX.Element {
   );
 }
 
-Bookmarks.getLayout = (page: ReactElement): ReactNode => (
+Bookmarks.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <TrendsLayout>{page}</TrendsLayout>

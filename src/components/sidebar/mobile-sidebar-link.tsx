@@ -5,6 +5,8 @@ import { preventBubbling } from '@lib/utils';
 import { AppIcon, type AppIconName } from '@components/ui/app-icon';
 import { isNavLinkActive } from './nav-links';
 
+import type { JSX } from 'react';
+
 type MobileSidebarLinkProps = {
   href: string;
   linkName: string;
@@ -24,7 +26,7 @@ export function MobileSidebarLink({
 }: MobileSidebarLinkProps): JSX.Element {
   const { asPath } = useRouter();
   const isActive = !disabled && isNavLinkActive(asPath, href);
-  const renderedIconName = isActive ? activeIconName ?? iconName : iconName;
+  const renderedIconName = isActive ? (activeIconName ?? iconName) : iconName;
 
   return (
     <Link href={href} key={href}>

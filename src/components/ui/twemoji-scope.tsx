@@ -1,4 +1,4 @@
-import { createElement, useEffect, useRef } from 'react';
+import { createElement, useEffect, useRef, type JSX } from 'react';
 import { parseTwemojiNode } from '@lib/twemoji';
 import type { CSSProperties, ReactNode } from 'react';
 

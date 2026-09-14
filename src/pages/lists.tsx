@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import cn from 'clsx';
 import useSWR from 'swr';
 import { getUserLists } from '@lib/atproto/backend';
@@ -106,10 +106,10 @@ function ListStatus({
   const label = viewerBlocked
     ? 'Blocked'
     : viewerMuted
-    ? 'Muted'
-    : purpose === 'moderation'
-    ? 'Moderation'
-    : 'Follow List';
+      ? 'Muted'
+      : purpose === 'moderation'
+        ? 'Moderation'
+        : 'Follow List';
 
   return (
     <span
@@ -249,7 +249,7 @@ export default function Lists(): JSX.Element {
   );
 }
 
-Lists.getLayout = (page: ReactElement): ReactNode => (
+Lists.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

@@ -4,7 +4,8 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  type JSX
 } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -84,17 +85,15 @@ function isGroupConvo(convo: ChatConvo): boolean {
       ? convo.memberCount > 1
       : convo.members.length > 1;
 
-  return (
-    convo.kind === 'group' ||
-    !!convo.groupName ||
-    hasMultipleMembers
-  );
+  return convo.kind === 'group' || !!convo.groupName || hasMultipleMembers;
 }
 
 function getConvoMemberCount(convo: ChatConvo): number {
   if (typeof convo.memberCount === 'number') return convo.memberCount;
 
-  return convo.kind === 'group' ? convo.members.length + 1 : convo.members.length;
+  return convo.kind === 'group'
+    ? convo.members.length + 1
+    : convo.members.length;
 }
 
 function getConvoMembersLabel(convo: ChatConvo): string {
@@ -479,9 +478,7 @@ function ConversationAvatar({
 
   const visibleMembers = convo.members.slice(0, 2);
   const avatarSegments =
-    visibleMembers.length === 1
-      ? [visibleMembers[0], null]
-      : visibleMembers;
+    visibleMembers.length === 1 ? [visibleMembers[0], null] : visibleMembers;
   const segmentWidth = Math.ceil(size / 2);
 
   return (
@@ -1624,8 +1621,7 @@ export default function Messages(): JSX.Element {
     if (!anchor || !scrollContainer || loadingMoreMessages) return;
 
     scrollContainer.scrollTop =
-      anchor.scrollTop +
-      (scrollContainer.scrollHeight - anchor.scrollHeight);
+      anchor.scrollTop + (scrollContainer.scrollHeight - anchor.scrollHeight);
     olderMessagesScrollAnchorRef.current = null;
   }, [loadingMoreMessages, messages.length]);
 
@@ -2456,8 +2452,8 @@ export default function Messages(): JSX.Element {
                 ? 'Leaving...'
                 : 'Deleting...'
               : activeConvoGroup
-              ? 'Leave'
-              : 'Delete'
+                ? 'Leave'
+                : 'Delete'
           }
           action={handleDeleteConversationClick}
           closeModal={closeDeleteConversationModal}
@@ -2557,7 +2553,7 @@ export default function Messages(): JSX.Element {
                           key={convo.id}
                         />
                       ))}
-                        {loadingConvos && <Loading className='my-3' />}
+                      {loadingConvos && <Loading className='my-3' />}
                     </>
                   ) : (
                     <div className='mx-auto flex max-w-xs flex-col gap-2 px-8 py-16'>
@@ -2666,13 +2662,13 @@ export default function Messages(): JSX.Element {
                     />
                   ) : (
                     <>
-                        <div
-                          ref={messagesScrollRef}
-                          className='min-h-0 flex-1 overflow-y-auto overscroll-contain'
-                          onScroll={handleMessagesScroll}
-                        >
-                          <div className='flex min-h-full flex-col justify-end gap-2 px-6 py-6'>
-                            {loadingMoreMessages && <Loading className='my-2' />}
+                      <div
+                        ref={messagesScrollRef}
+                        className='min-h-0 flex-1 overflow-y-auto overscroll-contain'
+                        onScroll={handleMessagesScroll}
+                      >
+                        <div className='flex min-h-full flex-col justify-end gap-2 px-6 py-6'>
+                          {loadingMoreMessages && <Loading className='my-2' />}
                           {messages.map((message, index) => {
                             const isMine = message.senderId === user?.id;
                             const sender = activeConvo.members.find(
@@ -2817,58 +2813,58 @@ export default function Messages(): JSX.Element {
                           <div ref={messagesEndRef} />
                         </div>
                       </div>
-                        <form
-                          className='shrink-0 border-t border-light-border bg-main-background px-3 py-2.5 dark:border-dark-border
+                      <form
+                        className='shrink-0 border-t border-light-border bg-main-background px-3 py-2.5 dark:border-dark-border
                                      md:px-4 md:py-3'
-                          onSubmit={handleSubmit}
-                        >
-                          <div className='flex items-center gap-1.5 md:gap-2'>
-                            <IconButton
-                              className='p-2'
-                              disabled
-                              iconName='TwitterMediaIcon'
-                              label='Media attachments are unavailable in Bluesky messages'
-                            />
-                            <IconButton
-                              className='p-2'
-                              disabled
-                              iconName='TwitterGifIcon'
-                              label='GIF attachments are unavailable in Bluesky messages'
-                            />
-                            <div
-                              className='flex min-h-[40px] min-w-0 flex-1 items-center rounded-[20px]
+                        onSubmit={handleSubmit}
+                      >
+                        <div className='flex items-center gap-1.5 md:gap-2'>
+                          <IconButton
+                            className='p-2'
+                            disabled
+                            iconName='TwitterMediaIcon'
+                            label='Media attachments are unavailable in Bluesky messages'
+                          />
+                          <IconButton
+                            className='p-2'
+                            disabled
+                            iconName='TwitterGifIcon'
+                            label='GIF attachments are unavailable in Bluesky messages'
+                          />
+                          <div
+                            className='flex min-h-[40px] min-w-0 flex-1 items-center rounded-[20px]
                                          bg-main-sidebar-background px-3'
-                            >
-                              <TextArea
-                                className='max-h-28 min-h-[38px] min-w-0 flex-1 resize-none bg-transparent py-2 text-[15px]
+                          >
+                            <TextArea
+                              className='max-h-28 min-h-[38px] min-w-0 flex-1 resize-none bg-transparent py-2 text-[15px]
                                            leading-5 outline-none placeholder:text-light-secondary dark:placeholder:text-dark-secondary'
-                                maxRows={5}
-                                placeholder='Start a new message'
-                                value={inputValue}
-                                aria-keyshortcuts={SUBMIT_KEYSHORTCUTS}
-                                onChange={handleInputChange}
-                                onKeyDown={handleMessageInputKeyDown}
+                              maxRows={5}
+                              placeholder='Start a new message'
+                              value={inputValue}
+                              aria-keyshortcuts={SUBMIT_KEYSHORTCUTS}
+                              onChange={handleInputChange}
+                              onKeyDown={handleMessageInputKeyDown}
+                            />
+                            <span
+                              ref={emojiPickerAnchorRef}
+                              className='relative -mr-2 flex shrink-0'
+                            >
+                              <IconButton
+                                className='p-2'
+                                iconName='TwitterEmojiIcon'
+                                label='Emoji'
+                                onClick={(): void =>
+                                  setEmojiPickerOpen((open) => !open)
+                                }
                               />
-                              <span
-                                ref={emojiPickerAnchorRef}
-                                className='relative -mr-2 flex shrink-0'
-                              >
-                                <IconButton
-                                  className='p-2'
-                                  iconName='TwitterEmojiIcon'
-                                  label='Emoji'
-                                  onClick={(): void =>
-                                    setEmojiPickerOpen((open) => !open)
-                                  }
-                                />
-                              </span>
-                            </div>
-                            <Button
-                              className='dark-bg-tab flex h-10 w-10 shrink-0 items-center justify-center rounded-full
+                            </span>
+                          </div>
+                          <Button
+                            className='dark-bg-tab flex h-10 w-10 shrink-0 items-center justify-center rounded-full
                                          bg-transparent p-2 text-main-accent hover:bg-main-accent/10
                                          active:bg-main-accent/20 disabled:bg-transparent disabled:opacity-40'
-                              disabled={!inputValue.trim() || sending}
-                              loading={sending}
+                            disabled={!inputValue.trim() || sending}
+                            loading={sending}
                             title='Send'
                             type='submit'
                             aria-keyshortcuts={SUBMIT_KEYSHORTCUTS}
@@ -2877,21 +2873,21 @@ export default function Messages(): JSX.Element {
                               className='h-5 w-5'
                               iconName='TwitterSendIcon'
                             />
-                            </Button>
-                          </div>
-                          {emojiPickerOpen && (
-                            <TwitterComposePicker
-                              anchorElement={emojiPickerAnchorRef.current}
-                              placement='above'
-                              type='emoji'
-                              onClose={(): void => setEmojiPickerOpen(false)}
-                              onSelectEmoji={(emoji): void =>
-                                setInputValue((value) => `${value}${emoji}`)
-                              }
-                              onSelectGif={(): void => undefined}
-                            />
-                          )}
-                        </form>
+                          </Button>
+                        </div>
+                        {emojiPickerOpen && (
+                          <TwitterComposePicker
+                            anchorElement={emojiPickerAnchorRef.current}
+                            placement='above'
+                            type='emoji'
+                            onClose={(): void => setEmojiPickerOpen(false)}
+                            onSelectEmoji={(emoji): void =>
+                              setInputValue((value) => `${value}${emoji}`)
+                            }
+                            onSelectGif={(): void => undefined}
+                          />
+                        )}
+                      </form>
                     </>
                   )}
                 </>
@@ -2928,7 +2924,7 @@ export default function Messages(): JSX.Element {
   );
 }
 
-Messages.getLayout = (page: ReactElement): ReactNode => (
+Messages.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>{page}</MainLayout>
   </ProtectedLayout>

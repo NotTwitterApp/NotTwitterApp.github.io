@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type JSX } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import cn from 'clsx';
@@ -53,12 +53,7 @@ import { Loading } from '@components/ui/loading';
 import type { ChangeEvent, FormEvent, ReactElement, ReactNode } from 'react';
 
 type SettingsSection =
-  | 'account'
-  | 'security'
-  | 'privacy'
-  | 'content'
-  | 'notifications'
-  | 'display';
+  'account' | 'security' | 'privacy' | 'content' | 'notifications' | 'display';
 
 type SettingsNavItem = {
   id: SettingsSection;
@@ -1844,7 +1839,7 @@ export default function Settings(): JSX.Element {
   );
 }
 
-Settings.getLayout = (page: ReactElement): ReactNode => (
+Settings.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>{page}</MainLayout>
   </ProtectedLayout>

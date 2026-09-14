@@ -1,5 +1,7 @@
 import { HeroIcon } from './hero-icon';
 
+import type { JSX } from 'react';
+
 type ErrorProps = {
   message?: string;
 };

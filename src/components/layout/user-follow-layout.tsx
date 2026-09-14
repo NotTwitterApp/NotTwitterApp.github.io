@@ -5,6 +5,8 @@ import { UserNav } from '@components/user/user-nav';
 import { variants } from '@components/user/user-header';
 import type { LayoutProps } from './common-layout';
 
+import type { JSX } from 'react';
+
 export function UserFollowLayout({ children }: LayoutProps): JSX.Element {
   const { user: userData, loading } = useUser();
 

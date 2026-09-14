@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import cn from 'clsx';
 import { preventBubbling } from '@lib/utils';
 import { AppIcon } from '@components/ui/app-icon';

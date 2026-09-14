@@ -3,6 +3,8 @@ import { useTheme } from '@lib/context/theme-context';
 import { HeroIcon } from '@components/ui/hero-icon';
 import type { Accent } from '@lib/types/theme';
 
+import type { JSX } from 'react';
+
 type InputAccentRadioProps = {
   type: Accent;
 };

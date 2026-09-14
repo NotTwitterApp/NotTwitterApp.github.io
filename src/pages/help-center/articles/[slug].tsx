@@ -6,7 +6,7 @@ import {
 } from '@components/help/help-center-content';
 import { SEO } from '@components/common/seo';
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 import type { HelpArticle } from '@components/help/help-center-content';
 
 type HelpArticleRouteProps = {
@@ -45,6 +45,6 @@ export default function HelpArticleRoute({
   );
 }
 
-HelpArticleRoute.getLayout = (page: ReactElement): ReactNode => (
+HelpArticleRoute.getLayout = (page: ReactElement<any>): ReactNode => (
   <HelpCenterLayout>{page}</HelpCenterLayout>
 );

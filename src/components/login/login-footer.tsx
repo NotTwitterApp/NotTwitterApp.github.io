@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import type { JSX } from 'react';
+
 const footerLinks = [
   { label: 'Privacy Policy', href: '/privacy' },
   { label: 'Help Center', href: '/help-center' },

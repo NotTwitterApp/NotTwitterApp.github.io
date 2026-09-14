@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '@lib/context/auth-context';
@@ -132,9 +132,8 @@ function ActivityNotificationButton({
     setCategories(next);
 
     try {
-      const { setActivityNotificationCategoriesForUser } = await import(
-        '@lib/atproto/backend'
-      );
+      const { setActivityNotificationCategoriesForUser } =
+        await import('@lib/atproto/backend');
       const saved = await setActivityNotificationCategoriesForUser(
         targetUser.id,
         next
@@ -431,8 +430,8 @@ function BlockedProfileState({
   const description = blockedBy
     ? `You can’t follow or see ${displayUsername}’s Tweets.`
     : blockedByListName
-    ? `This account is blocked by ${blockedByListName}.`
-    : `You can’t follow or see ${displayUsername}’s Tweets.`;
+      ? `This account is blocked by ${blockedByListName}.`
+      : `You can’t follow or see ${displayUsername}’s Tweets.`;
 
   return (
     <div

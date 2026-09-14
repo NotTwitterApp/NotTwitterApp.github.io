@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
@@ -274,8 +274,8 @@ export function ImagePreview({
           ? mediaCount - 1
           : selectedIndex - 1
         : selectedIndex === mediaCount - 1
-        ? 0
-        : selectedIndex + 1;
+          ? 0
+          : selectedIndex + 1;
 
     setSelectedImage(imagesPreview[nextIndex]);
     setSelectedIndex(nextIndex);
@@ -321,17 +321,15 @@ export function ImagePreview({
           ? 'relative flex w-full gap-2 overflow-x-auto overflow-y-hidden py-2 scrollbar-hidden snap-x snap-mandatory rounded-2xl'
           : 'relative grid rounded-2xl',
         !useCarousel &&
-          (singleMedia
-            ? 'grid-cols-1 grid-rows-1'
-            : 'grid-cols-2 grid-rows-2'),
+          (singleMedia ? 'grid-cols-1 grid-rows-1' : 'grid-cols-2 grid-rows-2'),
         isTweet
           ? `dark:bg-dark-hover mt-2 w-full border border-light-border
              bg-light-line-reply dark:border-dark-border`
           : draftSingleGif
-          ? 'mt-2 w-full overflow-hidden border border-light-border dark:border-dark-border'
-          : !useCarousel
-          ? 'h-[42vw] gap-3 xs:h-[37vw] md:h-[271px]'
-          : '',
+            ? 'mt-2 w-full overflow-hidden border border-light-border dark:border-dark-border'
+            : !useCarousel
+              ? 'h-[42vw] gap-3 xs:h-[37vw] md:h-[271px]'
+              : '',
         !useCarousel && isTweet && 'overflow-hidden',
         !useCarousel && isTweet && singleMedia && 'max-h-[510px] min-h-[188px]',
         !useCarousel &&
@@ -340,7 +338,10 @@ export function ImagePreview({
           (viewTweet
             ? 'aspect-[16/9] max-h-[420px] min-h-[190px]'
             : 'aspect-[16/9] max-h-[285px] min-h-[180px]'),
-        !useCarousel && !isTweet && draftSingleGif && 'max-h-[510px] min-h-[188px] gap-0',
+        !useCarousel &&
+          !isTweet &&
+          draftSingleGif &&
+          'max-h-[510px] min-h-[188px] gap-0',
         !useCarousel && isTweet && 'gap-0.5'
       )}
       style={useCarousel ? undefined : tweetMediaStyle}
@@ -392,7 +393,8 @@ export function ImagePreview({
           const mediaAltText = getMediaAltText(media);
           const showAltTextBadge = !!mediaAltText || !!updateAltText;
           const imageRadius = isTweet
-            ? postImageBorderRadius[visiblePreviewCount][index] ?? 'rounded-2xl'
+            ? (postImageBorderRadius[visiblePreviewCount][index] ??
+              'rounded-2xl')
             : 'rounded-2xl';
           const shouldCropImage =
             Boolean(isTweet) || visiblePreviewCount > 1 || useCarousel;

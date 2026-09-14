@@ -16,6 +16,8 @@ import { UserCard } from '@components/user/user-card';
 import { Loading } from '@components/ui/loading';
 import { variants } from './aside-trends';
 
+import type { JSX } from 'react';
+
 export function Suggestions(): JSX.Element {
   const { randomSeed } = useAuth();
 

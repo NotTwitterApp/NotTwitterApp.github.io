@@ -5,6 +5,8 @@ import { Button } from '@components/ui/button';
 import { TwemojiScope } from '@components/ui/twemoji-scope';
 import { BlueskySignInModal } from './bluesky-sign-in-modal';
 
+import type { JSX } from 'react';
+
 export function LoginMain(): JSX.Element {
   const {
     open: signInOpen,

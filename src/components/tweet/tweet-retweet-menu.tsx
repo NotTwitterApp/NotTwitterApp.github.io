@@ -12,6 +12,8 @@ import { NumberStats } from './number-stats';
 import { variants } from './tweet-actions';
 import type { TweetWithUser } from '@lib/types/tweet';
 
+import type { JSX } from 'react';
+
 type TweetRetweetMenuProps = {
   tip: string;
   move?: number;

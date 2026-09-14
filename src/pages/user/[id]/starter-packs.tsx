@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import useSWR from 'swr';
 import {
   getProfileStarterPacks,
@@ -167,7 +167,7 @@ export default function UserStarterPacks(): JSX.Element {
   );
 }
 
-UserStarterPacks.getLayout = (page: ReactElement): ReactNode => (
+UserStarterPacks.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

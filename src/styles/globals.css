@@ -1,8 +1,5 @@
-@import 'fonts';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config "../../tailwind.config.js";
 
 @layer base {
   :root {
@@ -79,7 +76,7 @@
 }
 
 @utility accent-tab {
-  @apply main-tab #{'focus-visible:ring-main-accent/80!'};
+  @apply main-tab focus-visible:ring-main-accent/80!;
 }
 
 @layer components {

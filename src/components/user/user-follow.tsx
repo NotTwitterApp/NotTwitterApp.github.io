@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
 import { query, where } from '@lib/atproto/store';
@@ -31,8 +31,8 @@ export function UserFollow({ type }: UserFollowProps): JSX.Element {
     type === 'following'
       ? `People followed by ${name} (${displayUsername})`
       : type === 'followers'
-      ? `People following ${name} (${displayUsername})`
-      : `Followers you know for ${name} (${displayUsername})`;
+        ? `People following ${name} (${displayUsername})`
+        : `Followers you know for ${name} (${displayUsername})`;
 
   const { data, loading } = useCollection(
     query(
@@ -41,8 +41,8 @@ export function UserFollow({ type }: UserFollowProps): JSX.Element {
         type === 'following'
           ? 'followers'
           : type === 'followers'
-          ? 'following'
-          : 'knownFollowers',
+            ? 'following'
+            : 'knownFollowers',
         'array-contains',
         user?.id
       )

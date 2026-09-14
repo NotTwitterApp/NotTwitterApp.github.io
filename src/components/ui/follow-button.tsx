@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-hot-toast';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';

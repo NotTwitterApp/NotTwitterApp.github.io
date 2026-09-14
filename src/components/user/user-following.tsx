@@ -1,5 +1,7 @@
 import { useAuth } from '@lib/context/auth-context';
 
+import type { JSX } from 'react';
+
 type UserFollowingProps = {
   userTargetId: string;
   userTargetFollowing?: string[];

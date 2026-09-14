@@ -1,7 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { CustomIcon } from '@components/ui/custom-icon';
 import { Button } from '@components/ui/button';
-import type { ReactNode, FormEvent } from 'react';
+import type { ReactNode, FormEvent, JSX } from 'react';
 
 type UsernameModalProps = {
   loading: boolean;

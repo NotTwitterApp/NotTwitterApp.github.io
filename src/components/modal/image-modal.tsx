@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, type JSX } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';
@@ -40,7 +40,7 @@ import {
   TwitterGifMedia,
   isGifMedia
 } from '@components/input/twitter-gif-media';
-import type { VariantLabels, Variants } from 'framer-motion';
+import type { TargetAndTransition, Variants } from 'framer-motion';
 import type { ImageData } from '@lib/types/file';
 import type { TweetWithUser } from '@lib/types/tweet';
 import type { IconName } from '@components/ui/hero-icon';
@@ -453,7 +453,7 @@ function ConversationTweet({
   const hasInlineMedia = !!images?.length;
   const displayCard = hasInlineMedia
     ? null
-    : card ?? createYouTubeCardFromText(text);
+    : (card ?? createYouTubeCardFromText(text));
   const parentDisplayUsername = formatAtprotoDisplayIdentifier(
     parent?.username,
     { hideBskySocialSuffix }
@@ -1001,11 +1001,11 @@ function ConversationActionButton({
     iconName === 'TwitterRetweetIcon'
       ? 'text-accent-green'
       : iconName === 'TwitterLikeFilledIcon' || iconName === 'TwitterLikeIcon'
-      ? 'text-accent-pink'
-      : iconName === 'TwitterBookmarksIcon' ||
-        iconName === 'TwitterBookmarksFilledIcon'
-      ? 'text-main-accent'
-      : null;
+        ? 'text-accent-pink'
+        : iconName === 'TwitterBookmarksIcon' ||
+            iconName === 'TwitterBookmarksFilledIcon'
+          ? 'text-main-accent'
+          : null;
   const iconClassNameBySize = root
     ? 'h-[22.5px] w-[22.5px]'
     : 'h-[18.75px] w-[18.75px]';
@@ -1099,10 +1099,10 @@ export function ImageModal({
         previousIndex === lastIndex && selectedIndex === 0
           ? 1
           : previousIndex === 0 && selectedIndex === lastIndex
-          ? -1
-          : selectedIndex > previousIndex
-          ? 1
-          : -1;
+            ? -1
+            : selectedIndex > previousIndex
+              ? 1
+              : -1;
 
       setMediaDirection(nextDirection);
       previousSelectedIndex.current = selectedIndex;
@@ -1162,8 +1162,8 @@ export function ImageModal({
         key === 'ArrowLeft'
           ? handleNextIndex('prev')
           : key === 'ArrowRight'
-          ? handleNextIndex('next')
-          : null;
+            ? handleNextIndex('next')
+            : null;
 
       if (callback) callback();
     };
@@ -1218,7 +1218,7 @@ export function ImageModal({
           <motion.div
             className='mx-auto'
             {...mediaFade}
-            exit={tweet ? (mediaFade.exit as VariantLabels) : undefined}
+            exit={tweet ? (mediaFade.exit as TargetAndTransition) : undefined}
           >
             <Loading iconClassName='w-20 h-20' />
           </motion.div>

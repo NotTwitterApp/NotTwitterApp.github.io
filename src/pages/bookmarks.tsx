@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type JSX } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -153,7 +153,7 @@ export default function Bookmarks(): JSX.Element {
   );
 }
 
-Bookmarks.getLayout = (page: ReactElement): ReactNode => (
+Bookmarks.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

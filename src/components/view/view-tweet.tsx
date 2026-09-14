@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type JSX } from 'react';
 import { motion } from 'framer-motion';
 import cn from 'clsx';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -34,7 +34,7 @@ import type { Tweet, TweetWithUser } from '@lib/types/tweet';
 
 type ViewTweetProps = Tweet & {
   user: User;
-  viewTweetRef?: RefObject<HTMLElement>;
+  viewTweetRef?: RefObject<HTMLElement | null>;
   onReplySent?: (tweet: TweetWithUser) => void;
 };
 

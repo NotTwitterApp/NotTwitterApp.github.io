@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type JSX } from 'react';
 import Link from 'next/link';
 import cn from 'clsx';
 import useSWR from 'swr';
@@ -715,7 +715,7 @@ export default function Feeds(): JSX.Element {
   );
 }
 
-Feeds.getLayout = (page: ReactElement): ReactNode => (
+Feeds.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

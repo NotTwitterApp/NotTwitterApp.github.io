@@ -14,7 +14,7 @@ import { UserHomeLayout } from '@components/layout/user-home-layout';
 import { Tweet } from '@components/tweet/tweet';
 import { Loading } from '@components/ui/loading';
 import { StatsEmpty } from '@components/tweet/stats-empty';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function UserArticles(): JSX.Element {
   const { hideBskySocialSuffix } = useTheme();
@@ -66,7 +66,7 @@ export default function UserArticles(): JSX.Element {
   );
 }
 
-UserArticles.getLayout = (page: ReactElement): ReactNode => (
+UserArticles.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

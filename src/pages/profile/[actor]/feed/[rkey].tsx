@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { AnimatePresence } from 'framer-motion';
 import useSWR from 'swr';
@@ -159,7 +159,7 @@ export default function FeedPage(): JSX.Element {
   );
 }
 
-FeedPage.getLayout = (page: ReactElement): ReactNode => (
+FeedPage.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <TrendsLayout>{page}</TrendsLayout>

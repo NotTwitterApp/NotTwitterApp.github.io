@@ -3,7 +3,7 @@ import {
   HelpCenterLayout
 } from '@components/help/help-center-content';
 import { SEO } from '@components/common/seo';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function HelpCenter(): JSX.Element {
   return (
@@ -17,6 +17,6 @@ export default function HelpCenter(): JSX.Element {
   );
 }
 
-HelpCenter.getLayout = (page: ReactElement): ReactNode => (
+HelpCenter.getLayout = (page: ReactElement<any>): ReactNode => (
   <HelpCenterLayout>{page}</HelpCenterLayout>
 );

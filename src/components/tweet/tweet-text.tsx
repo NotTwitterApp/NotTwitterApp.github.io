@@ -9,7 +9,7 @@ import {
   normalizeMention
 } from '@lib/hashtags';
 import { TwemojiScope } from '@components/ui/twemoji-scope';
-import type { CSSProperties, MouseEvent } from 'react';
+import type { CSSProperties, MouseEvent, JSX } from 'react';
 
 type TweetTextProps = {
   text: string;

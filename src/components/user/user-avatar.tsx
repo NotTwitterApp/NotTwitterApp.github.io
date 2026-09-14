@@ -3,6 +3,8 @@ import cn from 'clsx';
 import { getUserPath } from '@lib/routes';
 import { NextImage } from '@components/ui/next-image';
 
+import type { JSX } from 'react';
+
 type UserAvatarProps = {
   src: string;
   alt: string;

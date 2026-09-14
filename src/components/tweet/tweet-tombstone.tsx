@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import cn from 'clsx';
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode, JSX } from 'react';
 import type { TweetTombstoneKind } from '@lib/types/tweet';
 
 const LEARN_MORE_URL = '/help-center/articles/tweet-tombstones-and-notices';
@@ -203,8 +203,8 @@ export function TweetTombstone({
       kind === 'reported'
         ? 'You reported this Tweet.'
         : kind === 'muted-account'
-        ? 'This Tweet is from an account you muted.'
-        : 'This Tweet includes a word you muted.';
+          ? 'This Tweet is from an account you muted.'
+          : 'This Tweet includes a word you muted.';
 
     return (
       <div

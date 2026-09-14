@@ -7,6 +7,8 @@ import { Sidebar } from '@components/sidebar/sidebar';
 import type { DefaultToastOptions } from 'react-hot-toast';
 import type { LayoutProps } from './common-layout';
 
+import type { JSX } from 'react';
+
 const toastOptions: DefaultToastOptions = {
   style: {
     color: 'white',

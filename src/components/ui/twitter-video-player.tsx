@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react';
 import cn from 'clsx';
 import { formatNumber } from '@lib/date';
 import { preventBubbling } from '@lib/utils';
@@ -299,8 +306,8 @@ export function TwitterVideoPlayer({
           Math.min(compactSettings ? 292 : 340, playerSize.height - 76)
         )
       : compactSettings
-      ? 292
-      : 340;
+        ? 292
+        : 340;
 
   const setMutedState = useCallback((nextMuted: boolean): void => {
     mutedRef.current = nextMuted;

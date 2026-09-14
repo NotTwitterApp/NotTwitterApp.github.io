@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Dialog, Menu } from '@headlessui/react';
 import { toast } from 'react-hot-toast';

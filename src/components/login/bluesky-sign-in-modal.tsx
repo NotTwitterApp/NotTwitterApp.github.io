@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { Dialog } from '@headlessui/react';
 import { useAuth } from '@lib/context/auth-context';
 import { CustomIcon } from '@components/ui/custom-icon';

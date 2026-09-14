@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import Link from 'next/link';
 import cn from 'clsx';
 import { useWindow } from '@lib/context/window-context';

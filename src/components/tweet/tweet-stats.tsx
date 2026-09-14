@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import cn from 'clsx';
 import type { CSSProperties, ReactNode } from 'react';
 

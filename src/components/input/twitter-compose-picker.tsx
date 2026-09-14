@@ -1,6 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react';
 import { createPortal } from 'react-dom';
 import cn from 'clsx';
 import { getTwemojiSvgUrl } from '@lib/twemoji';

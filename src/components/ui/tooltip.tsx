@@ -1,5 +1,7 @@
 import cn from 'clsx';
 
+import type { JSX } from 'react';
+
 type ToolTipProps = {
   tip: string;
   modal?: boolean;

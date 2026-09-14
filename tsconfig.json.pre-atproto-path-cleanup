@@ -1,0 +1,67 @@
+{
+  "compilerOptions": {
+    "types": ["node", "jest"],
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "paths": {
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
+      "@atproto/api": [
+        "./node_modules/@atproto/api/dist/index.d.ts"
+      ],
+      "@atproto/common-web": [
+        "./node_modules/@atproto/common-web/dist/index.d.ts"
+      ],
+      "@atproto/lexicon": [
+        "./node_modules/@atproto/lexicon/dist/index.d.ts"
+      ],
+      "@atproto/oauth-client": [
+        "./node_modules/@atproto/oauth-client/dist/index.d.ts"
+      ],
+      "@atproto/oauth-client-browser": [
+        "./node_modules/@atproto/oauth-client-browser/dist/index.d.ts"
+      ],
+      "@atproto/oauth-types": [
+        "./node_modules/@atproto/oauth-types/dist/index.d.ts"
+      ],
+      "@atproto/syntax": [
+        "./node_modules/@atproto/syntax/dist/index.d.ts"
+      ],
+      "@atproto/xrpc": [
+        "./node_modules/@atproto/xrpc/dist/index.d.ts"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "functions"
+  ]
+}

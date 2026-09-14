@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
@@ -672,7 +679,7 @@ export default function Home(): JSX.Element {
   );
 }
 
-Home.getLayout = (page: ReactElement): ReactNode => (
+Home.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import cn from 'clsx';
 import type { MouseEvent } from 'react';
 
@@ -12,10 +12,7 @@ const UNKNOWN_LANGUAGE_CODES = new Set(['mul', 'und', 'zxx']);
 const DEFAULT_TARGET_LANGUAGE = 'en';
 
 type NativeTranslatorAvailability =
-  | 'available'
-  | 'downloadable'
-  | 'downloading'
-  | 'unavailable';
+  'available' | 'downloadable' | 'downloading' | 'unavailable';
 
 type NativeTranslator = {
   translate(text: string): Promise<string>;
@@ -51,7 +48,9 @@ function getBrowserPrimaryLanguage(): string {
   return getBaseLanguage(language) ?? DEFAULT_TARGET_LANGUAGE;
 }
 
-function getPostLanguages(langs: readonly string[] | null | undefined): string[] {
+function getPostLanguages(
+  langs: readonly string[] | null | undefined
+): string[] {
   if (!langs?.length) return [];
 
   return Array.from(
@@ -225,7 +224,10 @@ export function TweetTranslation({
   if (translatedText)
     return (
       <div
-        className={cn('mt-2 flex min-w-0 flex-col gap-1 text-[15px]', className)}
+        className={cn(
+          'mt-2 flex min-w-0 flex-col gap-1 text-[15px]',
+          className
+        )}
         onClick={stopTweetNavigation}
       >
         <p className='whitespace-pre-line break-words leading-5 text-light-primary dark:text-dark-primary'>

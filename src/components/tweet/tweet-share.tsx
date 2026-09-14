@@ -11,6 +11,8 @@ import { CustomIcon } from '@components/ui/custom-icon';
 import { ToolTip } from '@components/ui/tooltip';
 import { variants } from './tweet-actions';
 
+import type { JSX } from 'react';
+
 type TweetShareProps = {
   tweetId: string;
   username?: string | null;

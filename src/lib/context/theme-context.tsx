@@ -6,7 +6,8 @@ import {
   createContext,
   useContext,
   useCallback,
-  useMemo
+  useMemo,
+  type JSX
 } from 'react';
 import { useAuth } from './auth-context';
 import type { ReactNode, ChangeEvent } from 'react';

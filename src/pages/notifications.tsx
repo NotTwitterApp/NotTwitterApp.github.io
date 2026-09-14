@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
 import useSWR from 'swr';
@@ -255,11 +255,7 @@ function getTargetHref(
 }
 
 function isTweetNotification(reason: NotificationReason): boolean {
-  return (
-    reason === 'mention' ||
-    reason === 'reply' ||
-    reason === 'quote'
-  );
+  return reason === 'mention' || reason === 'reply' || reason === 'quote';
 }
 
 function getFollowBucket(notification: NotificationItem): number {
@@ -442,7 +438,8 @@ function GroupedNotificationText({
         <span className='font-bold'>{firstUser.name}</span>
         {othersCount > 0 && (
           <>
-            {' '}and {othersCount} other{othersCount === 1 ? '' : 's'}
+            {' '}
+            and {othersCount} other{othersCount === 1 ? '' : 's'}
           </>
         )}
       </p>
@@ -767,18 +764,18 @@ function MentionActionButton({
     (action.kind === 'bookmark' && optimisticBookmarked);
   const stats =
     action.kind === 'reply'
-      ? tweet?.userReplies ?? 0
+      ? (tweet?.userReplies ?? 0)
       : action.kind === 'retweet'
-      ? optimisticRetweets.length + optimisticQuoteCount
-      : action.kind === 'like'
-      ? optimisticLikes.length
-      : 0;
+        ? optimisticRetweets.length + optimisticQuoteCount
+        : action.kind === 'like'
+          ? optimisticLikes.length
+          : 0;
   const iconName =
     action.kind === 'like' && liked
       ? 'TwitterLikeFilledIcon'
       : action.kind === 'bookmark' && optimisticBookmarked
-      ? 'TwitterBookmarksFilledIcon'
-      : action.iconName;
+        ? 'TwitterBookmarksFilledIcon'
+        : action.iconName;
   const actionEffect = action.kind === 'like' ? action.kind : null;
   const disabled =
     !tweet ||
@@ -836,15 +833,15 @@ function MentionActionButton({
         action.kind === 'like' && liked
           ? 'Unlike'
           : action.kind === 'bookmark' && optimisticBookmarked
-          ? 'Remove from Bookmarks'
-          : action.label
+            ? 'Remove from Bookmarks'
+            : action.label
       }
       title={
         action.kind === 'like' && liked
           ? 'Unlike'
           : action.kind === 'bookmark' && optimisticBookmarked
-          ? 'Remove from Bookmarks'
-          : action.label
+            ? 'Remove from Bookmarks'
+            : action.label
       }
       onClick={preventBubbling(handleClick)}
       disabled={disabled}
@@ -887,7 +884,7 @@ function TweetNotificationRow({
   const { user } = latestNotification;
   const targetHref = getTargetHref(latestNotification, viewerUsername);
   const quotedTweet =
-    reason === 'quote' ? group.tweet?.quotedTweet ?? null : null;
+    reason === 'quote' ? (group.tweet?.quotedTweet ?? null) : null;
   const router = useRouter();
   const {
     open: replyOpen,
@@ -1021,10 +1018,7 @@ function TweetNotificationRow({
             )}
             {quotedTweet && (
               <div className='mt-3 max-w-xl'>
-                <TweetEmbed
-                  card={null}
-                  quotedTweet={quotedTweet}
-                />
+                <TweetEmbed card={null} quotedTweet={quotedTweet} />
               </div>
             )}
             <div className='mt-3 flex max-w-md justify-between pr-8'>
@@ -1165,8 +1159,8 @@ export default function Notifications(): JSX.Element {
           activeTab === 'tweets'
             ? 'Tweet notifications / Not Twitter'
             : activeTab === 'mentions'
-            ? 'Mentions / Not Twitter'
-            : 'Notifications / Not Twitter'
+              ? 'Mentions / Not Twitter'
+              : 'Notifications / Not Twitter'
         }
       />
       <header className='hover-animation sticky top-0 z-20 bg-main-background/80 backdrop-blur-md'>
@@ -1190,9 +1184,7 @@ export default function Notifications(): JSX.Element {
               <MobileSidebar />
             )}
             <h2 className='truncate text-xl font-bold'>
-              {activeTab === 'tweets'
-                ? 'Tweet notifications'
-                : 'Notifications'}
+              {activeTab === 'tweets' ? 'Tweet notifications' : 'Notifications'}
             </h2>
           </div>
           <Button
@@ -1204,9 +1196,7 @@ export default function Notifications(): JSX.Element {
             <ToolTip tip='Settings' />
           </Button>
         </div>
-        {activeTab !== 'tweets' && (
-          <NotificationsTabs activeTab={activeTab} />
-        )}
+        {activeTab !== 'tweets' && <NotificationsTabs activeTab={activeTab} />}
       </header>
       <section className='mt-0.5 xs:mt-0'>
         {loading ? (
@@ -1244,7 +1234,7 @@ export default function Notifications(): JSX.Element {
   );
 }
 
-Notifications.getLayout = (page: ReactElement): ReactNode => (
+Notifications.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

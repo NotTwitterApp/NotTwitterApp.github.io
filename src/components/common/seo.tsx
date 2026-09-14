@@ -3,6 +3,8 @@ import Head from 'next/head';
 import { absolutePublicAsset } from '@lib/assets';
 import { siteURL } from '@lib/env';
 
+import type { JSX } from 'react';
+
 type MainLayoutProps = {
   title: string;
   image?: string;

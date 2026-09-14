@@ -6,7 +6,7 @@ import { InputThemeRadio } from '@components/input/input-theme-radio';
 import { Button } from '@components/ui/button';
 import { UserAvatar } from '@components/user/user-avatar';
 import { UserName } from '@components/user/user-name';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, JSX } from 'react';
 import type { Theme, Accent, FontSize } from '@lib/types/theme';
 
 type DisplayModalProps = {

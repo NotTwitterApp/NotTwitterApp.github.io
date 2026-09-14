@@ -7,7 +7,7 @@ import { MainContainer } from '@components/home/main-container';
 import { MobileSidebar } from '@components/sidebar/mobile-sidebar';
 import { NotTwitterBluePanel } from '@components/settings/not-twitter-blue-panel';
 import { CustomIcon } from '@components/ui/custom-icon';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 const settingsRows = [
   { title: 'Your account', href: '/settings?section=account' },
@@ -68,9 +68,7 @@ export default function NotTwitterBlue(): JSX.Element {
             className='sticky top-0 z-10 flex h-[53px] items-center border-b border-light-border
                        bg-main-background/90 px-6 backdrop-blur-md dark:border-dark-border'
           >
-            <h2 className='text-[23px] font-extrabold leading-7'>
-              Settings
-            </h2>
+            <h2 className='text-[23px] font-extrabold leading-7'>Settings</h2>
           </header>
           <nav>
             {settingsRows.map((row) => (
@@ -90,7 +88,7 @@ export default function NotTwitterBlue(): JSX.Element {
   );
 }
 
-NotTwitterBlue.getLayout = (page: ReactElement): ReactNode => (
+NotTwitterBlue.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>{page}</MainLayout>
   </ProtectedLayout>

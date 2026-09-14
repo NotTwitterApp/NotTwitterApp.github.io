@@ -1,7 +1,8 @@
-import '@styles/globals.scss';
+import '@styles/fonts.scss';
+import '@styles/globals.css';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { AuthContextProvider } from '@lib/context/auth-context';
 import { ThemeContextProvider } from '@lib/context/theme-context';
 import { RouteHistoryRecorder } from '@lib/hooks/useRouteBack';
@@ -23,7 +24,7 @@ const ServerConnectionModal = dynamic<{ defaultOpen?: boolean }>(
 );
 
 type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: ReactElement<any>) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {

@@ -15,6 +15,8 @@ import { MoreSettings } from './more-settings';
 import { navLinks } from './nav-links';
 import { SidebarProfile } from './sidebar-profile';
 
+import type { JSX } from 'react';
+
 const Input = dynamic<{ modal?: boolean; closeModal?: () => void }>(
   () => import('@components/input/input').then((module) => module.Input),
   { ssr: false }
@@ -92,8 +94,8 @@ export function Sidebar(): JSX.Element {
                   linkData.href === '/notifications'
                     ? notificationCount
                     : linkData.href === '/messages'
-                    ? messageCount
-                    : 0
+                      ? messageCount
+                      : 0
                 }
                 badgeDot={linkData.href === '/home' && homeBadgeCount > 0}
                 key={linkData.href}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -48,7 +48,7 @@ const searchTabs: Readonly<SearchTabData[]> = [
 const DISCOVER_REFRESH_INTERVAL_MS = 60000;
 
 function getRouteParam(value: string | string[] | undefined): string {
-  return Array.isArray(value) ? value[0] ?? '' : value ?? '';
+  return Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 }
 
 function getSearchTab(value: string | string[] | undefined): SearchTab {
@@ -183,10 +183,7 @@ function mergeDiscoverTweets(
 ): TweetWithUser[] {
   const seenIds = new Set(currentFeed.map(({ id }) => id));
 
-  return [
-    ...currentFeed,
-    ...nextFeed.filter(({ id }) => !seenIds.has(id))
-  ];
+  return [...currentFeed, ...nextFeed.filter(({ id }) => !seenIds.has(id))];
 }
 
 function DiscoverTabs(): JSX.Element {
@@ -211,7 +208,10 @@ function DiscoverTabs(): JSX.Element {
                      text-[15px] font-bold text-light-secondary outline-none dark:text-dark-secondary'
         >
           <span>Feeds</span>
-          <HeroIcon className='h-4 w-4 text-main-accent' iconName='SparklesIcon' />
+          <HeroIcon
+            className='h-4 w-4 text-main-accent'
+            iconName='SparklesIcon'
+          />
         </a>
       </Link>
     </nav>
@@ -259,13 +259,14 @@ function DiscoverFeed(): JSX.Element {
 
   if (!data && !error) return <Loading className='mt-5' />;
 
-  if (error)
-    return <Error message={error.message || 'Something went wrong'} />;
+  if (error) return <Error message={error.message || 'Something went wrong'} />;
 
   if (!feed.length)
     return (
-      <p className='border-b border-light-border px-4 py-8 text-center text-light-secondary
-                    dark:border-dark-border dark:text-dark-secondary'>
+      <p
+        className='border-b border-light-border px-4 py-8 text-center text-light-secondary
+                    dark:border-dark-border dark:text-dark-secondary'
+      >
         No posts found in Discover.
       </p>
     );
@@ -432,7 +433,7 @@ export default function Explore(): JSX.Element {
   );
 }
 
-Explore.getLayout = (page: ReactElement): ReactNode => (
+Explore.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <TrendsLayout>{page}</TrendsLayout>

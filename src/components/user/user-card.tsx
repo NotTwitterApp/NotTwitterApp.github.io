@@ -7,7 +7,7 @@ import { UserTooltip } from './user-tooltip';
 import { UserName } from './user-name';
 import { UserFollowing } from './user-following';
 import { UserUsername } from './user-username';
-import type { KeyboardEvent, MouseEvent } from 'react';
+import type { KeyboardEvent, MouseEvent, JSX } from 'react';
 import type { User } from '@lib/types/user';
 
 type UserCardProps = User & {

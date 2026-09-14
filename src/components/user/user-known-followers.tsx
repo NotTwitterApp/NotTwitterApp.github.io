@@ -8,6 +8,8 @@ import { useTheme } from '@lib/context/theme-context';
 import { NextImage } from '@components/ui/next-image';
 import type { User, UserKnownFollower } from '@lib/types/user';
 
+import type { JSX } from 'react';
+
 type UserKnownFollowersProps = Pick<
   User,
   'id' | 'username' | 'knownFollowers' | 'knownFollowersCount'

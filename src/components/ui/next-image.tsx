@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import Image from 'next/image';
 import cn from 'clsx';
 import { publicAsset } from '@lib/assets';
@@ -44,11 +44,11 @@ export function NextImage({
         className={cn(
           imgClassName,
           loading
-            ? blurClassName ??
-                'animate-pulse bg-light-secondary dark:bg-dark-secondary'
+            ? (blurClassName ??
+                'animate-pulse bg-light-secondary dark:bg-dark-secondary')
             : previewCount === 1
-            ? '!h-auto !min-h-0 !w-auto !min-w-0 rounded-lg object-contain'
-            : 'object-cover'
+              ? '!h-auto !min-h-0 !w-auto !min-w-0 rounded-lg object-contain'
+              : 'object-cover'
         )}
         src={imageSrc}
         width={width}

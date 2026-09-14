@@ -1,4 +1,10 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import {
+  useEffect,
+  useState,
+  type FormEvent,
+  type ReactNode,
+  type JSX
+} from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTrends } from '@lib/api/trends';

@@ -7,6 +7,8 @@ import { CustomIcon } from '@components/ui/custom-icon';
 import { isNavLinkActive } from './nav-links';
 import type { NavLink } from './nav-links';
 
+import type { JSX } from 'react';
+
 type SidebarLinkProps = NavLink;
 
 export function SidebarLink({
@@ -22,7 +24,7 @@ export function SidebarLink({
   const { asPath } = useRouter();
   const { isMobile } = useWindow();
   const isActive = isNavLinkActive(asPath, href);
-  const renderedIconName = isActive ? activeIconName ?? iconName : iconName;
+  const renderedIconName = isActive ? (activeIconName ?? iconName) : iconName;
   const showBadgeCount = !!badgeCount;
   const showBadgeDot = !showBadgeCount && !!badgeDot;
   const badgeLabel = badgeCount

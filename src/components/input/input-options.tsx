@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type JSX } from 'react';
 import { motion } from 'framer-motion';
 import { SUBMIT_KEYSHORTCUTS } from '@lib/keyboard-shortcuts';
 import { Button } from '@components/ui/button';
@@ -154,8 +154,8 @@ export function InputOptions({
                 index === 0
                   ? onClick
                   : picker
-                  ? togglePicker(picker)
-                  : undefined
+                    ? togglePicker(picker)
+                    : undefined
               }
               disabled={disabled}
               key={name}

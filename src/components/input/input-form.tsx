@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import TextArea from 'react-textarea-autosize';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
@@ -38,7 +38,7 @@ type InputFormProps = {
   quote?: boolean;
   children: ReactNode;
   footerStatus?: ReactNode;
-  inputRef: RefObject<HTMLTextAreaElement>;
+  inputRef: RefObject<HTMLTextAreaElement | null>;
   inputValue: string;
   replySetting: TweetReplySetting;
   replyModal?: boolean;
@@ -198,14 +198,14 @@ export function InputForm({
   );
   const selectedReplyOption = replyOptions.find(
     ({ value }) => value === replySetting
-  ) as typeof replyOptions[number];
+  ) as (typeof replyOptions)[number];
   const isVisibilityShown = visited && !reply && !replyModal && !loading;
   const textareaMinRows =
     loading || reply || replyModal
       ? 1
       : modal && !isUploadingImages && !quote
-      ? 4
-      : 1;
+        ? 4
+        : 1;
 
   useEffect(() => handleShowHideNav(true), []);
 
@@ -406,8 +406,8 @@ export function InputForm({
                 quote
                   ? 'Add a comment'
                   : reply || replyModal
-                  ? 'Tweet your reply'
-                  : "What's happening?"
+                    ? 'Tweet your reply'
+                    : "What's happening?"
               }
               onBlur={handleShowHideNav(true)}
               minRows={textareaMinRows}

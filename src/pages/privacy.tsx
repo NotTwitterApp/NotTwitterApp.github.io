@@ -5,7 +5,7 @@ import { MainContainer } from '@components/home/main-container';
 import { MainHeader } from '@components/home/main-header';
 import { MainLayout } from '@components/layout/main-layout';
 import { LoggedOutTwitterLayout } from '@components/layout/logged-out-twitter-layout';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 type PrivacySectionProps = {
   title: string;
@@ -230,6 +230,6 @@ export default function Privacy(): JSX.Element {
   );
 }
 
-Privacy.getLayout = (page: ReactElement): ReactNode => (
+Privacy.getLayout = (page: ReactElement<any>): ReactNode => (
   <PrivacyLayout>{page}</PrivacyLayout>
 );

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState, type JSX } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';

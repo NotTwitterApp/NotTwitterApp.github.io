@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import cn from 'clsx';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type JSX } from 'react';
 import { useAuth } from '@lib/context/auth-context';
 import { useTheme } from '@lib/context/theme-context';
 import {

@@ -1,6 +1,6 @@
 import { NextImage } from '@components/ui/next-image';
 import { HeroIcon, type IconName } from '@components/ui/hero-icon';
-import type { ReactNode } from 'react';
+import type { ReactNode, JSX } from 'react';
 
 type UserProfileResourceRowProps = {
   href: string;

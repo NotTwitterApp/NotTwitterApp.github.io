@@ -8,6 +8,8 @@ import type { User } from '@lib/types/user';
 import type { StatsType } from '@components/view/view-tweet-stats';
 import type { StatsEmptyProps } from '@components/tweet/stats-empty';
 
+import type { JSX } from 'react';
+
 type FollowType = 'following' | 'followers' | 'followers_you_follow';
 
 type UserCardStatsType = Exclude<StatsType, 'quotes'>;

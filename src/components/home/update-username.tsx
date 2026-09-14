@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type JSX } from 'react';
 import { toast } from 'react-hot-toast';
 import { checkUsernameAvailability, updateUsername } from '@lib/atproto/utils';
 import { useAuth } from '@lib/context/auth-context';

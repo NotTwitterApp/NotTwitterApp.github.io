@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import cn from 'clsx';
 import { Button } from '@components/ui/button';
 import { HeroIcon } from '@components/ui/hero-icon';

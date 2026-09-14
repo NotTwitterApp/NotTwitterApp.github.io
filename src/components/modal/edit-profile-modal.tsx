@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type JSX } from 'react';
 import cn from 'clsx';
 import { MainHeader } from '@components/home/main-header';
 import { Button } from '@components/ui/button';

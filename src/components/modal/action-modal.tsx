@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, type JSX } from 'react';
 import cn from 'clsx';
 import { Dialog } from '@headlessui/react';
 import { Button } from '@components/ui/button';

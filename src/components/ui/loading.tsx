@@ -1,6 +1,8 @@
 import cn from 'clsx';
 import { CustomIcon } from './custom-icon';
 
+import type { JSX } from 'react';
+
 type LoadingProps = {
   className?: string;
   iconClassName?: string;

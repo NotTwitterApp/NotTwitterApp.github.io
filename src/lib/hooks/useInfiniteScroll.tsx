@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type JSX } from 'react';
 import { motion } from 'framer-motion';
 import { query, limit } from '@lib/atproto/store';
 import { getCollectionCount } from '@lib/atproto/utils';

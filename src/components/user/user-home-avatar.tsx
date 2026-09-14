@@ -5,6 +5,8 @@ import { Modal } from '@components/modal/modal';
 import { ImageModal } from '@components/modal/image-modal';
 import type { ImageData } from '@lib/types/file';
 
+import type { JSX } from 'react';
+
 type UserHomeAvatarProps = {
   profileData?: ImageData | null;
 };

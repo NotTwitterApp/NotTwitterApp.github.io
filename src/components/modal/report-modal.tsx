@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type JSX } from 'react';
 import { Dialog } from '@headlessui/react';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';

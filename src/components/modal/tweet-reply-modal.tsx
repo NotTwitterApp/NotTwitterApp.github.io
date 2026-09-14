@@ -3,6 +3,8 @@ import { Tweet } from '@components/tweet/tweet';
 import type { TweetProps } from '@components/tweet/tweet';
 import type { TweetWithUser } from '@lib/types/tweet';
 
+import type { JSX } from 'react';
+
 type TweetReplyModalProps = {
   tweet: TweetProps;
   closeModal: () => void;

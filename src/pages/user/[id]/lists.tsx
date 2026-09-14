@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import cn from 'clsx';
 import useSWR from 'swr';
 import {
@@ -48,10 +48,10 @@ function ListStatus({
   const label = viewerBlocked
     ? 'Blocked'
     : viewerMuted
-    ? 'Muted'
-    : purpose === 'moderation'
-    ? 'Moderation'
-    : 'List';
+      ? 'Muted'
+      : purpose === 'moderation'
+        ? 'Moderation'
+        : 'List';
 
   return (
     <span
@@ -167,7 +167,7 @@ export default function UserLists(): JSX.Element {
   );
 }
 
-UserLists.getLayout = (page: ReactElement): ReactNode => (
+UserLists.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

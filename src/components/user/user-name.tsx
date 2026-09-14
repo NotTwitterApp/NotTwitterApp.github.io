@@ -4,6 +4,8 @@ import { getUserPath } from '@lib/routes';
 import { CustomIcon } from '@components/ui/custom-icon';
 import { TwemojiScope } from '@components/ui/twemoji-scope';
 
+import type { JSX } from 'react';
+
 type UserNameProps = {
   tag?: keyof JSX.IntrinsicElements;
   name: string;

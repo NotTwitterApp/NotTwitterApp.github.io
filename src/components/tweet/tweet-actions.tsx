@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { Popover } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -140,9 +140,8 @@ function TweetActionsComponent({
   const isInAdminControl = isAdmin && !isOwner;
   const tweetIsPinned = pinnedTweet === tweetId;
   const signedIn = !!userId;
-  const [optimisticThreadMuted, setOptimisticThreadMuted] = useState(
-    !!threadMuted
-  );
+  const [optimisticThreadMuted, setOptimisticThreadMuted] =
+    useState(!!threadMuted);
   const [updatingThreadMute, setUpdatingThreadMute] = useState(false);
 
   useEffect(() => {
@@ -499,8 +498,8 @@ function TweetActionsComponent({
                       {mutingByListName
                         ? `Muted by ${mutingByListName}`
                         : muting
-                        ? `Unmute ${displayUsername}`
-                        : `Mute ${displayUsername}`}
+                          ? `Unmute ${displayUsername}`
+                          : `Mute ${displayUsername}`}
                     </Popover.Button>
                   )}
                   {signedIn && (

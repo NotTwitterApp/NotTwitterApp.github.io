@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import cn from 'clsx';
 import {
   undoTweetKinds,
@@ -147,16 +147,15 @@ function NotTwitterBlueLanding({
 }: {
   openUndoTweet: () => void;
 }): JSX.Element {
-  const {
-    notTwitterBlueSettings,
-    setReaderModeEnabled,
-    setReaderTextSize
-  } = useNotTwitterBlueSettings();
+  const { notTwitterBlueSettings, setReaderModeEnabled, setReaderTextSize } =
+    useNotTwitterBlueSettings();
 
   return (
     <>
       <header className='flex h-[53px] items-center border-b border-light-border px-4 dark:border-dark-border'>
-        <h2 className='text-[23px] font-extrabold leading-7'>Not Twitter Blue</h2>
+        <h2 className='text-[23px] font-extrabold leading-7'>
+          Not Twitter Blue
+        </h2>
       </header>
       <section>
         <h3 className='px-4 pt-6 pb-3 text-[25px] font-extrabold leading-8'>
@@ -165,23 +164,13 @@ function NotTwitterBlueLanding({
         <SettingsRow
           title='Undo Tweet'
           description='Select which types of Tweets you want to undo before they’re public, plus the length of your undo period.'
-          icon={
-            <CustomIcon
-              className='h-8 w-8'
-              iconName='TwitterUndoIcon'
-            />
-          }
+          icon={<CustomIcon className='h-8 w-8' iconName='TwitterUndoIcon' />}
           onClick={openUndoTweet}
         />
         <SettingsRow
           title='Reader Mode'
           description='Turn long Tweet threads into a continuous reading view.'
-          icon={
-            <HeroIcon
-              className='h-8 w-8'
-              iconName='BookOpenIcon'
-            />
-          }
+          icon={<HeroIcon className='h-8 w-8' iconName='BookOpenIcon' />}
         >
           <Toggle
             checked={notTwitterBlueSettings.readerMode}
@@ -195,9 +184,7 @@ function NotTwitterBlueLanding({
           title='Reader text size'
           description='Choose the text size used while reading threads.'
           icon={
-            <span className='text-[24px] font-extrabold leading-8'>
-              Aa
-            </span>
+            <span className='text-[24px] font-extrabold leading-8'>Aa</span>
           }
         >
           <div
@@ -271,9 +258,7 @@ function UndoTweetDetail({
         <Toggle
           checked={undoTweetSettings.enabled}
           label='Undo Tweet'
-          onChange={(): void =>
-            setUndoTweetEnabled(!undoTweetSettings.enabled)
-          }
+          onChange={(): void => setUndoTweetEnabled(!undoTweetSettings.enabled)}
         />
       </SettingsRow>
       <section className='border-b border-light-border px-4 py-4 dark:border-dark-border'>
@@ -310,11 +295,7 @@ function UndoTweetDetail({
         const { title, description } = undoTweetKindLabels[kind];
 
         return (
-          <SettingsRow
-            title={title}
-            description={description}
-            key={kind}
-          >
+          <SettingsRow title={title} description={description} key={kind}>
             <Toggle
               checked={undoTweetSettings.kinds[kind]}
               disabled={!undoTweetSettings.enabled}
@@ -346,7 +327,9 @@ export function NotTwitterBluePanel(): JSX.Element {
       {detailOpen ? (
         <UndoTweetDetail closeDetail={(): void => setDetailOpen(false)} />
       ) : (
-        <NotTwitterBlueLanding openUndoTweet={(): void => setDetailOpen(true)} />
+        <NotTwitterBlueLanding
+          openUndoTweet={(): void => setDetailOpen(true)}
+        />
       )}
     </div>
   );

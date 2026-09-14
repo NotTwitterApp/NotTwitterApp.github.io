@@ -1,6 +1,6 @@
 import cn from 'clsx';
 import { publicAsset } from '@lib/assets';
-import type { ReactNode } from 'react';
+import type { ReactNode, JSX } from 'react';
 
 type IconProps = {
   className?: string;

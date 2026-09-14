@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type JSX } from 'react';
 import cn from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
 import { listTweetStatsPage, subscribeBackend } from '@lib/atproto/backend';
@@ -86,12 +86,9 @@ export function QuoteTweetsFeed({
     };
 
     void fetchQuotes(true);
-    const unsubscribe = subscribeBackend(
-      () => {
-        void fetchQuotes(false);
-      },
-      ['content']
-    );
+    const unsubscribe = subscribeBackend(() => {
+      void fetchQuotes(false);
+    }, ['content']);
 
     return () => {
       active = false;

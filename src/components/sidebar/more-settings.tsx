@@ -14,6 +14,8 @@ import { isNavLinkActive } from './nav-links';
 import { MenuLink } from './menu-link';
 import type { Variants } from 'framer-motion';
 
+import type { JSX } from 'react';
+
 export const variants: Variants = {
   initial: { opacity: 0 },
   animate: {

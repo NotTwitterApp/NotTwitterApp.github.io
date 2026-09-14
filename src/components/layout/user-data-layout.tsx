@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { getUser, subscribeBackend } from '@lib/atproto/backend';
 import { UserContextProvider } from '@lib/context/user-context';

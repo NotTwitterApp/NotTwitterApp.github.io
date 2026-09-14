@@ -7,7 +7,7 @@ import { MainContainer } from '@components/home/main-container';
 import { MainHeader } from '@components/home/main-header';
 import { QuoteTweetsFeed } from '@components/view/quote-tweets-feed';
 import { Error } from '@components/ui/error';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 function getRouteParam(value: string | string[] | undefined): string | null {
   if (Array.isArray(value)) return value[0] ?? null;
@@ -35,6 +35,6 @@ export default function TweetQuoteTweets(): JSX.Element {
   );
 }
 
-TweetQuoteTweets.getLayout = (page: ReactElement): ReactNode => (
+TweetQuoteTweets.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicTweetLayout>{page}</PublicTweetLayout>
 );

@@ -14,7 +14,7 @@ import { Tweet } from '@components/tweet/tweet';
 import { Loading } from '@components/ui/loading';
 import { StatsEmpty } from '@components/tweet/stats-empty';
 import { TweetWithParent } from '@components/tweet/tweet-with-parent';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function UserWithReplies(): JSX.Element {
   const { hideBskySocialSuffix } = useTheme();
@@ -49,7 +49,7 @@ export default function UserWithReplies(): JSX.Element {
 
   const availableTweets = awaitingPinnedTweet ? null : data;
   const timelineTweets = pinnedTweet
-    ? availableTweets?.filter(({ id }) => id !== pinnedTweet) ?? null
+    ? (availableTweets?.filter(({ id }) => id !== pinnedTweet) ?? null)
     : availableTweets;
 
   const timelineLoading = awaitingPinnedTweet || loading;
@@ -81,7 +81,7 @@ export default function UserWithReplies(): JSX.Element {
   );
 }
 
-UserWithReplies.getLayout = (page: ReactElement): ReactNode => (
+UserWithReplies.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

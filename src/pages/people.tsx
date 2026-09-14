@@ -16,7 +16,7 @@ import { UserCard } from '@components/user/user-card';
 import { Loading } from '@components/ui/loading';
 import { Error } from '@components/ui/error';
 import { variants } from '@components/aside/aside-trends';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function People(): JSX.Element {
   const { user } = useAuth();
@@ -54,7 +54,7 @@ export default function People(): JSX.Element {
   );
 }
 
-People.getLayout = (page: ReactElement): ReactNode => (
+People.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <PeopleLayout>{page}</PeopleLayout>

@@ -3,7 +3,7 @@ import { Button } from '@components/ui/button';
 import { HeroIcon } from '@components/ui/hero-icon';
 import { ToolTip } from '@components/ui/tooltip';
 import { MobileSidebar } from '@components/sidebar/mobile-sidebar';
-import type { ReactNode } from 'react';
+import type { ReactNode, JSX } from 'react';
 import type { IconName } from '@components/ui/hero-icon';
 
 type HomeHeaderProps = {
@@ -57,7 +57,10 @@ export function MainHeader({
           {useMobileSidebar && <MobileSidebar />}
           <div className='min-w-0'>
             <h2
-              className={cn('truncate text-xl font-bold', subtitle && 'leading-6')}
+              className={cn(
+                'truncate text-xl font-bold',
+                subtitle && 'leading-6'
+              )}
               key={title}
             >
               {title}

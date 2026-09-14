@@ -8,6 +8,8 @@ import { UserAvatar } from '@components/user/user-avatar';
 import type { Variants } from 'framer-motion';
 import type { User } from '@lib/types/user';
 
+import type { JSX } from 'react';
+
 const variant: Variants = {
   initial: { x: '-100%', opacity: 1 },
   animate: {

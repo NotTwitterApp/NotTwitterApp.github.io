@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 import { matchStaticRoute } from '@lib/static-routes';
 import { SEO } from '@components/common/seo';
 import { LoggedOutTwitterLayout } from '@components/layout/logged-out-twitter-layout';
@@ -19,7 +19,7 @@ import type { ReactElement, ReactNode } from 'react';
 
 type RoutedPage = {
   (): JSX.Element;
-  getLayout?: (page: ReactElement) => ReactNode;
+  getLayout?: (page: ReactElement<any>) => ReactNode;
 };
 
 function renderPage(Page: RoutedPage): ReactNode {

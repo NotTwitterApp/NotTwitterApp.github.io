@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'clsx';
 import { useSearchUsers } from '@lib/api/search';
@@ -27,7 +27,7 @@ const typeaheadDelayMs = 250;
 const typeaheadUserLimit = 5;
 
 function getRouteParam(value: string | string[] | undefined): string {
-  return Array.isArray(value) ? value[0] ?? '' : value ?? '';
+  return Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 }
 
 function useDebouncedValue(value: string, delay: number): string {

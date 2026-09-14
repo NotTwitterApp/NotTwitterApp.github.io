@@ -13,6 +13,8 @@ import { orderBy, query, where } from '@lib/atproto/store';
 import { UserName } from './user-name';
 import type { Variants } from 'framer-motion';
 
+import type { JSX } from 'react';
+
 export const variants: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.2, ease: 'easeOut' } },
@@ -89,13 +91,13 @@ export function UserHeader(): JSX.Element {
 
   const totalArticles =
     isArticlesPage && !profileRestricted
-      ? articleTweets?.filter(({ card }) => isStandardSiteArticleCard(card))
-          .length ?? 0
+      ? (articleTweets?.filter(({ card }) => isStandardSiteArticleCard(card))
+          .length ?? 0)
       : 0;
   const [totalTweets, totalMedia, totalLikes] = [
     user?.totalTweets ?? 0,
-    isMediaPage && !profileRestricted ? mediaTweets?.length ?? 0 : 0,
-    isLikesPage && likesVisible ? likedTweets?.length ?? 0 : 0
+    isMediaPage && !profileRestricted ? (mediaTweets?.length ?? 0) : 0,
+    isLikesPage && likesVisible ? (likedTweets?.length ?? 0) : 0
   ];
   const statsLoading =
     (isArticlesPage && articlesLoading) ||
@@ -131,22 +133,22 @@ export function UserHeader(): JSX.Element {
             {isInFollowPage
               ? displayUsername
               : isInTweetPage
-              ? totalTweets
-                ? `${totalTweets} ${`Tweet${isPlural(totalTweets)}`}`
-                : 'No Tweet'
-              : isMediaPage
-              ? totalMedia
-                ? `${totalMedia} Photo${isPlural(totalMedia)} & GIF${isPlural(
-                    totalMedia
-                  )}`
-                : 'No Photo & GIF'
-              : isArticlesPage
-              ? totalArticles
-                ? `${totalArticles} Article${isPlural(totalArticles)}`
-                : 'No Article'
-              : totalLikes
-              ? `${totalLikes} Like${isPlural(totalLikes)}`
-              : 'No Like'}
+                ? totalTweets
+                  ? `${totalTweets} ${`Tweet${isPlural(totalTweets)}`}`
+                  : 'No Tweet'
+                : isMediaPage
+                  ? totalMedia
+                    ? `${totalMedia} Photo${isPlural(totalMedia)} & GIF${isPlural(
+                        totalMedia
+                      )}`
+                    : 'No Photo & GIF'
+                  : isArticlesPage
+                    ? totalArticles
+                      ? `${totalArticles} Article${isPlural(totalArticles)}`
+                      : 'No Article'
+                    : totalLikes
+                      ? `${totalLikes} Like${isPlural(totalLikes)}`
+                      : 'No Like'}
           </p>
         </motion.div>
       )}

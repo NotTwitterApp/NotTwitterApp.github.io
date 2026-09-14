@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type JSX } from 'react';
 import cn from 'clsx';
 import useSWR from 'swr';
 import { toast } from 'react-hot-toast';
@@ -233,7 +233,7 @@ export default function Interests(): JSX.Element {
   );
 }
 
-Interests.getLayout = (page: ReactElement): ReactNode => (
+Interests.getLayout = (page: ReactElement<any>): ReactNode => (
   <ProtectedLayout>
     <MainLayout>
       <HomeLayout>{page}</HomeLayout>

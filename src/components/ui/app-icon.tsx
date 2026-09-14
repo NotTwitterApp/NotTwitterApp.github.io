@@ -8,6 +8,8 @@ import {
   type IconName as HeroIconName
 } from '@components/ui/hero-icon';
 
+import type { JSX } from 'react';
+
 export type AppIconName = CustomIconName | HeroIconName;
 
 type AppIconProps = {

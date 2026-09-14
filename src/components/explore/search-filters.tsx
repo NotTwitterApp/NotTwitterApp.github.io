@@ -4,6 +4,8 @@ import cn from 'clsx';
 import { HeroIcon } from '@components/ui/hero-icon';
 import type { ParsedUrlQueryInput } from 'querystring';
 
+import type { JSX } from 'react';
+
 type FilterOption = {
   label: string;
   active: boolean;
@@ -11,7 +13,7 @@ type FilterOption = {
 };
 
 function getRouteParam(value: string | string[] | undefined): string {
-  return Array.isArray(value) ? value[0] ?? '' : value ?? '';
+  return Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 }
 
 function cleanQuery(query: ParsedUrlQueryInput): ParsedUrlQueryInput {

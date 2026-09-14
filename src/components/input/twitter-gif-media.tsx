@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react';
 import { preventBubbling } from '@lib/utils';
 import type { ImageData } from '@lib/types/file';
 
@@ -89,7 +89,7 @@ export function TwitterGifMedia({
       ) : (
         <img
           className='h-full w-full object-cover object-center'
-          src={playing ? media.src : media.poster ?? media.src}
+          src={playing ? media.src : (media.poster ?? media.src)}
           alt={media.alt}
           key={`${media.src}-${animationKey}-${playing ? 'playing' : 'paused'}`}
           draggable={false}

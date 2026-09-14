@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -135,12 +135,9 @@ function StatsModalContent({
     };
 
     void fetchStats(true);
-    const unsubscribe = subscribeBackend(
-      () => {
-        void fetchStats(false);
-      },
-      ['content']
-    );
+    const unsubscribe = subscribeBackend(() => {
+      void fetchStats(false);
+    }, ['content']);
 
     return () => {
       active = false;

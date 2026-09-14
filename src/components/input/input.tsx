@@ -5,7 +5,8 @@ import {
   useRef,
   useId,
   useMemo,
-  useCallback
+  useCallback,
+  type JSX
 } from 'react';
 import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -168,7 +169,9 @@ function getPostGraphemeLength(text: string): number {
 
 function isValidThreadText(text: string): boolean {
   const trimmed = text.trim();
-  return !!trimmed && getPostGraphemeLength(text) <= BLUESKY_POST_GRAPHEME_LIMIT;
+  return (
+    !!trimmed && getPostGraphemeLength(text) <= BLUESKY_POST_GRAPHEME_LIMIT
+  );
 }
 
 function getErrorMessage(error: unknown): string | null {
@@ -432,9 +435,7 @@ function ThreadComposerStack({
   photoURL: string;
   name: string;
   username: string;
-  setThreadInputRef: (
-    id: string
-  ) => (node: HTMLTextAreaElement | null) => void;
+  setThreadInputRef: (id: string) => (node: HTMLTextAreaElement | null) => void;
   updateThreadItem: (id: string, text: string) => void;
   removeThreadItem: (id: string) => void;
 }): JSX.Element | null {
@@ -458,7 +459,12 @@ function ThreadComposerStack({
               {index < items.length - 1 && (
                 <span className='absolute left-1/2 top-10 bottom-[-12px] w-0.5 -translate-x-1/2 bg-light-line-reply dark:bg-dark-line-reply' />
               )}
-              <UserAvatar size={40} src={photoURL} alt={name} username={username} />
+              <UserAvatar
+                size={40}
+                src={photoURL}
+                alt={name}
+                username={username}
+              />
             </div>
             <div className='relative min-w-0'>
               <TextArea
@@ -629,7 +635,7 @@ export function Input({
     if (hydratedDraftId !== currentDraftId) return;
 
     const gifPreview = selectedGifCard
-      ? imagesPreview.find(({ type }) => type === 'gif') ?? null
+      ? (imagesPreview.find(({ type }) => type === 'gif') ?? null)
       : null;
 
     saveTweetDraft(draftScope, {
@@ -735,15 +741,16 @@ export function Input({
     const quotedTweet = snapshot.quoteTweet
       ? getQuotedTweetPreview(snapshot.quoteTweet)
       : null;
-    const uploadedImages = (snapshot.selectedGifCard
-      ? snapshot.imagesPreview
-      : snapshot.selectedImages.length || snapshot.imagesPreview.length
-      ? await uploadImages(
-          userId,
-          snapshot.selectedImages,
-          snapshot.imagesPreview
-        )
-      : []) ?? [];
+    const uploadedImages =
+      (snapshot.selectedGifCard
+        ? snapshot.imagesPreview
+        : snapshot.selectedImages.length || snapshot.imagesPreview.length
+          ? await uploadImages(
+              userId,
+              snapshot.selectedImages,
+              snapshot.imagesPreview
+            )
+          : []) ?? [];
 
     const tweetData: WithFieldValue<TweetDraft> = {
       text: snapshot.text || null,
@@ -1146,9 +1153,7 @@ export function Input({
       aspectRatio
     };
 
-    setSelectedGifCard(
-      createGifCard({ id, title, src, preview, aspectRatio })
-    );
+    setSelectedGifCard(createGifCard({ id, title, src, preview, aspectRatio }));
     setImagesPreview([gifPreview]);
     setSelectedImages([]);
 
@@ -1198,7 +1203,9 @@ export function Input({
     !activeQuoteTweet &&
     !loading &&
     !pendingUndoTweet &&
-    (lastThreadItem ? isValidThreadText(lastThreadItem.text) : isValidSingleTweet);
+    (lastThreadItem
+      ? isValidThreadText(lastThreadItem.text)
+      : isValidSingleTweet);
 
   return (
     <form
@@ -1295,10 +1302,10 @@ export function Input({
           reply
             ? 'pt-3 pb-1'
             : replyModal
-            ? 'pt-0'
-            : modal
-            ? 'pb-4'
-            : 'border-b border-light-border dark:border-dark-border',
+              ? 'pt-0'
+              : modal
+                ? 'pb-4'
+                : 'border-b border-light-border dark:border-dark-border',
           compactReply && 'pr-5',
           (disabled || (loading && !isUndoTweetPending)) &&
             'pointer-events-none opacity-50'
@@ -1312,7 +1319,7 @@ export function Input({
           username={username}
         />
         <div className='flex w-full min-w-0 flex-col gap-4'>
-            <InputForm
+          <InputForm
             modal={modal}
             reply={reply}
             quote={!!activeQuoteTweet}
@@ -1344,7 +1351,7 @@ export function Input({
             discardTweet={discardTweet}
             handleChange={handleChange}
             handleImageUpload={handleImageUpload}
-            >
+          >
             <ThreadComposerStack
               items={threadItems}
               inputLimit={inputLimit}

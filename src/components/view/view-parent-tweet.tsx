@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type JSX } from 'react';
 import Link from 'next/link';
 import { doc } from '@lib/atproto/store';
 import { useDocument } from '@lib/hooks/useDocument';
@@ -8,7 +8,7 @@ import type { RefObject } from 'react';
 
 type ViewParentTweetProps = {
   parentId: string;
-  viewTweetRef: RefObject<HTMLElement>;
+  viewTweetRef: RefObject<HTMLElement | null>;
 };
 
 export function ViewParentTweet({

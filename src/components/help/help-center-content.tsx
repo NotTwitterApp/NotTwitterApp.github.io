@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState, type JSX } from 'react';
 import Link from 'next/link';
 import cn from 'clsx';
 import { ThemeContext } from '@lib/context/theme-context';
@@ -35,10 +35,7 @@ type HelpCategory = {
   title: string;
   description: string;
   illustration:
-    | 'blue-screens'
-    | 'green-gears'
-    | 'pink-privacy'
-    | 'orange-trust';
+    'blue-screens' | 'green-gears' | 'pink-privacy' | 'orange-trust';
   theme: {
     name: 'blue' | 'green' | 'pink' | 'orange';
     header: string;
@@ -993,7 +990,7 @@ function DefaultHelpHome(): JSX.Element {
 function DoorwayCard({
   card
 }: {
-  card: typeof doorwayCards[number];
+  card: (typeof doorwayCards)[number];
 }): JSX.Element {
   return (
     <section
@@ -1039,7 +1036,7 @@ function DoorwayCard({
 function ResourceCard({
   resource: { title, description, href }
 }: {
-  resource: typeof externalResources[number];
+  resource: (typeof externalResources)[number];
 }): JSX.Element {
   return (
     <a

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type JSX } from 'react';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -964,7 +964,7 @@ function appendBlocksFromObject(
   else if (type.includes('list') && Array.isArray(value.items))
     value.items.forEach((item) => {
       const itemText = isRecord(item)
-        ? getBlockText(item) ?? ''
+        ? (getBlockText(item) ?? '')
         : String(item ?? '');
 
       if (itemText.trim()) blocks.push({ type: 'list', text: `• ${itemText}` });
@@ -1189,8 +1189,8 @@ function ArticleNotificationButton({
         {enabled
           ? `Article notifications on for @${author.username}`
           : alreadyFollowing
-          ? `Notify me of articles from @${author.username}`
-          : `Follow & Notify me about articles from @${author.username}`}
+            ? `Notify me of articles from @${author.username}`
+            : `Follow & Notify me about articles from @${author.username}`}
       </span>
     </button>
   );
@@ -1806,7 +1806,7 @@ function isGifLikeMedia({ src, type }: ImageData): boolean {
 }
 
 function getMediaThumbnailSrc(media: ImageData): string | null | undefined {
-  return isVideoLikeMedia(media) ? media.poster : media.poster ?? media.src;
+  return isVideoLikeMedia(media) ? media.poster : (media.poster ?? media.src);
 }
 
 function getQuotedCardPreviewMedia(
@@ -2049,7 +2049,7 @@ function QuotedTweetCard({
 
   const quotedTweetCard = hideMedia
     ? null
-    : quotedTweet.card ?? createYouTubeCardFromText(quotedTweet.text);
+    : (quotedTweet.card ?? createYouTubeCardFromText(quotedTweet.text));
   const expandPreview = expanded && !hideMedia;
   const compactMedia = getQuotedTweetPreviewMedia({
     quotedTweet,

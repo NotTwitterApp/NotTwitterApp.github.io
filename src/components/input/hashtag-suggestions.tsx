@@ -7,7 +7,7 @@ import { CustomIcon } from '@components/ui/custom-icon';
 import { HeroIcon } from '@components/ui/hero-icon';
 import { Loading } from '@components/ui/loading';
 import { NextImage } from '@components/ui/next-image';
-import type { MouseEvent } from 'react';
+import type { MouseEvent, JSX } from 'react';
 import type { User } from '@lib/types/user';
 
 type HashtagSuggestionsProps = {

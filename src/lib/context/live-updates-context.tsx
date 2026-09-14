@@ -5,7 +5,8 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  type JSX
 } from 'react';
 import { useAuth } from './auth-context';
 import type * as BackendApi from '@lib/atproto/backend';

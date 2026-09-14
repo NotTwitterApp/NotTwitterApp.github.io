@@ -1,3 +1,5 @@
+const path = require('path');
+
 function getBasePath() {
   const rawBasePath =
     process.env.NEXT_PUBLIC_BASE_PATH ?? process.env.BASE_PATH ?? '';
@@ -8,10 +10,10 @@ function getBasePath() {
 
 const basePath = getBasePath();
 
-/** @type {import("next").NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  swcMinify: true,
   trailingSlash: true,
   ...(basePath
     ? {
@@ -28,8 +30,26 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  turbopack: {
-    root: __dirname
+  webpack(config, { webpack }) {
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /^\.\/detection\.js$/,
+        (resource) => {
+          if (
+            resource.context?.endsWith(
+              path.join('@atproto', 'api', 'dist', 'rich-text')
+            )
+          ) {
+            resource.request = path.resolve(
+              __dirname,
+              'src/lib/atproto/rich-text-detection-compat.js'
+            );
+          }
+        }
+      )
+    );
+
+    return config;
   }
 };
 

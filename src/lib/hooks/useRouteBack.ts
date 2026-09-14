@@ -1,4 +1,11 @@
-import { createElement, Fragment, useCallback, useEffect, useRef } from 'react';
+import {
+  createElement,
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  type JSX
+} from 'react';
 import { useRouter } from 'next/router';
 import type { ReactNode } from 'react';
 

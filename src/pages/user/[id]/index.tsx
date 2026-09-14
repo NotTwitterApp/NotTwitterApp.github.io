@@ -13,7 +13,7 @@ import { UserHomeLayout } from '@components/layout/user-home-layout';
 import { StatsEmpty } from '@components/tweet/stats-empty';
 import { Loading } from '@components/ui/loading';
 import { Tweet } from '@components/tweet/tweet';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function UserTweets(): JSX.Element {
   const { hideBskySocialSuffix } = useTheme();
@@ -59,7 +59,7 @@ export default function UserTweets(): JSX.Element {
     ? null
     : mergeData(true, ownerTweets, peopleTweets);
   const timelineTweets = pinnedTweet
-    ? mergedTweets?.filter(({ id }) => id !== pinnedTweet) ?? null
+    ? (mergedTweets?.filter(({ id }) => id !== pinnedTweet) ?? null)
     : mergedTweets;
 
   const hasProfileTweets = !!pinnedData || !!timelineTweets?.length;
@@ -90,7 +90,7 @@ export default function UserTweets(): JSX.Element {
   );
 }
 
-UserTweets.getLayout = (page: ReactElement): ReactNode => (
+UserTweets.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

@@ -1,5 +1,5 @@
 import { publicAsset } from '@lib/assets';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, JSX } from 'react';
 
 const BALLOONS = [
   { left: 1, size: 78, hue: 190, delay: 0, duration: 9.8, sway: 84 },

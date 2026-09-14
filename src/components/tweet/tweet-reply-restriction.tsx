@@ -4,6 +4,8 @@ import { AppIcon } from '@components/ui/app-icon';
 import type { AppIconName } from '@components/ui/app-icon';
 import type { TweetReplySetting } from '@lib/types/tweet';
 
+import type { JSX } from 'react';
+
 type TweetReplyRestrictionProps = {
   replySetting?: TweetReplySetting | null;
   viewerCanReply?: boolean | null;

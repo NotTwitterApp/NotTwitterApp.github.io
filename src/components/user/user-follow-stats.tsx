@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, type JSX } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { formatNumber } from '@lib/date';

@@ -3,6 +3,8 @@ import {
   limitedVisibilityTweetMessage
 } from './tweet-tombstone';
 
+import type { JSX } from 'react';
+
 export { limitedVisibilityTweetMessage };
 
 export function TweetUnavailableNotice({

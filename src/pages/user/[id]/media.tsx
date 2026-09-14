@@ -13,7 +13,7 @@ import { UserHomeLayout } from '@components/layout/user-home-layout';
 import { Tweet } from '@components/tweet/tweet';
 import { Loading } from '@components/ui/loading';
 import { StatsEmpty } from '@components/tweet/stats-empty';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement, ReactNode, JSX } from 'react';
 
 export default function UserMedia(): JSX.Element {
   const { hideBskySocialSuffix } = useTheme();
@@ -63,7 +63,7 @@ export default function UserMedia(): JSX.Element {
   );
 }
 
-UserMedia.getLayout = (page: ReactElement): ReactNode => (
+UserMedia.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicUserLayout>
     <UserDataLayout>
       <UserHomeLayout>{page}</UserHomeLayout>

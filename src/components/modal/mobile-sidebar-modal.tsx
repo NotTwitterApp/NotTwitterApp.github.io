@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -338,10 +338,7 @@ export function MobileSidebarModal({
                 {...themeShortcutHandlers}
                 title='Hold for display options'
               >
-                <HeroIcon
-                  className='h-6 w-6'
-                  iconName={themeShortcutIcon}
-                />
+                <HeroIcon className='h-6 w-6' iconName={themeShortcutIcon} />
                 {themeShortcutLabel}
               </Button>
               <Button

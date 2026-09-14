@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import { SUBMIT_KEYSHORTCUTS } from '@lib/keyboard-shortcuts';
 import type { User, EditableData } from '@lib/types/user';
-import type { KeyboardEvent, ChangeEvent } from 'react';
+import type { KeyboardEvent, ChangeEvent, JSX } from 'react';
 
 export type InputFieldProps = {
   label: string;

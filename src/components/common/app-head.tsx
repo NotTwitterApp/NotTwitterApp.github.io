@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { absolutePublicAsset, publicAsset } from '@lib/assets';
 import { DEFAULT_SEO_IMAGE } from './seo';
 
+import type { JSX } from 'react';
+
 export function AppHead(): JSX.Element {
   const absoluteImage = absolutePublicAsset(DEFAULT_SEO_IMAGE);
 

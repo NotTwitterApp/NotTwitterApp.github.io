@@ -18,6 +18,8 @@ import { ToolTip } from '@components/ui/tooltip';
 import { variants } from '@components/tweet/tweet-actions';
 import type { ModerationReportReason } from '@lib/atproto/backend';
 
+import type { JSX } from 'react';
+
 type UserShareProps = {
   targetId?: string;
   username: string;
@@ -233,8 +235,8 @@ export function UserShare({
                       {muteIsListOnly
                         ? `Muted by ${mutingByListName}`
                         : actionIsUnmute
-                        ? `Unmute ${displayUsername}`
-                        : `Mute ${displayUsername}`}
+                          ? `Unmute ${displayUsername}`
+                          : `Mute ${displayUsername}`}
                     </Popover.Button>
                   )}
                   {canModerate && (
@@ -253,8 +255,8 @@ export function UserShare({
                       {blockIsListOnly
                         ? `Blocked by ${blockingByListName}`
                         : actionIsUnblock
-                        ? `Unblock ${displayUsername}`
-                        : `Block ${displayUsername}`}
+                          ? `Unblock ${displayUsername}`
+                          : `Block ${displayUsername}`}
                     </Popover.Button>
                   )}
                   {canModerate && (

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import cn from 'clsx';
@@ -87,7 +87,7 @@ export function UserNav({ follow }: UserNavProps): JSX.Element {
       moved: false,
       pendingPath: shouldUseNativeClick
         ? null
-        : pendingTabLink?.dataset.profileTabPath ?? null,
+        : (pendingTabLink?.dataset.profileTabPath ?? null),
       pointerId: event.pointerId,
       scrollLeft: scrollRef.current.scrollLeft,
       startX: event.clientX

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type JSX } from 'react';
 import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'clsx';
@@ -141,10 +141,7 @@ function ReaderModeThread({
             const hasEmbed = !!displayCard || !!tweet.quotedTweet;
 
             return (
-              <section
-              className='min-w-0'
-                key={tweet.id}
-              >
+              <section className='min-w-0' key={tweet.id}>
                 {tweet.text && (
                   <TweetText
                     className={cn(
@@ -449,9 +446,7 @@ export default function TweetId(): JSX.Element {
   );
 
   return (
-    <MainContainer
-      className={readerModeActive ? '!pb-20' : '!pb-[1280px]'}
-    >
+    <MainContainer className={readerModeActive ? '!pb-20' : '!pb-[1280px]'}>
       <MainHeader
         useActionButton
         title={hasThread ? 'Thread' : 'Tweet'}
@@ -468,10 +463,7 @@ export default function TweetId(): JSX.Element {
             title={readerModeActive ? 'Exit Reader' : 'View thread in Reader'}
             onClick={(): void => setReaderModeActive((active) => !active)}
           >
-            <HeroIcon
-              className='h-5 w-5'
-              iconName='BookOpenIcon'
-            />
+            <HeroIcon className='h-5 w-5' iconName='BookOpenIcon' />
           </Button>
         )}
       </MainHeader>
@@ -605,6 +597,6 @@ export default function TweetId(): JSX.Element {
   );
 }
 
-TweetId.getLayout = (page: ReactElement): ReactNode => (
+TweetId.getLayout = (page: ReactElement<any>): ReactNode => (
   <PublicTweetLayout>{page}</PublicTweetLayout>
 );
