@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "env PATH=/usr/bin:/bin:$PATH node --require ./scripts/buffer-compat.js ./node_modules/next/dist/bin/next dev",
+    "dev": "node --require ./scripts/buffer-compat.js ./node_modules/next/dist/bin/next dev",
     "prebuild": "node scripts/write-atproto-client-metadata.mjs",
-    "build": "env PATH=/usr/bin:/bin:$PATH next build",
+    "build": "next build",
     "export": "NEXT_STATIC_EXPORT=true npm run build",
-    "start": "env PATH=/usr/bin:/bin:$PATH next start",
+    "start": "next start",
     "format": "prettier --check .",
     "lint": "next lint",
     "test": "jest --watch",
@@ -67,5 +67,8 @@
     "core-js@3.50.0": true,
     "unrs-resolver@1.12.2": true,
     "@parcel/watcher@2.6.0": true
+  },
+  "engines": {
+    "node": "26.x"
   }
 }
