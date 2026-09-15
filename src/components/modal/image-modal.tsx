@@ -17,7 +17,6 @@ import { tweetsCollection } from '@lib/atproto/collections';
 import { query, where, orderBy } from '@lib/atproto/store';
 import { manageBookmark, manageLike, manageRetweet } from '@lib/atproto/utils';
 import { getBskyTweetUrl, getTweetPath, getUserPath } from '@lib/routes';
-import { createYouTubeCardFromText } from '@lib/youtube';
 import { Button } from '@components/ui/button';
 import { HeroIcon } from '@components/ui/hero-icon';
 import { AppIcon, type AppIconName } from '@components/ui/app-icon';
@@ -144,7 +143,9 @@ type ConversationActionButtonProps = {
 };
 
 function isVideoMedia({ src, type }: ImageData): boolean {
-  return (!!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src));
+  return (
+    !!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src)
+  );
 }
 
 function getMediaAltText(media: ImageData): string {
@@ -405,14 +406,19 @@ function MediaConversation({ tweet }: { tweet: TweetWithUser }): JSX.Element {
         </div>
         <div className={cn('border-b px-4', mediaModalBorder)}>
           {user ? (
-          <Input
-            reply
-            compactReply
-            focusSignal={replyFocusRequest}
-            parent={{ id: tweet.id, username: tweet.user.username }}
-          />
+            <Input
+              reply
+              compactReply
+              focusSignal={replyFocusRequest}
+              parent={{ id: tweet.id, username: tweet.user.username }}
+            />
           ) : (
-            <Link href='/' className='block py-4 font-bold text-main-accent hover:underline'>Sign in to reply</Link>
+            <Link
+              href='/'
+              className='block py-4 font-bold text-main-accent hover:underline'
+            >
+              Sign in to reply
+            </Link>
           )}
         </div>
         {loading ? (
@@ -455,9 +461,7 @@ function ConversationTweet({
   const isOwner = userId === createdBy;
   const tweetLink = getTweetPath(id, username);
   const hasInlineMedia = !!images?.length;
-  const displayCard = hasInlineMedia
-    ? null
-    : (card ?? createYouTubeCardFromText(text));
+  const displayCard = hasInlineMedia ? null : card;
   const parentDisplayUsername = formatAtprotoDisplayIdentifier(
     parent?.username,
     { hideBskySocialSuffix }
@@ -611,6 +615,8 @@ function ConversationTweet({
           {!root && <ConversationAttachments images={images} />}
           {!root && (
             <TweetEmbed
+              text={text}
+              hasMedia={!!images?.length}
               card={displayCard}
               quotedTweet={quotedTweet}
               articleTweetPath={tweetLink}
@@ -648,17 +654,22 @@ function ConversationTweet({
 }
 
 function MediaTweetStatsRow({ tweet }: { tweet: TweetWithUser }): JSX.Element {
-  return <ViewTweetStats
-    media
-    tweetId={tweet.id}
-    username={tweet.user.username}
-    currentQuotes={tweet.userQuotes}
-    currentTweets={tweet.userRetweets.length}
-    currentLikes={tweet.userLikes.length}
-    currentReplies={0}
-    quoteMove={0} tweetMove={0} likeMove={0} replyMove={0}
-    isStatsVisible
-  />;
+  return (
+    <ViewTweetStats
+      media
+      tweetId={tweet.id}
+      username={tweet.user.username}
+      currentQuotes={tweet.userQuotes}
+      currentTweets={tweet.userRetweets.length}
+      currentLikes={tweet.userLikes.length}
+      currentReplies={0}
+      quoteMove={0}
+      tweetMove={0}
+      likeMove={0}
+      replyMove={0}
+      isStatsVisible
+    />
+  );
 }
 
 function ConversationAttachments({

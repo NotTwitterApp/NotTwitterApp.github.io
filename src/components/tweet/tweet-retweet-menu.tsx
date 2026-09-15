@@ -61,7 +61,7 @@ export function TweetRetweetMenu({
     <>
       <Modal
         className='flex items-start justify-center'
-        modalClassName='mt-8 w-full max-w-xl rounded-2xl bg-main-background'
+        modalClassName='mt-8 w-full max-w-[600px] max-h-[90dvh] overflow-y-auto rounded-2xl bg-main-background'
         open={modalOpen}
         closeModal={closeModal}
       >

@@ -7,7 +7,6 @@ import { useAuth } from '@lib/context/auth-context';
 import { useTheme } from '@lib/context/theme-context';
 import { useModal } from '@lib/hooks/useModal';
 import { getTweetPath, getUserPath } from '@lib/routes';
-import { createYouTubeCardFromText } from '@lib/youtube';
 import { Modal } from '@components/modal/modal';
 import { TweetReplyModal } from '@components/modal/tweet-reply-modal';
 import { ImagePreview } from '@components/input/image-preview';
@@ -74,7 +73,7 @@ export function ViewTweet(tweet: ViewTweetProps): JSX.Element {
   const [tombstoneRevealed, setTombstoneRevealed] = useState(false);
 
   const tweetLink = getTweetPath(tweetId, username);
-  const displayCard = card ?? createYouTubeCardFromText(text);
+  const displayCard = card;
 
   const userId = user?.id ?? '';
 
@@ -157,7 +156,7 @@ export function ViewTweet(tweet: ViewTweetProps): JSX.Element {
     >
       <Modal
         className='flex items-start justify-center'
-        modalClassName='bg-main-background rounded-2xl max-w-xl w-full mt-8'
+        modalClassName='bg-main-background rounded-2xl max-w-[600px] w-full mt-8 max-h-[90dvh] overflow-y-auto'
         open={open}
         closeModal={closeModal}
       >
@@ -246,6 +245,8 @@ export function ViewTweet(tweet: ViewTweetProps): JSX.Element {
           />
         )}
         <TweetEmbed
+          text={text}
+          hasMedia={!!images?.length}
           card={displayCard}
           quotedTweet={quotedTweet}
           viewTweet

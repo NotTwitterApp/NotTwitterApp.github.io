@@ -8,7 +8,6 @@ import { useAuth } from '@lib/context/auth-context';
 import { useTheme } from '@lib/context/theme-context';
 import { useModal } from '@lib/hooks/useModal';
 import { getTweetPath, getUserPath } from '@lib/routes';
-import { createYouTubeCardFromText } from '@lib/youtube';
 import { delayScroll } from '@lib/utils';
 import { Modal } from '@components/modal/modal';
 import { TweetReplyModal } from '@components/modal/tweet-reply-modal';
@@ -167,7 +166,7 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
   const [tombstoneRevealed, setTombstoneRevealed] = useState(false);
 
   const tweetLink = getTweetPath(tweetId, username);
-  const displayCard = card ?? createYouTubeCardFromText(text);
+  const displayCard = card;
 
   const userId = user?.id ?? '';
 
@@ -280,7 +279,7 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
     >
       <Modal
         className='flex items-start justify-center'
-        modalClassName='bg-main-background rounded-2xl max-w-xl w-full my-8'
+        modalClassName='bg-main-background rounded-2xl max-w-[600px] w-full my-8 max-h-[90dvh] overflow-y-auto'
         open={open}
         closeModal={closeModal}
       >
@@ -386,7 +385,7 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
               </>
             )}
             <div className='mt-1 flex flex-col gap-2'>
-              {images && (
+              {!modal && !!images?.length && (
                 <ImagePreview
                   tweet
                   tweetData={tweet}
@@ -396,6 +395,9 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
                 />
               )}
               <TweetEmbed
+                text={text}
+                hasMedia={!!images?.length}
+                contextOnly={modal}
                 card={displayCard}
                 quotedTweet={quotedTweet}
                 articleAuthor={tweetUserData}

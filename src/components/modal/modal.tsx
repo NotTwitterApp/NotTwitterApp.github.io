@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Dialog } from '@headlessui/react';
 import cn from 'clsx';
 import type { MouseEvent, ReactNode, JSX } from 'react';
@@ -48,39 +48,37 @@ export function Modal({
   closePanelOnClick,
   closeModal
 }: ModalProps): JSX.Element {
+  // The dialog owns closing and focus cleanup. Composer animations can remount
+  // during send completion and must not keep an invisible dialog alive.
   return (
-    <AnimatePresence>
-      {open && (
-        <Dialog
-          className='relative z-50'
-          open={open}
-          onClose={closeModal}
-          static
+    <Dialog
+      transition
+      className='relative z-50 transition-opacity duration-100 data-closed:opacity-0'
+      open={open}
+      onClose={closeModal}
+    >
+      <motion.div
+        className='hover-animation fixed inset-0 bg-black/40 dark:bg-[#5B7083]/40'
+        aria-hidden='true'
+        onClick={stopModalClickPropagation}
+        {...backdrop}
+      />
+      <div
+        className={cn(
+          'fixed inset-0 overflow-y-auto p-4',
+          className ?? 'flex items-center justify-center'
+        )}
+        onClick={stopModalClickPropagation}
+      >
+        <Dialog.Panel
+          className={modalClassName}
+          as={motion.div}
+          {...(modalAnimation ?? modal)}
+          onClick={closePanelOnClick ? closeModal : undefined}
         >
-          <motion.div
-            className='hover-animation fixed inset-0 bg-black/40 dark:bg-[#5B7083]/40'
-            aria-hidden='true'
-            onClick={stopModalClickPropagation}
-            {...backdrop}
-          />
-          <div
-            className={cn(
-              'fixed inset-0 overflow-y-auto p-4',
-              className ?? 'flex items-center justify-center'
-            )}
-            onClick={stopModalClickPropagation}
-          >
-            <Dialog.Panel
-              className={modalClassName}
-              as={motion.div}
-              {...(modalAnimation ?? modal)}
-              onClick={closePanelOnClick ? closeModal : undefined}
-            >
-              {children}
-            </Dialog.Panel>
-          </div>
-        </Dialog>
-      )}
-    </AnimatePresence>
+          {children}
+        </Dialog.Panel>
+      </div>
+    </Dialog>
   );
 }

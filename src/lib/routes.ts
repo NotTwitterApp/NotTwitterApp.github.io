@@ -28,7 +28,7 @@ function safeBtoa(value: string): string {
   return Buffer.from(value, 'utf8').toString('base64');
 }
 
-function postIdFromAtUri(uri: string): string {
+export function postIdFromAtUri(uri: string): string {
   return safeBtoa(uri)
     .replace(/\+/g, '-')
     .replace(/\//g, '_')

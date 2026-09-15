@@ -1,3 +1,7 @@
+import {
+  useLinkedTweet,
+  toEmbeddedTweet as getQuotedTweetPreview
+} from '@lib/hooks/use-linked-tweet';
 import { UndoTweetComposerStatus } from './undo-tweet-status';
 import Link from 'next/link';
 import {
@@ -15,8 +19,8 @@ import TextArea from 'react-textarea-autosize';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';
 import { RichText } from '@atproto/api';
-import { tweetsCollection, usersCollection } from '@lib/atproto/collections';
-import { addDoc, doc, getDoc, serverTimestamp } from '@lib/atproto/store';
+import { tweetsCollection } from '@lib/atproto/collections';
+import { addDoc, getDoc, serverTimestamp } from '@lib/atproto/store';
 import {
   canonicalizeBskyPostLinksInText,
   getBskyPostLinkFromText,
@@ -69,7 +73,6 @@ import type { WithFieldValue } from '@lib/atproto/store';
 import type { Variants } from 'framer-motion';
 import type { User } from '@lib/types/user';
 import type {
-  EmbeddedTweet,
   Tweet,
   TweetCard,
   TweetReplySetting,
@@ -130,22 +133,6 @@ function getUndoTweetKind({
   if (quoteTweet) return 'quote';
 
   return 'tweet';
-}
-
-function getQuotedTweetPreview(tweet: TweetWithUser): EmbeddedTweet {
-  return {
-    id: tweet.id,
-    authorName: tweet.user.name,
-    authorUsername: tweet.user.username,
-    authorAvatar: tweet.user.photoURL,
-    authorVerified: tweet.user.verified,
-    text: tweet.text,
-    langs: tweet.langs,
-    createdAt: tweet.createdAt,
-    images: tweet.images,
-    mediaWarning: tweet.mediaWarning,
-    card: tweet.card
-  };
 }
 
 export const variants: Variants = {
@@ -477,8 +464,6 @@ export function Input({
   const [selectedGifCard, setSelectedGifCard] = useState<TweetCard | null>(
     null
   );
-  const [linkedQuoteTweet, setLinkedQuoteTweet] =
-    useState<TweetWithUser | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [visited, setVisited] = useState(false);
@@ -525,9 +510,8 @@ export function Input({
     () => (quoteTweet ? null : getBskyPostLinkFromText(inputValue)),
     [inputValue, quoteTweet]
   );
-  const detectedPostLinkTweetId = detectedPostLink?.tweetId ?? null;
-  const linkedQuoteIsCurrent =
-    !!linkedQuoteTweet && linkedQuoteTweet.id === detectedPostLinkTweetId;
+  const linkedQuoteTweet = useLinkedTweet(detectedPostLink);
+  const linkedQuoteIsCurrent = !!linkedQuoteTweet;
   const activeQuoteTweet =
     quoteTweet ?? (linkedQuoteIsCurrent ? linkedQuoteTweet : null);
   const submittedText = useMemo(
@@ -541,7 +525,8 @@ export function Input({
   const previewCount = imagesPreview.length;
   const isUploadingImages = !!previewCount;
   const activeExternalCard =
-    selectedGifCard ?? (!isUploadingImages ? youtubeCard : null);
+    selectedGifCard ??
+    (!isUploadingImages && !activeQuoteTweet ? youtubeCard : null);
 
   const refreshAvailableDrafts = useCallback((): void => {
     setAvailableDrafts(getTweetDraftsForUser(userId, draftScope.type));
@@ -615,40 +600,6 @@ export function Input({
     setVisited(true);
     requestAnimationFrame(() => inputRef.current?.focus());
   }, [focusSignal]);
-
-  useEffect(() => {
-    if (quoteTweet || !detectedPostLinkTweetId) {
-      setLinkedQuoteTweet(null);
-      return;
-    }
-
-    let canceled = false;
-    const tweetId = detectedPostLinkTweetId;
-
-    setLinkedQuoteTweet(null);
-
-    void (async (): Promise<void> => {
-      const tweetSnapshot = await getDoc(doc(tweetsCollection, tweetId));
-
-      if (!tweetSnapshot.exists()) return;
-
-      const tweet = tweetSnapshot.data();
-      const userSnapshot = await getDoc(doc(usersCollection, tweet.createdBy));
-
-      if (!userSnapshot.exists() || canceled) return;
-
-      setLinkedQuoteTweet({
-        ...tweet,
-        user: userSnapshot.data()
-      });
-    })().catch(() => {
-      if (!canceled) setLinkedQuoteTweet(null);
-    });
-
-    return () => {
-      canceled = true;
-    };
-  }, [detectedPostLinkTweetId, quoteTweet]);
 
   const clearCurrentDraft = useCallback((): void => {
     deleteTweetDraft(draftScope);
@@ -1125,7 +1076,7 @@ export function Input({
     : null;
   const shouldCompactQuotedTweetPreview =
     isUploadingImages || !!activeExternalCard;
-  const showModalHeader = !!modal && !replyModal && !!closeModal;
+  const showModalHeader = !!modal && !!closeModal;
   const isUndoTweetPending = !!pendingUndoTweet;
 
   const inputLength = useMemo(
@@ -1312,18 +1263,20 @@ export function Input({
                 updateAltText={!loading ? updateImageAltText : undefined}
               />
             )}
-            {youtubeCard && !selectedGifCard && !isUploadingImages && (
-              <div className='min-w-0 max-w-full overflow-hidden'>
-                <TweetEmbed card={youtubeCard} quotedTweet={null} />
-              </div>
-            )}
+            {youtubeCard &&
+              !activeQuoteTweet &&
+              !selectedGifCard &&
+              !isUploadingImages && (
+                <div className='min-w-0 max-w-full overflow-hidden'>
+                  <TweetEmbed card={youtubeCard} quotedTweet={null} />
+                </div>
+              )}
             {quotedTweetPreview && (
               <div className='min-w-0 max-w-full overflow-hidden'>
                 <TweetEmbed
                   card={null}
                   quotedTweet={quotedTweetPreview}
                   hideQuotedTweetMedia={shouldCompactQuotedTweetPreview}
-                  expandQuotedTweet={!shouldCompactQuotedTweetPreview}
                 />
               </div>
             )}

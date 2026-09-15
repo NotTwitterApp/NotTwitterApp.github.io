@@ -14,8 +14,9 @@ import { useAuth } from '@lib/context/auth-context';
 import { useTheme } from '@lib/context/theme-context';
 import { formatDate } from '@lib/date';
 import { useStandardSiteArticlesInline } from '@lib/hooks/use-standard-site-articles-inline';
-import { getTweetPath } from '@lib/routes';
-import { createYouTubeCardFromText, getYouTubeVideoInfo } from '@lib/youtube';
+import { getBskyPostLinkFromText, getTweetPath } from '@lib/routes';
+import { useLinkedTweet, toEmbeddedTweet } from '@lib/hooks/use-linked-tweet';
+import { getYouTubeVideoInfo } from '@lib/youtube';
 import { ImagePreview } from '@components/input/image-preview';
 import { CustomIcon } from '@components/ui/custom-icon';
 import { HeroIcon } from '@components/ui/hero-icon';
@@ -47,6 +48,9 @@ type ArticleNotificationAuthor = Pick<
 >;
 
 type TweetEmbedProps = {
+  text?: string | null;
+  hasMedia?: boolean;
+  contextOnly?: boolean;
   card: TweetCard | null;
   quotedTweet: EmbeddedTweet | null;
   viewTweet?: boolean;
@@ -1151,6 +1155,13 @@ function isAnimatedCardImage(src: string): boolean {
 
 function LinkCardPreviewMedia({ card }: LinkCardProps): JSX.Element {
   const image = card.image as string;
+  const [failedImage, setFailedImage] = useState<string | null>(null);
+  if (failedImage === image)
+    return (
+      <div className='absolute inset-0 flex items-center justify-center text-main-secondary'>
+        <HeroIcon className='h-8 w-8' iconName='LinkIcon' />
+      </div>
+    );
   const className = 'absolute inset-0 h-full w-full object-cover';
 
   if (isVideoCardImage(image))
@@ -1158,6 +1169,7 @@ function LinkCardPreviewMedia({ card }: LinkCardProps): JSX.Element {
       <video
         className={className}
         src={image}
+        onError={() => setFailedImage(image)}
         autoPlay
         loop
         muted
@@ -1166,7 +1178,15 @@ function LinkCardPreviewMedia({ card }: LinkCardProps): JSX.Element {
     );
 
   if (isAnimatedCardImage(image))
-    return <img className={className} src={image} alt='' draggable={false} />;
+    return (
+      <img
+        className={className}
+        src={image}
+        alt=''
+        draggable={false}
+        onError={() => setFailedImage(image)}
+      />
+    );
 
   return (
     <NextImage
@@ -1174,6 +1194,7 @@ function LinkCardPreviewMedia({ card }: LinkCardProps): JSX.Element {
       imgClassName='object-cover'
       fill
       src={image}
+      onError={() => setFailedImage(image)}
       alt=''
       useSkeleton
     />
@@ -1223,7 +1244,7 @@ function LinkCardImage({ card, compact }: LinkCardProps): JSX.Element | null {
 
   if (!card.image)
     return (
-      <div className='dark:bg-dark-hover flex h-full w-[92px] shrink-0 items-center justify-center bg-light-line-reply text-light-secondary dark:text-dark-secondary'>
+      <div className='dark:bg-dark-hover flex min-h-[129px] w-[129px] self-stretch shrink-0 items-center justify-center bg-light-line-reply text-light-secondary dark:text-dark-secondary'>
         {isStandardSiteCard(card) ? (
           <LinkCardSourceIcon
             card={card}
@@ -1239,13 +1260,13 @@ function LinkCardImage({ card, compact }: LinkCardProps): JSX.Element | null {
 
   if (compact)
     return (
-      <div className='dark:bg-dark-hover relative h-full w-[92px] shrink-0 bg-light-line-reply'>
+      <div className='dark:bg-dark-hover relative min-h-[129px] w-[129px] self-stretch shrink-0 border-r border-light-border bg-light-line-reply dark:border-dark-border'>
         <LinkCardPreviewMedia card={card} compact />
       </div>
     );
 
   return (
-    <div className='dark:bg-dark-hover relative w-full overflow-hidden bg-light-line-reply pt-[52.35%]'>
+    <div className='dark:bg-dark-hover relative w-full overflow-hidden bg-light-line-reply aspect-[1.91/1]'>
       <LinkCardPreviewMedia card={card} />
     </div>
   );
@@ -1275,7 +1296,7 @@ function EnhancedLinkCardSourceRow({
 function ArticleCover({ card }: LinkCardProps): JSX.Element {
   if (card.image)
     return (
-      <div className='dark:bg-dark-hover relative w-full overflow-hidden bg-light-line-reply pt-[52.35%]'>
+      <div className='dark:bg-dark-hover relative w-full overflow-hidden bg-light-line-reply aspect-[1.91/1]'>
         <LinkCardPreviewMedia card={card} />
       </div>
     );
@@ -1577,6 +1598,7 @@ function TweetYouTubeCard({
   card: TweetCard;
   video: YouTubeVideoInfo;
 }): JSX.Element {
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
   const title = getCardTitle(card);
   const openCard = (event: MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
@@ -1595,15 +1617,33 @@ function TweetYouTubeCard({
       onKeyDown={stopEmbedEvent}
     >
       <div className='relative bg-black pt-[56.25%]'>
-        <iframe
-          className='absolute inset-0 h-full w-full'
-          src={video.embedUrl}
-          title={title}
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-          allowFullScreen
-          loading='lazy'
-          referrerPolicy='strict-origin-when-cross-origin'
-        />
+        {playingVideo === video.id ? (
+          <iframe
+            className='absolute inset-0 h-full w-full'
+            src={`${video.embedUrl}&autoplay=1`}
+            title={title}
+            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+            allowFullScreen
+            loading='lazy'
+            referrerPolicy='strict-origin-when-cross-origin'
+          />
+        ) : (
+          <button
+            type='button'
+            className='absolute inset-0 h-full w-full'
+            aria-label={`Play ${title}`}
+            onClick={() => setPlayingVideo(video.id)}
+          >
+            <img
+              className='h-full w-full object-cover'
+              src={card.image || video.thumbnail}
+              alt=''
+            />
+            <span className='absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-4 border-white bg-main-accent text-white'>
+              <HeroIcon className='h-7 w-7' iconName='PlayIcon' solid />
+            </span>
+          </button>
+        )}
       </div>
       <button
         className='flex w-full min-w-0 flex-col border-t border-light-border/90 px-3 py-2.5
@@ -1685,12 +1725,12 @@ function TweetLinkCard({
   if (isCompact)
     return (
       <CardShell
-        className='min-h-[104px]'
+        className='min-h-[129px]'
         ariaLabel={title}
         onClick={openCard}
         onKeyDown={onEnterOrSpace(openCard)}
       >
-        <div className='flex h-full min-h-[104px] min-w-0 max-w-full'>
+        <div className='flex h-full min-h-[129px] min-w-0 max-w-full'>
           <LinkCardImage card={card} compact />
           <div className='flex min-w-0 flex-1 flex-col justify-center px-3 py-2.5'>
             {enhanced ? (
@@ -1776,41 +1816,6 @@ function getMediaThumbnailSrc(media: ImageData): string | null | undefined {
   return isVideoLikeMedia(media) ? media.poster : (media.poster ?? media.src);
 }
 
-function getQuotedCardPreviewMedia(
-  card: TweetCard | null
-): ImagesPreview | null {
-  if (!card?.image) return null;
-
-  return [
-    {
-      id: `${card.url}-quote-card-preview`,
-      src: card.image,
-      alt: card.title,
-      type: card.type === 'youtube' ? 'video' : 'image',
-      poster: card.image,
-      aspectRatio: null
-    }
-  ];
-}
-
-function getQuotedTweetPreviewMedia({
-  quotedTweet,
-  card,
-  hideMedia,
-  expanded
-}: {
-  quotedTweet: EmbeddedTweet;
-  card: TweetCard | null;
-  hideMedia?: boolean;
-  expanded?: boolean;
-}): ImagesPreview | null {
-  if (hideMedia || expanded) return null;
-
-  if (quotedTweet.images?.length) return quotedTweet.images;
-
-  return getQuotedCardPreviewMedia(card);
-}
-
 function getQuoteMediaGridClassName(
   index: number,
   previewCount: number
@@ -1854,7 +1859,7 @@ function QuotedTweetMediaGrid({
   return (
     <div
       className={cn(
-        `dark:bg-dark-hover relative mt-2 grid w-full overflow-hidden rounded-xl border
+        `dark:bg-dark-hover relative mt-2 grid w-full overflow-hidden border-t
          border-light-border bg-light-line-reply dark:border-dark-border`,
         singleMedia
           ? 'aspect-[16/9] max-h-[360px] min-h-[150px] grid-cols-1 grid-rows-1'
@@ -2014,17 +2019,14 @@ function QuotedTweetCard({
       />
     );
 
-  const quotedTweetCard = hideMedia
-    ? null
-    : (quotedTweet.card ?? createYouTubeCardFromText(quotedTweet.text));
   const expandPreview = expanded && !hideMedia;
-  const compactMedia = getQuotedTweetPreviewMedia({
-    quotedTweet,
-    card: quotedTweetCard,
-    hideMedia,
-    expanded: expandPreview
-  });
-  const quotedTweetCardPreview = expandPreview ? quotedTweetCard : null;
+  const compactMedia =
+    !hideMedia &&
+    !expandPreview &&
+    !quotedTweet.mediaWarning &&
+    quotedTweet.images?.length
+      ? quotedTweet.images
+      : null;
   const tweetHref = quotedTweet.id
     ? getTweetPath(quotedTweet.id, quotedTweet.authorUsername)
     : null;
@@ -2063,7 +2065,9 @@ function QuotedTweetCard({
                 langs={quotedTweet.langs}
               />
             )}
-            <QuotedTweetMediaGrid media={compactMedia} />
+            <div className='-mx-3 -mb-3'>
+              <QuotedTweetMediaGrid media={compactMedia} />
+            </div>
           </>
         ) : quotedTweet.text ? (
           <>
@@ -2090,19 +2094,15 @@ function QuotedTweetCard({
             moderationWarning={quotedTweet.mediaWarning}
           />
         )}
-        {quotedTweetCardPreview && (
-          <TweetLinkCard
-            card={quotedTweetCardPreview}
-            compact
-            articleTweetPath={tweetHref}
-          />
-        )}
       </div>
     </CardShell>
   );
 }
 
 export function TweetEmbed({
+  text,
+  hasMedia = false,
+  contextOnly = false,
   card,
   quotedTweet,
   viewTweet,
@@ -2113,24 +2113,33 @@ export function TweetEmbed({
 }: TweetEmbedProps): JSX.Element | null {
   const { standardSiteArticlesInline } = useStandardSiteArticlesInline();
 
-  if (!card && !quotedTweet) return null;
+  const linkedPost = !quotedTweet
+    ? (getBskyPostLinkFromText(card?.url ?? '') ??
+      getBskyPostLinkFromText(text ?? ''))
+    : null;
+  const linkedTweet = useLinkedTweet(linkedPost);
+  const visibleQuote =
+    quotedTweet ?? (linkedTweet ? toEmbeddedTweet(linkedTweet) : null);
+  const visibleCard = !hasMedia && !contextOnly && !visibleQuote ? card : null;
+
+  if (!visibleCard && !visibleQuote) return null;
 
   return (
     <>
-      {card && (
+      {visibleCard && (
         <TweetLinkCard
-          card={card}
+          card={visibleCard}
           fullArticleReader={viewTweet}
           standardSiteArticlesInline={standardSiteArticlesInline}
           articleAuthor={articleAuthor}
           articleTweetPath={articleTweetPath}
         />
       )}
-      {quotedTweet && (
+      {visibleQuote && (
         <QuotedTweetCard
-          quotedTweet={quotedTweet}
+          quotedTweet={visibleQuote}
           viewTweet={viewTweet}
-          hideMedia={hideQuotedTweetMedia}
+          hideMedia={hideQuotedTweetMedia || hasMedia || contextOnly}
           expanded={expandQuotedTweet}
         />
       )}
