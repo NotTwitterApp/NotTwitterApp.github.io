@@ -8663,7 +8663,6 @@ async function getTweetThreadWithDepth(
     parentHeight = BSKY_THREAD_PARENT_PAGE_SIZE + 1
   }: { depth?: number; parentHeight?: number } = {}
 ): Promise<TweetThreadPage | null> {
-  if (!agent) return null;
   if (!id || id === 'null') return null;
   if (locallyDeletedTweetIds.has(id)) return null;
 
