@@ -18,14 +18,18 @@ export function getStandardSiteArticleCacheKey(card: TweetCard): string {
 }
 
 // Share in-flight requests, but let failed reads recover on the next attempt.
-export function createArticleCache<T>(timeoutMs = 30_000) {
+export function createArticleCache<T>(
+  timeoutMs = 30_000,
+  maxAgeMs = 5 * 60_000
+) {
   const entries = new Map<
     string,
-    { request: Promise<T | null>; expiresAt: number }
+    { request: Promise<T | null>; expiresAt: number; pending: boolean }
   >();
   return (key: string, read: () => Promise<T | null>): Promise<T | null> => {
     const cached = entries.get(key);
-    if (cached && cached.expiresAt > Date.now()) return cached.request;
+    if (cached && (cached.pending || cached.expiresAt > Date.now()))
+      return cached.request;
     let timer: ReturnType<typeof setTimeout>;
     const deadline = new Promise<null>((resolve) => {
       timer = setTimeout(() => resolve(null), timeoutMs);
@@ -33,18 +37,21 @@ export function createArticleCache<T>(timeoutMs = 30_000) {
     const request = Promise.race([Promise.resolve().then(read), deadline])
       .catch(() => null)
       .finally(() => clearTimeout(timer));
-    const entry = { request, expiresAt: Date.now() + 5 * 60_000 };
+    const entry = { request, expiresAt: Infinity, pending: true };
     entries.delete(key);
     entries.set(key, entry);
     if (entries.size > 100) entries.delete(entries.keys().next().value!);
     void request.then((value) => {
-      if (value === null && entries.get(key) === entry) entries.delete(key);
+      entry.pending = false;
+      entry.expiresAt = Date.now() + maxAgeMs;
+      if ((value === null || maxAgeMs === 0) && entries.get(key) === entry)
+        entries.delete(key);
     });
     return request;
   };
 }
 
-const readHtml = createArticleCache<string>();
+const readHtml = createArticleCache<string>(30_000, 0);
 
 export function fetchStandardSiteArticleHTML(
   url: string,
@@ -80,6 +87,7 @@ export function fetchStandardSiteArticleHTML(
       try {
         const response = await fetch(candidate, {
           signal: controller.signal,
+          cache: 'no-cache',
           credentials: 'omit',
           referrerPolicy: 'no-referrer'
         });

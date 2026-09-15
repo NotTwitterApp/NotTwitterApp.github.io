@@ -127,3 +127,34 @@ it('skips unusable HTML and retries when every host has failed', async () => {
     global.fetch = original;
   }
 });
+
+it('shares an in-flight revision read but checks again after it completes', async () => {
+  const cache = createArticleCache<string>(12_000, 0);
+  const read = jest
+    .fn()
+    .mockResolvedValueOnce('Original')
+    .mockResolvedValueOnce('Edited');
+  const first = cache('same-document-uri', read);
+  expect(cache('same-document-uri', read)).toBe(first);
+  expect(await first).toBe('Original');
+  expect(await cache('same-document-uri', read)).toBe('Edited');
+});
+it('revalidates HTML instead of retaining the old page after an edit', async () => {
+  const original = global.fetch;
+  const fetchMock = jest
+    .fn()
+    .mockResolvedValueOnce({ ok: true, text: async () => 'Original HTML' })
+    .mockResolvedValueOnce({ ok: true, text: async () => 'Edited HTML' });
+  global.fetch = fetchMock;
+  try {
+    expect(
+      await fetchStandardSiteArticleHTML('https://example.com/edited')
+    ).toBe('Original HTML');
+    expect(
+      await fetchStandardSiteArticleHTML('https://example.com/edited')
+    ).toBe('Edited HTML');
+    expect(fetchMock.mock.calls[1][1].cache).toBe('no-cache');
+  } finally {
+    global.fetch = original;
+  }
+});

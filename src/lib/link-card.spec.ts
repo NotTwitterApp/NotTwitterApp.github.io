@@ -5,12 +5,18 @@ import {
   resolveSubmissionLinkCard
 } from './link-card';
 import { fetchStandardSiteArticleHTML } from './standard-site-loader';
-import { getStandardSiteLinkCard } from './atproto/backend';
+import {
+  getStandardSiteLinkCard,
+  getStandardSiteArticleSnapshot
+} from './atproto/backend';
 jest.mock('./standard-site-loader', () => ({
   ...jest.requireActual('./standard-site-loader'),
   fetchStandardSiteArticleHTML: jest.fn()
 }));
-jest.mock('./atproto/backend', () => ({ getStandardSiteLinkCard: jest.fn() }));
+jest.mock('./atproto/backend', () => ({
+  getStandardSiteLinkCard: jest.fn(),
+  getStandardSiteArticleSnapshot: jest.fn()
+}));
 
 it('discovers Standard.site records even when a page has no Open Graph tags', async () => {
   const url = 'https://erickrouss.github.io/blog/welcome/';
@@ -93,4 +99,43 @@ it('does not attach a link card alongside native media or an explicit quote', as
     ).toBeNull();
   }
   expect(fetchStandardSiteArticleHTML).not.toHaveBeenCalled();
+});
+
+it('uses the current article revision when sending an older composer preview', async () => {
+  const card = {
+    type: 'external' as const,
+    url: 'https://example.com/edit',
+    title: 'Original',
+    description: null,
+    image: null,
+    domain: 'example.com',
+    associatedRefs: [
+      { uri: 'at://did:plc:author/site.standard.document/edit', cid: 'old-cid' }
+    ]
+  };
+  const latest = {
+    ...card,
+    title: 'Edited',
+    associatedRefs: [{ ...card.associatedRefs[0], cid: 'new-cid' }]
+  };
+  jest.mocked(getStandardSiteArticleSnapshot).mockResolvedValueOnce({
+    card: latest,
+    article: {
+      url: card.url,
+      title: 'Edited',
+      description: null,
+      textContent: 'Updated',
+      publishedAt: null,
+      updatedAt: null,
+      tags: []
+    }
+  });
+  expect(
+    await resolveSubmissionLinkCard({
+      text: card.url,
+      card,
+      hasMedia: false,
+      hasQuote: false
+    })
+  ).toEqual(latest);
 });

@@ -56,6 +56,7 @@ export type StandardSiteArticle = {
   textContent: string;
   content?: unknown;
   documentURI?: string | null;
+  revision?: string | null;
   publishedAt: string | null;
   updatedAt: string | null;
   tags: string[];

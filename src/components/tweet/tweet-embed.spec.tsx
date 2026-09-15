@@ -1,7 +1,17 @@
 import { getLinkCard } from '@lib/link-card';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react';
 import { SWRConfig } from 'swr';
-import { getTweet, getUser } from '@lib/atproto/backend';
+import {
+  getTweet,
+  getUser,
+  getStandardSiteArticleSnapshot
+} from '@lib/atproto/backend';
 import { Timestamp } from '@lib/atproto/timestamp';
 import { TweetEmbed } from './tweet-embed';
 import type { EmbeddedTweet, TweetCard } from '@lib/types/tweet';
@@ -25,7 +35,8 @@ jest.mock('@lib/hooks/use-standard-site-articles-inline', () => ({
 }));
 jest.mock('@lib/atproto/backend', () => ({
   getUser: jest.fn(),
-  getTweet: jest.fn()
+  getTweet: jest.fn(),
+  getStandardSiteArticleSnapshot: jest.fn()
 }));
 jest.mock('@components/input/image-preview', () => ({
   ImagePreview: () => <div data-testid='native-media' />
@@ -200,18 +211,16 @@ it('preserves an attached article card when the text also contains a Bluesky lin
 });
 
 it('recovers a Standard.site article from an older URL-only Tweet', async () => {
-  jest
-    .mocked(getLinkCard)
-    .mockResolvedValueOnce({
-      ...card,
-      title: 'Welcome',
-      associatedRefs: [
-        {
-          uri: 'at://did:plc:author/site.standard.document/3abc',
-          cid: 'document-cid'
-        }
-      ]
-    });
+  jest.mocked(getLinkCard).mockResolvedValueOnce({
+    ...card,
+    title: 'Welcome',
+    associatedRefs: [
+      {
+        uri: 'at://did:plc:author/site.standard.document/3abc',
+        cid: 'document-cid'
+      }
+    ]
+  });
   show(
     <TweetEmbed
       text='My new blog https://example.com/welcome'
@@ -234,4 +243,112 @@ it('does not invent an attachment for an ordinary URL-only published Tweet', asy
     expect(getLinkCard).toHaveBeenCalledWith('https://example.com/plain-link')
   );
   expect(container.querySelector('[role="link"]')).toBeNull();
+});
+
+it('refreshes an edited article and cover while the original Tweet reference stays unchanged', async () => {
+  jest.useFakeTimers();
+  const original = {
+    ...card,
+    associatedRefs: [
+      {
+        uri: 'at://did:plc:author/site.standard.document/current',
+        cid: 'original-post-cid'
+      }
+    ]
+  };
+  const revision = (version: number) => ({
+    card: {
+      ...original,
+      title: `Title ${version}`,
+      description: null,
+      image: `https://example.com/cover-${version}.jpg`
+    },
+    article: {
+      url: card.url,
+      title: `Title ${version}`,
+      description: null,
+      textContent: `Body ${version}`,
+      publishedAt: null,
+      updatedAt: null,
+      revision: `cid-${version}`,
+      tags: []
+    }
+  });
+  const read = jest.mocked(getStandardSiteArticleSnapshot);
+  read.mockReset();
+  read
+    .mockResolvedValueOnce(revision(1))
+    .mockResolvedValueOnce(revision(2))
+    .mockRejectedValue(new Error('offline'));
+  try {
+    const { container } = show(
+      <TweetEmbed card={original} quotedTweet={null} viewTweet />
+    );
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(1);
+    });
+    expect(screen.getByText('Body 1')).toBeTruthy();
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(60_001);
+    });
+    expect(screen.getByText('Title 2')).toBeTruthy();
+    expect(screen.getByText('Body 2')).toBeTruthy();
+    expect(screen.queryByText('Body 1')).toBeNull();
+    expect(
+      container.querySelector('img[src="https://example.com/cover-2.jpg"]')
+    ).toBeTruthy();
+    expect(read.mock.calls[1][0].associatedRefs?.[0].cid).toBe(
+      'original-post-cid'
+    );
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(60_001);
+    });
+    expect(screen.getByText('Body 2')).toBeTruthy();
+  } finally {
+    jest.useRealTimers();
+  }
+});
+
+it('checks the current article again when returning to the tab', async () => {
+  jest.useFakeTimers();
+  const original = {
+    ...card,
+    associatedRefs: [
+      {
+        uri: 'at://did:plc:author/site.standard.document/focus',
+        cid: 'posted-cid'
+      }
+    ]
+  };
+  const read = jest.mocked(getStandardSiteArticleSnapshot);
+  const snapshot = (title: string) => ({
+    card: { ...original, title },
+    article: {
+      url: card.url,
+      title,
+      description: null,
+      textContent: 'Article text',
+      publishedAt: null,
+      updatedAt: null,
+      tags: []
+    }
+  });
+  read.mockReset();
+  read
+    .mockResolvedValueOnce(snapshot('Before edit'))
+    .mockResolvedValue(snapshot('After edit'));
+  try {
+    show(<TweetEmbed card={original} quotedTweet={null} viewTweet />);
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(6000);
+    });
+    expect(screen.getByText('Before edit')).toBeTruthy();
+    await act(async () => {
+      window.dispatchEvent(new Event('focus'));
+      await jest.advanceTimersByTimeAsync(1);
+    });
+    expect(screen.getByText('After edit')).toBeTruthy();
+  } finally {
+    jest.useRealTimers();
+  }
 });

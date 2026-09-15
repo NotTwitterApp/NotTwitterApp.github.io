@@ -1,4 +1,4 @@
-import { createArticleCache, getStandardSiteArticleCacheKey, getStandardSiteDocumentUris } from '@lib/standard-site-loader';
+import { createArticleCache, getStandardSiteDocumentUris } from '@lib/standard-site-loader';
 import {
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
@@ -1807,6 +1807,8 @@ async function callServiceRawXrpc<T>(
     buildXrpcPath(method, params),
     {
       method: httpMethod,
+      cache:
+        method === 'app.bsky.embed.getEmbedExternalView' ? 'no-cache' : undefined,
       headers,
       body: data ? JSON.stringify(data) : undefined
     }
@@ -1932,7 +1934,11 @@ async function callRawAppViewQueryXrpc<T>(
 
   const response = await fetch(
     `${baseUrl}/xrpc/${method}${queryString ? `?${queryString}` : ''}`,
-    { headers }
+    {
+      headers,
+      cache:
+        method === 'app.bsky.embed.getEmbedExternalView' ? 'no-cache' : undefined
+    }
   );
 
   if (!response.ok) {
@@ -4806,7 +4812,15 @@ function getCardAssociatedRefs(
     .filter((ref): ref is { uri: string; cid: string } => !!ref);
 }
 
-const readStandardSiteArticle = createArticleCache<StandardSiteArticle>(12_000);
+const readStandardSiteArticle = createArticleCache<StandardSiteArticleSnapshot>(
+  12_000,
+  0
+);
+
+export type StandardSiteArticleSnapshot = {
+  card: TweetCard;
+  article: StandardSiteArticle;
+};
 
 function getRecordString(
   record: Record<string, unknown>,
@@ -4927,7 +4941,7 @@ function getStandardSiteDocumentRecord(
 
 async function fetchStandardSiteArticle(
   card: TweetCard
-): Promise<StandardSiteArticle | null> {
+): Promise<StandardSiteArticleSnapshot | null> {
   const uris = getStandardSiteDocumentUris(card);
 
   if (!uris.length) return null;
@@ -4950,14 +4964,16 @@ async function fetchStandardSiteArticle(
       uri.includes(`/${STANDARD_SITE_DOCUMENT_COLLECTION}/`)
     ) ?? null;
 
-  return {
+  const article: StandardSiteArticle = {
+    revision:
+      response.associatedRefs?.find((ref) => ref.uri === documentURI)?.cid ??
+      JSON.stringify(documentRecord),
     url:
       getRecordString(documentRecord, 'canonicalUrl') ??
       response.view?.external.uri ??
       card.url,
     title: getRecordString(documentRecord, 'title') ?? card.title,
-    description:
-      getRecordString(documentRecord, 'description') ?? card.description,
+    description: getRecordString(documentRecord, 'description'),
     textContent,
     content: documentRecord.content,
     documentURI,
@@ -4967,12 +4983,38 @@ async function fetchStandardSiteArticle(
       getRecordString(documentRecord, 'updatedAt') ?? card.updatedAt ?? null,
     tags: getRecordTags(documentRecord)
   };
+  return {
+    article,
+    card: response.view
+      ? {
+          ...mapExternalCard(response.view),
+          associatedRefs: getCardAssociatedRefs(
+            response.associatedRefs ?? response.view.external.associatedRefs
+          )
+        }
+      : {
+          ...card,
+          title: article.title,
+          description: article.description,
+          updatedAt: article.updatedAt
+        }
+  };
+}
+
+export async function getStandardSiteArticleSnapshot(
+  card: TweetCard
+): Promise<StandardSiteArticleSnapshot | null> {
+  const key = JSON.stringify([
+    card.url,
+    getStandardSiteDocumentUris(card).sort()
+  ]);
+  return readStandardSiteArticle(key, () => fetchStandardSiteArticle(card));
 }
 
 export async function getStandardSiteArticle(
   card: TweetCard
 ): Promise<StandardSiteArticle | null> {
-  return readStandardSiteArticle(getStandardSiteArticleCacheKey(card), () => fetchStandardSiteArticle(card));
+  return (await getStandardSiteArticleSnapshot(card))?.article ?? null;
 }
 
 function getCardReadingTime(

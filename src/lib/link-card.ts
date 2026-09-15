@@ -1,3 +1,4 @@
+import { isStandardSiteArticleCard } from './standard-site';
 import {
   createArticleCache,
   fetchStandardSiteArticleHTML
@@ -101,6 +102,15 @@ export async function resolveSubmissionLinkCard({
   hasMedia: boolean;
   hasQuote: boolean;
 }): Promise<TweetCard | null> {
+  if (card && isStandardSiteArticleCard(card)) {
+    try {
+      const { getStandardSiteArticleSnapshot } =
+        await import('./atproto/backend');
+      return (await getStandardSiteArticleSnapshot(card))?.card ?? card;
+    } catch {
+      return card;
+    }
+  }
   if (card || hasMedia || hasQuote) return card;
   const url = getArticleLink(text);
   return url ? getLinkCard(url) : null;

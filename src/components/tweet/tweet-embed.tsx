@@ -1,11 +1,9 @@
+import { useStandardSiteArticle } from '@lib/hooks/use-standard-site-article';
 import { useLinkCard } from '@lib/hooks/use-link-card';
 /* eslint-disable @next/next/no-img-element */
 
 import { isStandardSiteArticleCard as isStandardSiteCard } from '@lib/standard-site';
-import {
-  fetchStandardSiteArticleHTML,
-  getStandardSiteArticleCacheKey
-} from '@lib/standard-site-loader';
+import { fetchStandardSiteArticleHTML } from '@lib/standard-site-loader';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import cn from 'clsx';
@@ -1008,58 +1006,6 @@ function renderRichInlineText(text: string): ReactNode[] {
   return nodes.filter(Boolean);
 }
 
-function useStandardSiteArticleReader(card: TweetCard): {
-  article: StandardSiteArticle | null;
-  loading: boolean;
-} {
-  const [article, setArticle] = useState<StandardSiteArticle | null>(null);
-  const [loading, setLoading] = useState(false);
-  const cardRef = useRef(card);
-  cardRef.current = card;
-  const requestKey = getStandardSiteArticleCacheKey(card);
-
-  useEffect(() => {
-    let canceled = false;
-
-    setArticle(null);
-
-    const requestedCard = cardRef.current;
-    setLoading(true);
-
-    void import('@lib/atproto/backend')
-      .then(({ getStandardSiteArticle }) =>
-        getStandardSiteArticle(requestedCard)
-      )
-      .catch(() => null)
-      .then((nextArticle) => {
-        if (!canceled)
-          setArticle(
-            nextArticle ?? {
-              url: requestedCard.url,
-              title: requestedCard.title,
-              description: requestedCard.description,
-              textContent: '',
-              publishedAt: requestedCard.createdAt ?? null,
-              updatedAt: requestedCard.updatedAt ?? null,
-              tags: []
-            }
-          );
-      })
-      .catch(() => {
-        if (!canceled) setArticle(null);
-      })
-      .finally(() => {
-        if (!canceled) setLoading(false);
-      });
-
-    return () => {
-      canceled = true;
-    };
-  }, [requestKey]);
-
-  return { article, loading };
-}
-
 function ArticleNotificationButton({
   author
 }: {
@@ -1319,15 +1265,18 @@ function TweetStandardSiteArticleCard({
   title,
   description,
   articleAuthor,
+  article,
+  loading,
   onOpenArticle,
   onOpenWebsite
 }: LinkCardProps & {
   title: string;
   description: string | null;
+  article: StandardSiteArticle | null;
+  loading: boolean;
   onOpenArticle: (event: CardEvent) => void;
   onOpenWebsite: (event: CardEvent) => void;
 }): JSX.Element {
-  const { article, loading } = useStandardSiteArticleReader(card);
   const visibleTitle = article?.title ?? title;
   const visibleDescription = article?.description ?? description;
   const readingTimeLabel = getCardReadingTimeLabel(card.readingTime);
@@ -1443,9 +1392,7 @@ function StandardSiteArticleBody({
     let canceled = false;
     const shouldFetchHTML =
       !hasRichArticleBlocks(articleBlocks) &&
-      (fullArticleReader ||
-        articleBlocks.length === 0 ||
-        article.textContent.trim().length === 0);
+      (articleBlocks.length === 0 || article.textContent.trim().length === 0);
 
     setHtmlBlocks(null);
     setHtmlLoading(shouldFetchHTML);
@@ -1454,7 +1401,7 @@ function StandardSiteArticleBody({
 
     void fetchStandardSiteArticleHTML(
       article.url,
-      JSON.stringify([article.url, article.updatedAt]),
+      JSON.stringify([article.url, article.revision, article.updatedAt]),
       (html) => getBlocksFromHtml(html, article.title, article.url).length > 0
     )
       .then((html) => {
@@ -1479,6 +1426,7 @@ function StandardSiteArticleBody({
     article.url,
     article.title,
     article.updatedAt,
+    article.revision,
     article.textContent,
     articleBlocks,
     fullArticleReader,
@@ -1668,13 +1616,24 @@ function TweetYouTubeCard({
 }
 
 function TweetLinkCard({
-  card,
+  card: originalCard,
   compact,
   fullArticleReader = false,
   standardSiteArticlesInline = false,
   articleAuthor,
   articleTweetPath
 }: LinkCardProps): JSX.Element {
+  const { snapshot, loading } = useStandardSiteArticle(originalCard);
+  const card = snapshot?.card ?? originalCard;
+  const fallbackArticle: StandardSiteArticle = {
+    url: card.url,
+    title: card.title,
+    description: card.description,
+    textContent: '',
+    publishedAt: card.createdAt ?? null,
+    updatedAt: card.updatedAt ?? null,
+    tags: []
+  };
   const router = useRouter();
   const title = getCardTitle(card);
   const description = getCardDescription(card);
@@ -1712,6 +1671,8 @@ function TweetLinkCard({
   )
     return (
       <TweetStandardSiteArticleCard
+        article={snapshot?.article ?? (loading ? null : fallbackArticle)}
+        loading={loading}
         card={card}
         fullArticleReader={fullArticleReader}
         title={title}
