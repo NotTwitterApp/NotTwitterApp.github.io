@@ -80,35 +80,31 @@ it('loads a YouTube player only after Play is clicked', () => {
 });
 
 it('resolves a Bluesky link card to a quoted Tweet using the canonical DID', async () => {
-  jest
-    .mocked(getUser)
-    .mockResolvedValue({
-      id: 'did:plc:author',
-      name: 'Linked author',
-      username: 'author.test',
-      photoURL: '',
-      verified: false
-    } as Awaited<ReturnType<typeof getUser>>);
-  jest
-    .mocked(getTweet)
-    .mockResolvedValue({
-      id: 'resolved',
-      createdBy: 'did:plc:author',
-      text: 'The linked Tweet',
-      langs: [],
-      createdAt: Timestamp.now(),
-      images: null,
-      card: null,
-      mediaWarning: null,
-      quotedTweet: null,
-      parent: null,
-      userLikes: [],
-      updatedAt: null,
-      userReplies: 0,
-      userRetweets: [],
-      userQuotes: 0,
-      bookmarkCount: 0
-    });
+  jest.mocked(getUser).mockResolvedValue({
+    id: 'did:plc:author',
+    name: 'Linked author',
+    username: 'author.test',
+    photoURL: '',
+    verified: false
+  } as Awaited<ReturnType<typeof getUser>>);
+  jest.mocked(getTweet).mockResolvedValue({
+    id: 'resolved',
+    createdBy: 'did:plc:author',
+    text: 'The linked Tweet',
+    langs: [],
+    createdAt: Timestamp.now(),
+    images: null,
+    card: null,
+    mediaWarning: null,
+    quotedTweet: null,
+    parent: null,
+    userLikes: [],
+    updatedAt: null,
+    userReplies: 0,
+    userRetweets: [],
+    userQuotes: 0,
+    bookmarkCount: 0
+  });
   show(
     <TweetEmbed
       card={{
@@ -183,4 +179,17 @@ it('keeps a failed link poster clickable without an endless image placeholder', 
   fireEvent.error(container.querySelector('img')!);
   expect(container.querySelector('img')).toBeNull();
   expect(screen.getByRole('link', { name: 'Article' })).toBeTruthy();
+});
+
+it('preserves an attached article card when the text also contains a Bluesky link', () => {
+  jest.mocked(getUser).mockClear();
+  show(
+    <TweetEmbed
+      card={card}
+      text='https://bsky.app/profile/other.test/post/3xyz'
+      quotedTweet={null}
+    />
+  );
+  expect(screen.getByRole('link', { name: 'Article' })).toBeTruthy();
+  expect(getUser).not.toHaveBeenCalled();
 });

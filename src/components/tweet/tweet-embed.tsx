@@ -2115,7 +2115,7 @@ export function TweetEmbed({
 
   const linkedPost = !quotedTweet
     ? (getBskyPostLinkFromText(card?.url ?? '') ??
-      getBskyPostLinkFromText(text ?? ''))
+      (!card ? getBskyPostLinkFromText(text ?? '') : null))
     : null;
   const linkedTweet = useLinkedTweet(linkedPost);
   const visibleQuote =
