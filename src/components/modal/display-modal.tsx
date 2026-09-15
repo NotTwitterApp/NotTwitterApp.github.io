@@ -169,15 +169,15 @@ export function DisplayModal({ closeModal }: DisplayModalProps): JSX.Element {
         </p>
       </div>
       <article
-        className='hover-animation mx-8 rounded-2xl border 
-                   border-light-border px-4 py-3 dark:border-dark-border'
+        className='hover-animation rounded-2xl border border-light-border px-4 py-3
+                   dark:border-dark-border sm:mx-8'
       >
-        <div className='grid grid-cols-[auto,1fr] gap-3'>
+        <div className='grid grid-cols-[auto_minmax(0,1fr)] gap-3'>
           <UserAvatar src='/assets/twitter-avatar.jpg' alt='Not Twitter' />
-          <div>
-            <div className='flex gap-1'>
+          <div className='min-w-0'>
+            <div className='flex flex-wrap gap-x-1'>
               <UserName verified name='Not Twitter' />
-              <p className='text-light-secondary dark:text-dark-secondary'>
+              <p className='truncate text-light-secondary dark:text-dark-secondary'>
                 @{previewUsername}
               </p>
               <div className='flex gap-1 text-light-secondary dark:text-dark-secondary'>

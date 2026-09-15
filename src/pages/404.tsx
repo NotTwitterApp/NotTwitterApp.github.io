@@ -72,10 +72,10 @@ export default function NotFound(): JSX.Element {
       <LoggedOutTwitterLayout>
         <main className='border-t border-transparent'>
           <section className='mx-auto max-w-[720px] px-6 pt-[82px] text-center'>
-            <h1 className='text-[31px] font-extrabold leading-9 tracking-normal text-[#14171a]'>
+            <h1 className='text-[31px] font-extrabold leading-9 tracking-normal text-main-primary'>
               Sorry, that page doesn’t exist!
             </h1>
-            <p className='mt-[70px] text-[20px] leading-7 text-[#14171a]'>
+            <p className='mt-[70px] text-[20px] leading-7 text-main-primary'>
               Why not try a{' '}
               <Link href='/explore' className='custom-underline text-[#1da1f2]'>
                 search

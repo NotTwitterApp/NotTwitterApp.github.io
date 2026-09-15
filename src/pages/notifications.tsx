@@ -521,7 +521,7 @@ function ActivityNotificationRow({
         isSubscribedTweetSummary ? 'Open Tweet notifications' : undefined
       }
       className={cn(
-        `hover-card grid grid-cols-[40px,1fr] gap-4 border-b border-light-border px-4 py-3
+        `hover-card grid grid-cols-[40px_minmax(0,1fr)] gap-4 border-b border-light-border px-4 py-3
          dark:border-dark-border`,
         !isRead && 'bg-main-accent/[0.07]',
         isSubscribedTweetSummary &&
@@ -562,7 +562,7 @@ function ActivityNotificationRow({
         {group.reason !== 'subscribed-post' && text && (
           <Link
             href={targetHref}
-            className='mt-3 block rounded-sm text-light-secondary outline-none
+            className='mt-3 block rounded-xs text-light-secondary outline-none
                        focus-visible:ring-2 focus-visible:ring-main-accent/80 dark:text-dark-secondary'
           >
             <TweetText
@@ -596,7 +596,7 @@ function MentionContext({
         {viewerUsername ? (
           <Link
             href={getUserPath(viewerUsername)}
-            className='rounded-sm text-main-accent outline-none
+            className='rounded-xs text-main-accent outline-none
                        focus-visible:ring-2 focus-visible:ring-main-accent/80'
           >
             {displayViewerUsername}
@@ -944,7 +944,7 @@ function TweetNotificationRow({
         onClick={handleTweetClick}
         onKeyDown={handleTweetKeyDown}
       >
-        <div className='grid grid-cols-[48px,1fr] gap-3'>
+        <div className='grid grid-cols-[48px_minmax(0,1fr)] gap-3'>
           <UserTooltip avatar {...user}>
             <UserAvatar
               className='mt-0.5 [&>figure>span]:[transition:200ms]'

@@ -1,3 +1,4 @@
+import { UndoTweetComposerStatus } from './undo-tweet-status';
 import Link from 'next/link';
 import {
   useState,
@@ -283,7 +284,7 @@ function TweetDraftsModal({
       closeModal={closeModal}
     >
       <div
-        className='grid h-[53px] grid-cols-[48px,1fr,48px] items-center border-b
+        className='grid h-[53px] grid-cols-[48px_minmax(0,1fr)_48px] items-center border-b
                    border-light-border px-1 dark:border-dark-border'
       >
         <Button
@@ -363,61 +364,6 @@ function TweetDraftsModal({
   );
 }
 
-function UndoTweetComposerStatus({
-  expiresAt,
-  durationSeconds,
-  onUndo,
-  onSendNow
-}: {
-  expiresAt: number;
-  durationSeconds: number;
-  onUndo: () => void;
-  onSendNow: () => void;
-}): JSX.Element {
-  const [now, setNow] = useState(Date.now());
-  const remainingRatio = Math.max(
-    0,
-    Math.min(1, (expiresAt - now) / (durationSeconds * 1000))
-  );
-  const progressDegrees = Math.round(remainingRatio * 360);
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => setNow(Date.now()), 250);
-
-    return () => window.clearInterval(intervalId);
-  }, []);
-
-  return (
-    <div className='mt-1 border-t border-light-border pt-2 dark:border-dark-border'>
-      <div className='flex min-h-[38px] items-center gap-3 overflow-hidden text-[15px] leading-5'>
-        <span
-          className='grid h-[22px] w-[22px] shrink-0 place-items-center rounded-full'
-          style={{
-            background: `conic-gradient(var(--main-accent) ${progressDegrees}deg, rgba(83,100,113,0.28) 0deg)`
-          }}
-        >
-          <span className='h-[15px] w-[15px] rounded-full bg-main-background' />
-        </span>
-        <p className='min-w-0 shrink truncate font-bold'>Sending Tweet…</p>
-        <Button
-          className='accent-tab accent-bg-tab shrink-0 px-2 py-2 text-[14px] font-bold leading-5
-                     text-main-accent hover:bg-main-accent/10 active:bg-main-accent/20'
-          onClick={onSendNow}
-        >
-          Send now
-        </Button>
-        <Button
-          className='shrink-0 rounded-full bg-main-accent px-4 py-2 text-[14px] font-bold
-                     leading-5 text-white hover:bg-main-accent/90 active:bg-main-accent/80'
-          onClick={onUndo}
-        >
-          Undo
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 function ThreadComposerStack({
   items,
   inputLimit,
@@ -451,7 +397,7 @@ function ThreadComposerStack({
 
         return (
           <div
-            className='relative grid min-h-[86px] grid-cols-[48px,1fr] gap-3 py-3'
+            className='relative grid min-h-[86px] grid-cols-[48px_minmax(0,1fr)] gap-3 py-3'
             key={id}
           >
             <div className='relative flex justify-center'>
@@ -1227,7 +1173,7 @@ export function Input({
         selectDraft={selectDraft}
         deleteDraft={deleteDraft}
       />
-      {loading && (
+      {loading && !isUndoTweetPending && (
         <motion.div
           className='relative h-0.5 overflow-hidden bg-main-accent/20'
           role='progressbar'
@@ -1262,14 +1208,7 @@ export function Input({
             <HeroIcon className='h-5 w-5' iconName='XMarkIcon' />
           </Button>
           {isUndoTweetPending ? (
-            <Button
-              className='accent-tab h-9 rounded-full bg-main-accent px-4 py-0 text-[15px]
-                         font-bold leading-5 text-white hover:bg-main-accent/90
-                         active:bg-main-accent/75'
-              onClick={sendPendingUndoTweet}
-            >
-              Send now
-            </Button>
+            <span className='pr-4 text-xl font-bold'>Tweet</span>
           ) : !quoteTweet ? (
             <Button
               className='accent-tab accent-bg-tab px-4 py-2 text-[15px] font-bold
@@ -1302,7 +1241,7 @@ export function Input({
       )}
       <label
         className={cn(
-          'hover-animation grid w-full grid-cols-[auto,1fr] gap-3 px-4 py-3',
+          'hover-animation grid w-full grid-cols-[auto_minmax(0,1fr)] gap-3 px-4 py-3',
           reply
             ? 'pt-3 pb-1'
             : replyModal
@@ -1323,6 +1262,14 @@ export function Input({
           username={username}
         />
         <div className='flex w-full min-w-0 flex-col gap-4'>
+          {isUndoTweetPending && (
+            <div className='flex flex-col leading-5'>
+              <span className='font-bold'>{name}</span>
+              <span className='text-light-secondary dark:text-dark-secondary'>
+                @{username}
+              </span>
+            </div>
+          )}
           <InputForm
             modal={modal}
             reply={reply}
@@ -1339,16 +1286,6 @@ export function Input({
             isUploadingImages={isUploadingImages}
             setReplySetting={setReplySetting}
             sendTweet={sendTweet}
-            footerStatus={
-              pendingUndoTweet ? (
-                <UndoTweetComposerStatus
-                  expiresAt={pendingUndoTweet.expiresAt}
-                  durationSeconds={pendingUndoTweet.durationSeconds}
-                  onUndo={undoPendingTweet}
-                  onSendNow={sendPendingUndoTweet}
-                />
-              ) : undefined
-            }
             handleHashtagSelect={handleHashtagSelect}
             handleMentionSelect={handleMentionSelect}
             handleFocus={handleFocus}
@@ -1410,6 +1347,16 @@ export function Input({
             )}
           </AnimatePresence>
         </div>
+        {pendingUndoTweet && (
+          <div className='col-span-2'>
+            <UndoTweetComposerStatus
+              expiresAt={pendingUndoTweet.expiresAt}
+              durationSeconds={pendingUndoTweet.durationSeconds}
+              onUndo={undoPendingTweet}
+              onSendNow={sendPendingUndoTweet}
+            />
+          </div>
+        )}
       </label>
     </form>
   );

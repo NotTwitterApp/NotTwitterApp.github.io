@@ -1,3 +1,4 @@
+import { Dialog } from '@headlessui/react';
 import { MainHeader } from '@components/home/main-header';
 import type { ReactNode, JSX } from 'react';
 import type { StatsType } from '@components/view/view-tweet-stats';
@@ -21,6 +22,9 @@ export function TweetStatsModal({
 }: TweetStatsModalProps): JSX.Element {
   return (
     <>
+      <Dialog.Title as='span' className='sr-only'>
+        {statsType ? titleByStatsType[statsType] : 'Tweet activity'}
+      </Dialog.Title>
       <MainHeader
         useActionButton
         disableSticky

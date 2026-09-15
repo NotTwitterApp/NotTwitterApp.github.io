@@ -35,6 +35,7 @@ import {
 import { useOptimisticReactionIds } from '@components/tweet/use-optimistic-reaction-ids';
 import { TweetShare } from '@components/tweet/tweet-share';
 import { TweetEmbed } from '@components/tweet/tweet-embed';
+import { ViewTweetStats } from '@components/view/view-tweet-stats';
 import { TweetText } from '@components/tweet/tweet-text';
 import {
   TwitterGifMedia,
@@ -143,9 +144,7 @@ type ConversationActionButtonProps = {
 };
 
 function isVideoMedia({ src, type }: ImageData): boolean {
-  return (
-    !!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src)
-  );
+  return (!!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src));
 }
 
 function getMediaAltText(media: ImageData): string {
@@ -191,7 +190,7 @@ function FullscreenImageModal({
         {closeModal && (
           <Button
             className='absolute left-4 top-4 z-20 flex h-11 w-11 items-center justify-center bg-black/40
-                       p-0 text-white backdrop-blur-sm transition-colors duration-200 ease-out
+                       p-0 text-white backdrop-blur-xs transition-colors duration-200 ease-out
                        hover:bg-white/10 focus-visible:ring-white/70 active:bg-white/20'
             aria-label='Close'
             onClick={preventBubbling(closeModal)}
@@ -204,7 +203,7 @@ function FullscreenImageModal({
             <Button
               className={cn(
                 `absolute top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center
-                 justify-center bg-black/40 p-0 text-white backdrop-blur-sm
+                 justify-center bg-black/40 p-0 text-white backdrop-blur-xs
                  transition-colors duration-200 ease-out hover:bg-white/10
                  focus-visible:ring-white/70 active:bg-white/20`,
                 name === 'prev' ? 'left-4' : 'right-4'
@@ -268,7 +267,7 @@ function FullscreenImageModal({
           >
             <Button
               className='rounded-md bg-black/70 px-2 py-0.5 text-[13px] font-extrabold
-                         leading-4 text-white backdrop-blur-sm transition hover:bg-black/80
+                         leading-4 text-white backdrop-blur-xs transition hover:bg-black/80
                          focus-visible:ring-2 focus-visible:ring-white/70 active:bg-black/90'
               aria-expanded={showAltText}
               aria-label='View image description'
@@ -280,7 +279,7 @@ function FullscreenImageModal({
               {showAltText && (
                 <motion.p
                   className='mt-2 max-h-[40vh] overflow-y-auto whitespace-pre-wrap break-words rounded-md
-                             bg-black/80 p-3 text-[15px] leading-5 text-white shadow-lg backdrop-blur-sm'
+                             bg-black/80 p-3 text-[15px] leading-5 text-white shadow-lg backdrop-blur-xs'
                   {...mediaFade}
                 >
                   {altText}
@@ -362,6 +361,7 @@ function ProfileFullscreenImageModal({
 }
 
 function MediaConversation({ tweet }: { tweet: TweetWithUser }): JSX.Element {
+  const { user } = useAuth();
   const [replyFocusRequest, setReplyFocusRequest] = useState(0);
 
   const repliesQuery = query(
@@ -404,12 +404,16 @@ function MediaConversation({ tweet }: { tweet: TweetWithUser }): JSX.Element {
           </button>
         </div>
         <div className={cn('border-b px-4', mediaModalBorder)}>
+          {user ? (
           <Input
             reply
             compactReply
             focusSignal={replyFocusRequest}
             parent={{ id: tweet.id, username: tweet.user.username }}
           />
+          ) : (
+            <Link href='/' className='block py-4 font-bold text-main-accent hover:underline'>Sign in to reply</Link>
+          )}
         </div>
         {loading ? (
           <Loading className='my-5' />
@@ -544,7 +548,7 @@ function ConversationTweet({
         root ? 'pt-3 pb-0' : 'hover-card py-3 duration-200'
       )}
     >
-      <div className='grid grid-cols-[auto,1fr] gap-3'>
+      <div className='grid grid-cols-[auto_minmax(0,1fr)] gap-3'>
         <UserAvatar
           className='mt-0.5'
           size={40}
@@ -643,42 +647,18 @@ function ConversationTweet({
   );
 }
 
-function MediaTweetStatsRow({
-  tweet
-}: {
-  tweet: TweetWithUser;
-}): JSX.Element | null {
-  const stats: Readonly<[number, string][]> = [
-    [tweet.userQuotes, tweet.userQuotes === 1 ? 'Quote Tweet' : 'Quote Tweets'],
-    [
-      tweet.userRetweets.length,
-      tweet.userRetweets.length === 1 ? 'Retweet' : 'Retweets'
-    ],
-    [tweet.userLikes.length, tweet.userLikes.length === 1 ? 'Like' : 'Likes']
-  ];
-
-  const visibleStats = stats.filter(([count]) => count > 0);
-
-  if (!visibleStats.length) return null;
-
-  return (
-    <div
-      className={cn(
-        'mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t py-3 text-[15px]',
-        mediaModalBorder,
-        mediaModalSecondaryText
-      )}
-    >
-      {visibleStats.map(([count, label]) => (
-        <span className='flex gap-1' key={label}>
-          <b className={cn('font-bold', mediaModalPrimaryText)}>
-            {formatNumber(count)}
-          </b>
-          <span>{label}</span>
-        </span>
-      ))}
-    </div>
-  );
+function MediaTweetStatsRow({ tweet }: { tweet: TweetWithUser }): JSX.Element {
+  return <ViewTweetStats
+    media
+    tweetId={tweet.id}
+    username={tweet.user.username}
+    currentQuotes={tweet.userQuotes}
+    currentTweets={tweet.userRetweets.length}
+    currentLikes={tweet.userLikes.length}
+    currentReplies={0}
+    quoteMove={0} tweetMove={0} likeMove={0} replyMove={0}
+    isStatsVisible
+  />;
 }
 
 function ConversationAttachments({
@@ -903,7 +883,7 @@ function ConversationActionBar({
         'flex',
         mediaOnly
           ? `pointer-events-auto absolute inset-x-0 bottom-0 z-20 items-center
-             justify-between bg-gradient-to-t from-black via-black/80 to-transparent
+             justify-between bg-linear-to-t from-black via-black/80 to-transparent
              px-7 pb-5 pt-12 text-white lg:hidden`
           : cn(
               mediaModalSecondaryText,

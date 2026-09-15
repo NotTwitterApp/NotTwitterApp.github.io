@@ -75,7 +75,7 @@ export function PublicTweetLayout({ children }: LayoutProps): JSX.Element {
   ) : (
     <LoggedOutTwitterLayout>
       <WindowContextProvider>
-        <div className='mx-auto flex w-full max-w-xl'>{children}</div>
+        <div className='mx-auto flex w-full max-w-[600px]'>{children}</div>
       </WindowContextProvider>
     </LoggedOutTwitterLayout>
   );

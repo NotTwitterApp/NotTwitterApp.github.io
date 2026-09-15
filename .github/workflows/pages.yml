@@ -38,10 +38,11 @@ jobs:
           fi
       - run: npm ci
       - name: Build static site
+        env:
+          NEXT_STATIC_EXPORT: 'true'
         run: |
           node scripts/write-atproto-client-metadata.mjs
           node node_modules/next/dist/bin/next build
-          node node_modules/next/dist/bin/next export
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

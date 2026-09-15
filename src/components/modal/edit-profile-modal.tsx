@@ -101,7 +101,7 @@ export function EditProfileModal({
               imgClassName='object-cover'
               src={coverPhotoURL}
               alt={name}
-              layout='fill'
+              fill
             />
           ) : (
             <div className='h-full bg-light-line-reply dark:bg-dark-line-reply' />
@@ -153,7 +153,7 @@ export function EditProfileModal({
               imgClassName='profile-picture'
               src={photoURL}
               alt={name}
-              layout='fill'
+              fill
             />
             <Button
               className='group/inner absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2

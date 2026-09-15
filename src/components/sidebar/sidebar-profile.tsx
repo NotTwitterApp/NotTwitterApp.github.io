@@ -71,7 +71,7 @@ function AccountIdentity({
         <p className='truncate'>{account.name}</p>
         {account.verified && (
           <i className='shrink-0'>
-            <CustomIcon className='h-5 w-5' iconName='TwitterVerifiedIcon' />
+            <CustomIcon className='h-4 w-4' iconName='TwitterVerifiedIcon' />
           </i>
         )}
       </div>

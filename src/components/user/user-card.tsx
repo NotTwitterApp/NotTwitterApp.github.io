@@ -46,7 +46,7 @@ export function UserCard(user: UserCardProps): JSX.Element {
 
   return (
     <article
-      className='accent-tab hover-animation grid cursor-pointer grid-cols-[auto,1fr] gap-3 px-4
+      className='accent-tab hover-animation grid cursor-pointer grid-cols-[auto_minmax(0,1fr)] gap-3 px-4
                  py-3 hover:bg-light-primary/5 dark:hover:bg-dark-primary/5'
       role='link'
       tabIndex={0}

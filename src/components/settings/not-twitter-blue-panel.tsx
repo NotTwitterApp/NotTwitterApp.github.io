@@ -230,7 +230,7 @@ function UndoTweetDetail({
 
   return (
     <>
-      <header className='grid h-[53px] grid-cols-[48px,1fr,48px] items-center border-b border-light-border px-1 dark:border-dark-border'>
+      <header className='grid h-[53px] grid-cols-[48px_minmax(0,1fr)_48px] items-center border-b border-light-border px-1 dark:border-dark-border'>
         <Button
           className='dark-bg-tab group relative ml-2 h-9 w-9 rounded-full p-0
                      hover:bg-light-primary/10 active:bg-light-primary/20

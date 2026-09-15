@@ -40,7 +40,7 @@ function MainToaster(): JSX.Element {
 
 export function MainLayout({ children }: LayoutProps): JSX.Element {
   return (
-    <div className='flex w-full justify-center gap-0 min-[1120px]:gap-4'>
+    <div className='flex w-full justify-center'>
       <WindowContextProvider>
         <LiveUpdatesProvider>
           <Sidebar />

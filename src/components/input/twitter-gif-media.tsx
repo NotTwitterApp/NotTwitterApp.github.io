@@ -9,9 +9,7 @@ export function isGifMedia({ src, type }: ImageData): boolean {
 }
 
 function isVideoMedia({ src, type }: ImageData): boolean {
-  return (
-    !!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src)
-  );
+  return (!!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src));
 }
 
 function TwitterGifIcon({ playing }: { playing: boolean }): JSX.Element {
@@ -96,7 +94,7 @@ export function TwitterGifMedia({
         />
       )}
       <span
-        className='absolute bottom-2 left-2 rounded-sm bg-black/75 px-1.5 py-0.5
+        className='absolute bottom-2 left-2 rounded-xs bg-black/75 px-1.5 py-0.5
                    text-[11px] font-bold leading-4 tracking-[0.02em] text-white'
       >
         GIF

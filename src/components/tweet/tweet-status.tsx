@@ -11,7 +11,7 @@ type TweetStatusProps = {
 export function TweetStatus({ type, children }: TweetStatusProps): JSX.Element {
   return (
     <motion.div
-      className='col-span-2 grid grid-cols-[48px,1fr] items-center gap-x-3
+      className='col-span-2 grid grid-cols-[48px_minmax(0,1fr)] items-center gap-x-3
                  text-[13px] font-bold leading-5 text-light-secondary
                  dark:text-dark-secondary'
       {...fromTop}

@@ -15,7 +15,7 @@ export function UserHomeCover({ coverData }: UserHomeCoverProps): JSX.Element {
   const { open, openModal, closeModal } = useModal();
 
   return (
-    <div className='mt-0.5 h-36 xs:h-48 sm:h-52'>
+    <div className='aspect-[3/1] w-full'>
       <Modal
         className='!overflow-hidden !p-0'
         modalClassName='h-screen w-screen'
@@ -39,7 +39,7 @@ export function UserHomeCover({ coverData }: UserHomeCoverProps): JSX.Element {
             useSkeleton
             priority
             className='relative h-full w-full'
-            layout='fill'
+            fill
             imgClassName='object-cover'
             src={coverData.src}
             alt={coverData.alt}

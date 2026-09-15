@@ -126,7 +126,7 @@ export function UserHeader(): JSX.Element {
             tag='h2'
             name={user.name}
             className='-mt-1 text-xl'
-            iconClassName='w-6 h-6'
+            iconClassName='h-5 w-5'
             verified={user.verified}
           />
           <p className='text-xs text-light-secondary dark:text-dark-secondary'>

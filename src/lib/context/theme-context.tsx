@@ -122,31 +122,40 @@ function setInitialLastDarkTheme(): DarkTheme {
 export function ThemeContextProvider({
   children
 }: ThemeContextProviderProps): JSX.Element {
-  const [theme, setTheme] = useState<Theme>(setInitialTheme);
-  const [accent, setAccent] = useState<Accent>(setInitialAccent);
-  const [fontSize, setFontSize] = useState<FontSize>(setInitialFontSize);
-  const [lastDarkTheme, setLastDarkTheme] = useState<DarkTheme>(
-    setInitialLastDarkTheme
-  );
-  const [hideBskySocialSuffix, setHideBskySocialSuffix] = useState(
-    setInitialHideBskySocialSuffix
-  );
-  const [squareProfilePictures, setSquareProfilePictures] = useState(
-    setInitialSquareProfilePictures
-  );
+  // Hydrate with the same defaults as the server, then restore preferences.
+  // React preserves server-rendered radio checks during hydration otherwise.
+  const [theme, setTheme] = useState<Theme>('dark');
+  const [accent, setAccent] = useState<Accent>('blue');
+  const [fontSize, setFontSize] = useState<FontSize>('md');
+  const [lastDarkTheme, setLastDarkTheme] = useState<DarkTheme>('dark');
+  const [hideBskySocialSuffix, setHideBskySocialSuffix] = useState(false);
+  const [squareProfilePictures, setSquareProfilePictures] = useState(false);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+
+  useEffect(() => {
+    setTheme(setInitialTheme());
+    setAccent(setInitialAccent());
+    setFontSize(setInitialFontSize());
+    setLastDarkTheme(setInitialLastDarkTheme());
+    setHideBskySocialSuffix(setInitialHideBskySocialSuffix());
+    setSquareProfilePictures(setInitialSquareProfilePictures());
+    setPreferencesLoaded(true);
+  }, []);
 
   const { user } = useAuth();
   const { id: userId, theme: userTheme, accent: userAccent } = user ?? {};
 
   useEffect(() => {
-    if (user && userTheme) setTheme(userTheme);
-  }, [userId, userTheme]);
+    if (preferencesLoaded && user && userTheme) setTheme(userTheme);
+  }, [preferencesLoaded, userId, userTheme]);
 
   useEffect(() => {
-    if (user && userAccent) setAccent(userAccent);
-  }, [userId, userAccent]);
+    if (preferencesLoaded && user && userAccent) setAccent(userAccent);
+  }, [preferencesLoaded, userId, userAccent]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     const flipTheme = (theme: Theme): NodeJS.Timeout | undefined => {
       const root = document.documentElement;
       const targetTheme = theme === 'dim' ? 'dark' : theme;
@@ -182,16 +191,18 @@ export function ThemeContextProvider({
 
     const timeoutId = flipTheme(theme);
     return () => clearTimeout(timeoutId);
-  }, [userId, theme]);
+  }, [preferencesLoaded, userId, theme]);
 
   useEffect(() => {
-    if (!isDarkTheme(theme)) return;
+    if (!preferencesLoaded || !isDarkTheme(theme)) return;
 
     setLastDarkTheme(theme);
     localStorage.setItem(lastDarkThemeKey, theme);
-  }, [theme]);
+  }, [preferencesLoaded, theme]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     const flipAccent = (accent: Accent): NodeJS.Timeout | undefined => {
       const root = document.documentElement;
 
@@ -211,9 +222,11 @@ export function ThemeContextProvider({
 
     const timeoutId = flipAccent(accent);
     return () => clearTimeout(timeoutId);
-  }, [userId, accent]);
+  }, [preferencesLoaded, userId, accent]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     const root = document.documentElement;
     const rootFontSize = fontSizeRootPixels[fontSize];
     const scale = fontSizeScales[fontSize];
@@ -235,16 +248,20 @@ export function ThemeContextProvider({
     root.style.setProperty('--article-code-line-height', `${20 * scale}px`);
     root.dataset.fontSize = fontSize;
     localStorage.setItem(fontSizeKey, fontSize);
-  }, [fontSize]);
+  }, [preferencesLoaded, fontSize]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     localStorage.setItem(
       'hideBskySocialSuffix',
       hideBskySocialSuffix ? 'true' : 'false'
     );
-  }, [hideBskySocialSuffix]);
+  }, [preferencesLoaded, hideBskySocialSuffix]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
+
     document.documentElement.style.setProperty(
       '--profile-picture-radius',
       squareProfilePictures ? '16%' : '9999px'
@@ -257,7 +274,7 @@ export function ThemeContextProvider({
       'squareProfilePictures',
       squareProfilePictures ? 'true' : 'false'
     );
-  }, [squareProfilePictures]);
+  }, [preferencesLoaded, squareProfilePictures]);
 
   const changeTheme = useCallback(
     ({ target: { value } }: ChangeEvent<HTMLInputElement>): void =>

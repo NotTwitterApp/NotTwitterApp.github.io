@@ -1,7 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { isStandardSiteArticleCard as isStandardSiteCard } from '@lib/standard-site';
+import {
+  fetchStandardSiteArticleHTML,
+  getStandardSiteArticleCacheKey
+} from '@lib/standard-site-loader';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState, type JSX } from 'react';
+import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import cn from 'clsx';
 import { toast } from 'react-hot-toast';
 import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
@@ -149,18 +154,6 @@ function getCardDescription(card: TweetCard): string | null {
   return card.description;
 }
 
-function isStandardSiteCard(card: TweetCard): boolean {
-  if (card.domain?.toLowerCase() === 'standard.site') return true;
-  if (/^https?:\/\/(?:www\.)?standard\.site\//i.test(card.url)) return true;
-
-  return (
-    !!card.source ||
-    !!card.readingTime ||
-    !!card.createdAt ||
-    !!card.associatedRefs?.some(({ uri }) => uri.includes('/site.standard.'))
-  );
-}
-
 function formatCardPublishedDate(value?: string | null): string | null {
   if (!value) return null;
 
@@ -240,8 +233,6 @@ type StandardSiteArticleBlock =
   | { type: 'paragraph' | 'list' | 'code' | 'blockquote'; text: string }
   | { type: 'heading'; text: string; level: number }
   | { type: 'image'; url?: string; alt?: string; raw?: unknown };
-
-const standardSiteArticleHTMLCache = new Map<string, Promise<string | null>>();
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object' && !Array.isArray(value);
@@ -460,6 +451,9 @@ function getBlocksFromHtml(
   articleTitle?: string,
   baseUrl?: string
 ): StandardSiteArticleBlock[] {
+  if (!/<(?:!doctype|html|body|article|main|p|div|h[1-6])(?:\s|>)/i.test(html))
+    return getBlocksFromMarkdown(html, articleTitle);
+
   if (typeof window !== 'undefined' && 'DOMParser' in window) {
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const root =
@@ -773,7 +767,8 @@ function resolveArticleAssetUrl(
   if (!url?.trim()) return null;
 
   try {
-    return new URL(url.trim(), baseUrl).href;
+    const parsed = new URL(url.trim(), baseUrl);
+    return /^https?:$/.test(parsed.protocol) ? parsed.href : null;
   } catch {
     return /^https?:\/\//i.test(url.trim()) ? url.trim() : null;
   }
@@ -820,67 +815,6 @@ function hasRichArticleBlocks(blocks: StandardSiteArticleBlock[]): boolean {
   return blocks.some(({ type }) =>
     ['heading', 'image', 'blockquote', 'code'].includes(type)
   );
-}
-
-function getStandardSiteArticleHtmlProxyUrl(url: string): string | null {
-  const proxy = process.env.NEXT_PUBLIC_STANDARD_SITE_HTML_PROXY?.trim();
-
-  if (!proxy) return null;
-
-  if (proxy.includes('{url}'))
-    return proxy.replace('{url}', encodeURIComponent(url));
-
-  try {
-    const proxyUrl = new URL(proxy);
-    proxyUrl.searchParams.set('url', url);
-
-    return proxyUrl.href;
-  } catch {
-    return null;
-  }
-}
-
-function getStandardSiteArticleReaderUrl(url: string): string {
-  return `https://r.jina.ai/${url}`;
-}
-
-async function fetchStandardSiteArticleHTML(
-  url: string
-): Promise<string | null> {
-  if (typeof window === 'undefined') return null;
-
-  const cached = standardSiteArticleHTMLCache.get(url);
-
-  if (cached) return cached;
-
-  const request = (async (): Promise<string | null> => {
-    const proxyUrl = getStandardSiteArticleHtmlProxyUrl(url);
-    const candidates = proxyUrl
-      ? [proxyUrl, url, getStandardSiteArticleReaderUrl(url)]
-      : [url, getStandardSiteArticleReaderUrl(url)];
-
-    for (const candidate of candidates)
-      try {
-        const response = await fetch(candidate, {
-          credentials: 'omit',
-          referrerPolicy: 'no-referrer'
-        });
-
-        if (!response.ok) continue;
-
-        const html = await response.text();
-
-        if (html.trim()) return html;
-      } catch {
-        // Cross-origin article hosts often block browsers; native clients can still use the same parser.
-      }
-
-    return null;
-  })();
-
-  standardSiteArticleHTMLCache.set(url, request);
-
-  return request;
 }
 
 function getArticleDid(article: StandardSiteArticle): string | null {
@@ -1029,7 +963,7 @@ function renderRichInlineText(text: string): ReactNode[] {
       match;
 
     if (linkLabel && linkHref) {
-      if (token.startsWith('!')) {
+      if (token.startsWith('!') || !resolveArticleAssetUrl(linkHref)) {
         nodes.push(linkLabel);
       } else {
         nodes.push(
@@ -1075,25 +1009,36 @@ function useStandardSiteArticleReader(card: TweetCard): {
 } {
   const [article, setArticle] = useState<StandardSiteArticle | null>(null);
   const [loading, setLoading] = useState(false);
-  const associatedRefKey =
-    card.associatedRefs?.map(({ uri }) => uri).join('|') ?? '';
+  const cardRef = useRef(card);
+  cardRef.current = card;
+  const requestKey = getStandardSiteArticleCacheKey(card);
 
   useEffect(() => {
     let canceled = false;
 
     setArticle(null);
 
-    if (!associatedRefKey) {
-      setLoading(false);
-      return;
-    }
-
+    const requestedCard = cardRef.current;
     setLoading(true);
 
     void import('@lib/atproto/backend')
-      .then(({ getStandardSiteArticle }) => getStandardSiteArticle(card))
+      .then(({ getStandardSiteArticle }) =>
+        getStandardSiteArticle(requestedCard)
+      )
+      .catch(() => null)
       .then((nextArticle) => {
-        if (!canceled) setArticle(nextArticle);
+        if (!canceled)
+          setArticle(
+            nextArticle ?? {
+              url: requestedCard.url,
+              title: requestedCard.title,
+              description: requestedCard.description,
+              textContent: '',
+              publishedAt: requestedCard.createdAt ?? null,
+              updatedAt: requestedCard.updatedAt ?? null,
+              tags: []
+            }
+          );
       })
       .catch(() => {
         if (!canceled) setArticle(null);
@@ -1105,7 +1050,7 @@ function useStandardSiteArticleReader(card: TweetCard): {
     return () => {
       canceled = true;
     };
-  }, [associatedRefKey, card]);
+  }, [requestKey]);
 
   return { article, loading };
 }
@@ -1227,7 +1172,7 @@ function LinkCardPreviewMedia({ card }: LinkCardProps): JSX.Element {
     <NextImage
       className='absolute inset-0'
       imgClassName='object-cover'
-      layout='fill'
+      fill
       src={image}
       alt=''
       useSkeleton
@@ -1461,6 +1406,7 @@ function StandardSiteArticleBody({
     StandardSiteArticleBlock[] | null
   >(null);
   const [htmlLoading, setHtmlLoading] = useState(false);
+  const [retry, setRetry] = useState(0);
   const blocks = htmlBlocks ?? articleBlocks;
   const excerpt = useMemo(
     () =>
@@ -1484,7 +1430,11 @@ function StandardSiteArticleBody({
 
     if (!shouldFetchHTML) return;
 
-    void fetchStandardSiteArticleHTML(article.url)
+    void fetchStandardSiteArticleHTML(
+      article.url,
+      JSON.stringify([article.url, article.updatedAt]),
+      (html) => getBlocksFromHtml(html, article.title, article.url).length > 0
+    )
       .then((html) => {
         if (canceled || !html) return;
 
@@ -1506,14 +1456,31 @@ function StandardSiteArticleBody({
   }, [
     article.url,
     article.title,
+    article.updatedAt,
     article.textContent,
     articleBlocks,
-    fullArticleReader
+    fullArticleReader,
+    retry
   ]);
 
   if (htmlLoading && blocks.length === 0)
     return <StandardSiteArticleSkeleton />;
-  if (fullArticleReader && blocks.length === 0) return null;
+  if (fullArticleReader && blocks.length === 0)
+    return (
+      <div className='mt-4 border-t border-light-border pt-4 text-sm text-light-secondary dark:border-dark-border dark:text-dark-secondary'>
+        <p>
+          The article could not be loaded here. You can retry or read it on the
+          website.
+        </p>
+        <button
+          type='button'
+          className='mt-2 font-bold text-main-accent hover:underline'
+          onClick={() => setRetry((value) => value + 1)}
+        >
+          Try again
+        </button>
+      </div>
+    );
   if (!fullArticleReader && !excerpt)
     return htmlLoading ? <StandardSiteArticleSkeleton /> : null;
 
@@ -1910,7 +1877,7 @@ function QuotedTweetMediaGrid({
               <NextImage
                 className='absolute inset-0'
                 imgClassName='object-cover object-center'
-                layout='fill'
+                fill
                 src={thumbnailSrc}
                 alt={item.alt}
                 useSkeleton

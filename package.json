@@ -6,7 +6,7 @@
     "dev": "env PATH=/usr/bin:/bin:$PATH node --require ./scripts/buffer-compat.js ./node_modules/next/dist/bin/next dev",
     "prebuild": "node scripts/write-atproto-client-metadata.mjs",
     "build": "env PATH=/usr/bin:/bin:$PATH next build",
-    "export": "npm run build && env PATH=/usr/bin:/bin:$PATH next export",
+    "export": "NEXT_STATIC_EXPORT=true npm run build",
     "start": "env PATH=/usr/bin:/bin:$PATH next start",
     "format": "prettier --check .",
     "lint": "next lint",

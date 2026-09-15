@@ -304,7 +304,7 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
         onClick={handleTweetClick}
         onKeyDown={handleTweetKeyDown}
       >
-        <div className='grid grid-cols-[auto,1fr] gap-x-3 gap-y-1'>
+        <div className='grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1'>
           <AnimatePresence initial={false}>
             {modal ? null : pinned ? (
               <TweetStatus type='pin'>Pinned Tweet</TweetStatus>
@@ -315,7 +315,7 @@ function TweetComponent(tweet: TweetProps): JSX.Element {
                     href={profileUsername ? getUserPath(profileUsername) : '#'}
                     className='custom-underline truncate'
                   >
-                    {userId === profileId ? 'You' : profileName}Retweeted
+                    {userId === profileId ? 'You' : profileName} Retweeted
                   </Link>
                 </TweetStatus>
               )

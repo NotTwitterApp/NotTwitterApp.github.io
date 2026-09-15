@@ -35,28 +35,25 @@ export function UserHomeAvatar({
         />
       </Modal>
       <Button
-        className='accent-tab profile-picture-frame absolute -mt-3 aspect-square w-24 -translate-y-1/2 overflow-hidden p-0
-                   disabled:cursor-auto disabled:opacity-100 xs:w-32 sm:w-36
-                   [&:hover>figure>span]:bg-black/10'
+        className='accent-tab profile-picture-frame group absolute -mt-3 aspect-square w-24 -translate-y-1/2 overflow-hidden border-4 border-main-background bg-main-background p-0
+                   disabled:cursor-auto disabled:opacity-100 xs:w-32 sm:w-36'
         onClick={openModal}
         disabled={!profileData}
       >
         {profileData ? (
           <NextImage
             useSkeleton
-            className='profile-picture-frame hover-animation relative h-full w-full bg-main-background
-                       inner:!m-1 inner:transition-colors inner:duration-200'
+            className='profile-picture hover-animation relative h-full w-full overflow-hidden bg-main-background'
             imgClassName='profile-picture'
             src={profileData.src}
             alt={profileData.alt}
-            layout='fill'
+            fill
             key={profileData.src}
           />
         ) : (
-          <div className='profile-picture-frame h-full bg-main-background p-1'>
-            <div className='profile-picture h-full bg-main-sidebar-background' />
-          </div>
+          <div className='profile-picture h-full bg-main-sidebar-background' />
         )}
+        <span className='pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-200 group-hover:bg-black/10' />
       </Button>
     </div>
   );

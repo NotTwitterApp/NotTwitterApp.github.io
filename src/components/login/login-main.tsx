@@ -19,15 +19,16 @@ export function LoginMain(): JSX.Element {
       <BlueskySignInModal open={signInOpen} closeModal={closeSignInModal} />
       <TwemojiScope
         as='main'
-        className='grid text-main-primary lg:grid-cols-[1fr,45vw]'
+        className='grid text-main-primary lg:grid-cols-[minmax(0,1fr)_45vw]'
       >
         <div className='relative hidden items-center justify-center  lg:flex'>
           <NextImage
+            className='absolute inset-0'
             imgClassName='object-cover'
             blurClassName='bg-accent-blue'
             src='/assets/twitter-banner.png'
             alt='Not Twitter banner'
-            layout='fill'
+            fill
             useSkeleton
           />
           <i className='absolute'>

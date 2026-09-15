@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[2247],{2247:function(a,n,s){s.d(n,{y:function(){return u}});var c=s(5893),e=s(2365),i=s(4266);function u(a){var n=a.className,s=a.iconName,u=a.solid;return(0,e.O)(s)?(0,c.jsx)(e.d,{className:n,iconName:s}):(0,c.jsx)(i.e,{className:n,iconName:s,solid:u})}}}]);

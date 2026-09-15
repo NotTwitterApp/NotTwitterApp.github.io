@@ -44,6 +44,8 @@ import { formatAtprotoDisplayIdentifier } from '@lib/atproto/identity';
 import { useAuth } from '@lib/context/auth-context';
 import { useTheme } from '@lib/context/theme-context';
 import { formatDate } from '@lib/date';
+import { getMessageDeliveryStatus } from '@lib/message-delivery';
+import { DeliveryCheck } from '@components/messages/delivery-check';
 import { DEFAULT_PROFILE_PHOTO_URL } from '@lib/default-images';
 import { isSubmitShortcut, SUBMIT_KEYSHORTCUTS } from '@lib/keyboard-shortcuts';
 import { getUserPath } from '@lib/routes';
@@ -264,28 +266,11 @@ const CHAT_ALLOW_INCOMING_OPTIONS: ReadonlyArray<{
   { value: 'all', label: 'Everyone' }
 ];
 
-type MessageDeliveryStatus = 'delivered' | 'read';
-
 type ReactionGroup = {
   value: string;
   count: number;
   reactedByViewer: boolean;
 };
-
-function getMessageDeliveryStatus(
-  message: ChatMessage,
-  viewerId: string | undefined,
-  isMine: boolean
-): MessageDeliveryStatus | null {
-  if (!viewerId || !isMine || message.deleted) return null;
-
-  const readerIds = new Set(message.readBy);
-  const hasRemoteReadSignal =
-    Array.from(readerIds).some((readerId) => readerId !== viewerId) ||
-    message.reactions.some(({ senderId }) => senderId !== viewerId);
-
-  return hasRemoteReadSignal ? 'read' : 'delivered';
-}
 
 function getReactionGroups(
   message: ChatMessage,
@@ -1336,33 +1321,6 @@ function ConversationInfo({
         </InfoRow>
       </InfoSection>
     </div>
-  );
-}
-
-type DeliveryCheckProps = {
-  status: MessageDeliveryStatus;
-};
-
-function DeliveryCheck({ status }: DeliveryCheckProps): JSX.Element {
-  const read = status === 'read';
-
-  return (
-    <span
-      aria-label={read ? 'Read' : 'Delivered'}
-      className={cn(
-        'inline-flex h-4 w-4 items-center justify-center',
-        read
-          ? 'text-main-accent'
-          : 'text-light-secondary dark:text-dark-secondary'
-      )}
-      role='img'
-      title={read ? 'Read' : 'Delivered'}
-    >
-      <CustomIcon
-        className='h-4 w-4'
-        iconName={read ? 'TwitterDoubleCheckIcon' : 'TwitterCheckIcon'}
-      />
-    </span>
   );
 }
 

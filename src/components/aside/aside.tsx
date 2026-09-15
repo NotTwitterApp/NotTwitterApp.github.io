@@ -140,8 +140,8 @@ export function Aside({ children }: AsideProps): JSX.Element | null {
     <aside
       ref={asideRef}
       className={cn(
-        `scrollbar-hidden sticky top-0 h-screen w-96 shrink-0 self-start
-         px-4 pb-4 pt-1`,
+        `scrollbar-hidden sticky top-0 h-screen w-[380px] shrink-0 self-start
+         px-[15px] pb-4 pt-1`,
         isScrollable
           ? 'overflow-y-auto overscroll-contain'
           : 'overflow-y-hidden'

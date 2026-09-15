@@ -63,6 +63,13 @@
 
   body {
     @apply hover-animation bg-main-background font-twitter-chirp text-main-primary;
+    font-size: calc(15px * var(--display-font-scale));
+    line-height: calc(20px * var(--display-font-scale));
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
   }
 }
 

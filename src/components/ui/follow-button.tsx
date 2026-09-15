@@ -148,7 +148,7 @@ export function FollowButton({
         <Button
           className='min-w-[106px] self-start border border-accent-red bg-accent-red px-4 py-1.5
                      font-bold text-white hover:bg-accent-red/90 hover:before:content-["Unblock"]
-                     inner:hover:hidden'
+                     hover:inner:hidden'
           onClick={preventBubbling(openModal)}
         >
           <span>Blocked</span>

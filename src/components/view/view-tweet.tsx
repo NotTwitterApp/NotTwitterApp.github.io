@@ -173,7 +173,7 @@ export function ViewTweet(tweet: ViewTweetProps): JSX.Element {
             <i className='hover-animation h-2 w-0.5 bg-light-line-reply dark:bg-dark-line-reply' />
           </div>
         )}
-        <div className='grid grid-cols-[auto,1fr] gap-3'>
+        <div className='grid grid-cols-[auto_minmax(0,1fr)] gap-3'>
           <UserTooltip avatar {...tweetUserData}>
             <UserAvatar src={photoURL} alt={name} username={username} />
           </UserTooltip>

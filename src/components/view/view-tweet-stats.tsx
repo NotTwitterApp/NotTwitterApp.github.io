@@ -28,6 +28,7 @@ type viewTweetStats = {
   currentQuotes: number;
   currentReplies: number;
   isStatsVisible: boolean;
+  media?: boolean;
 };
 
 export type StatsType = TweetStatsType;
@@ -235,7 +236,8 @@ export function ViewTweetStats({
   currentTweets,
   currentQuotes,
   currentReplies,
-  isStatsVisible
+  isStatsVisible,
+  media = false
 }: viewTweetStats): JSX.Element {
   const [statsType, setStatsType] = useState<StatsType | null>(null);
 
@@ -244,7 +246,7 @@ export function ViewTweetStats({
   const { open, openModal, closeModal } = useModal();
 
   const handleOpen = (type: StatsType) => (): void => {
-    if (type === 'quotes') {
+    if (type === 'quotes' && !media) {
       void push(getTweetQuotesPath(tweetId, username));
       return;
     }
@@ -258,18 +260,23 @@ export function ViewTweetStats({
     closeModal();
   };
 
-  const allStats: Readonly<Stats[]> = [
-    ['Reply', null, replyMove, currentReplies],
-    ['Retweet', 'retweets', tweetMove, currentTweets],
-    ['Quote Tweet', 'quotes', quoteMove, currentQuotes],
-    ['Like', 'likes', likeMove, currentLikes]
-  ];
+  const allStats: Readonly<Stats[]> = media
+    ? [
+        ['Quote Tweet', 'quotes', quoteMove, currentQuotes],
+        ['Retweet', 'retweets', tweetMove, currentTweets],
+        ['Like', 'likes', likeMove, currentLikes]
+      ]
+    : [
+        ['Reply', null, replyMove, currentReplies],
+        ['Retweet', 'retweets', tweetMove, currentTweets],
+        ['Quote Tweet', 'quotes', quoteMove, currentQuotes],
+        ['Like', 'likes', likeMove, currentLikes]
+      ];
 
   return (
     <>
       <Modal
-        modalClassName='relative bg-main-background rounded-2xl max-w-xl w-full 
-                        h-[672px] overflow-hidden rounded-2xl'
+        modalClassName='relative w-full max-w-[600px] h-[min(672px,90dvh)] overflow-hidden rounded-2xl bg-main-background'
         open={open}
         closeModal={handleClose}
       >
@@ -279,12 +286,15 @@ export function ViewTweetStats({
       </Modal>
       {isStatsVisible && (
         <div
-          className='flex flex-wrap gap-x-4 gap-y-2 px-1 py-4 text-light-secondary dark:text-dark-secondary
-                     [&>button>div]:font-bold [&>button>div]:text-light-primary 
-                     dark:[&>button>div]:text-dark-primary'
+          className={cn(
+            'flex flex-wrap gap-x-4 gap-y-2 text-light-secondary dark:text-dark-secondary [&>button>div]:font-bold [&>button>div]:text-light-primary dark:[&>button>div]:text-dark-primary',
+            media
+              ? 'mt-3 border-t border-light-border py-3 text-[15px] dark:border-dark-border'
+              : 'px-1 py-4'
+          )}
         >
           {allStats.map(
-            ([title, type, move, stats], index) =>
+            ([title, type, move, stats]) =>
               !!stats && (
                 <button
                   className={cn(
@@ -292,7 +302,7 @@ export function ViewTweetStats({
                      border-b-transparent outline-none hover:border-b-light-primary 
                      focus-visible:border-b-light-primary dark:hover:border-b-dark-primary
                      dark:focus-visible:border-b-dark-primary`,
-                    index === 0 && 'cursor-not-allowed'
+                    !type && 'cursor-not-allowed'
                   )}
                   key={title}
                   onClick={type ? handleOpen(type) : undefined}

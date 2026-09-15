@@ -1,7 +1,7 @@
 {
-  "client_id": "https://erickrouss.github.io/not-twitter/oauth/neofreebird-client-metadata.json",
+  "client_id": "https://nottwitterapp.github.io/oauth/neofreebird-client-metadata.json",
   "client_name": "NeoFreeBird",
-  "client_uri": "https://erickrouss.github.io/not-twitter",
+  "client_uri": "https://nottwitterapp.github.io",
   "redirect_uris": [
     "io.github.erickrouss:/not-twitter/oauth/neofreebird-callback"
   ],

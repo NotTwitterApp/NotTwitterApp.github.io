@@ -457,7 +457,7 @@ function HelpHeader(): JSX.Element {
       <div className='mx-auto flex h-24 w-full max-w-[1441px] items-center px-5 md:px-8 lg:px-12'>
         <Link
           href='/help-center'
-          className='main-tab flex min-w-0 items-center gap-2 rounded-sm'
+          className='main-tab flex min-w-0 items-center gap-2 rounded-xs'
         >
           <CustomIcon
             className='h-7 w-7 shrink-0 text-[#1d9bf0]'

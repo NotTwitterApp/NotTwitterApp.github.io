@@ -1,3 +1,4 @@
+import { createArticleCache, getStandardSiteArticleCacheKey, getStandardSiteDocumentUris } from '@lib/standard-site-loader';
 import {
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
@@ -589,6 +590,7 @@ export type ChatMessage = {
   deleted: boolean;
   reactions: ChatReaction[];
   readBy: string[];
+  deliveredBy?: string[];
 };
 
 export type ChatConvo = {
@@ -1625,10 +1627,7 @@ function isRecordNotFoundError(error: unknown): boolean {
   const status = getErrorStatus(error);
   const message = getUnknownErrorMessage(error);
 
-  return (
-    status === 404 ||
-    /RecordNotFound|record not found|could not locate|not found/i.test(message)
-  );
+  return (status === 404 || /RecordNotFound|record not found|could not locate|not found/i.test(message));
 }
 
 function throwChatError(error: unknown): never {
@@ -2067,12 +2066,9 @@ function isTemporaryFeedUnavailableError(error: unknown): boolean {
   const status = getErrorStatus(error);
   const message = getUnknownErrorMessage(error);
 
-  return (
-    (typeof status === 'number' && status >= 500 && status < 600) ||
-    /Bad Gateway|Gateway Timeout|InternalServerError|Service Unavailable|Upstream server responded/i.test(
-      message
-    )
-  );
+  return ((typeof status === 'number' && status >= 500 && status < 600) || /Bad Gateway|Gateway Timeout|InternalServerError|Service Unavailable|Upstream server responded/i.test(
+    message
+  ));
 }
 
 type SettingsContentLabelConfig = {
@@ -4810,21 +4806,7 @@ function getCardAssociatedRefs(
     .filter((ref): ref is { uri: string; cid: string } => !!ref);
 }
 
-const standardSiteArticleCache = new Map<
-  string,
-  Promise<StandardSiteArticle | null>
->();
-
-function getStandardSiteArticleCacheKey(card: TweetCard): string | null {
-  const uris = card.associatedRefs?.map(({ uri }) => uri).sort() ?? [];
-
-  if (
-    !uris.some((uri) => uri.includes(`/${STANDARD_SITE_DOCUMENT_COLLECTION}/`))
-  )
-    return null;
-
-  return `${card.url}|${uris.join('|')}`;
-}
+const readStandardSiteArticle = createArticleCache<StandardSiteArticle>(12_000);
 
 function getRecordString(
   record: Record<string, unknown>,
@@ -4946,7 +4928,7 @@ function getStandardSiteDocumentRecord(
 async function fetchStandardSiteArticle(
   card: TweetCard
 ): Promise<StandardSiteArticle | null> {
-  const uris = card.associatedRefs?.map(({ uri }) => uri).slice(0, 4) ?? [];
+  const uris = getStandardSiteDocumentUris(card);
 
   if (!uris.length) return null;
 
@@ -4990,18 +4972,7 @@ async function fetchStandardSiteArticle(
 export async function getStandardSiteArticle(
   card: TweetCard
 ): Promise<StandardSiteArticle | null> {
-  const cacheKey = getStandardSiteArticleCacheKey(card);
-
-  if (!cacheKey) return null;
-
-  const cachedArticle = standardSiteArticleCache.get(cacheKey);
-
-  if (cachedArticle) return cachedArticle;
-
-  const articlePromise = fetchStandardSiteArticle(card).catch(() => null);
-  standardSiteArticleCache.set(cacheKey, articlePromise);
-
-  return articlePromise;
+  return readStandardSiteArticle(getStandardSiteArticleCacheKey(card), () => fetchStandardSiteArticle(card));
 }
 
 function getCardReadingTime(
@@ -7675,6 +7646,7 @@ function mapChatMessage(message?: RawChatMessage): ChatMessage | null {
     reactions?: unknown;
     readBy?: unknown;
     seenBy?: unknown;
+    deliveredBy?: unknown;
   };
 
   if (
@@ -7695,7 +7667,8 @@ function mapChatMessage(message?: RawChatMessage): ChatMessage | null {
     sentAt: Timestamp.fromDate(new Date(messageRecord.sentAt)),
     deleted: text === null,
     reactions: mapChatReactions(messageRecord.reactions),
-    readBy: mapActorDids(messageRecord.readBy ?? messageRecord.seenBy)
+    readBy: mapActorDids(messageRecord.readBy ?? messageRecord.seenBy),
+    deliveredBy: mapActorDids(messageRecord.deliveredBy)
   };
 }
 

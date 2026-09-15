@@ -17,7 +17,7 @@ type NextImageProps = {
 
 /**
  *
- * @description Must set width and height, if not add layout='fill'
+ * @description Must set width and height, if not add fill
  * @param useSkeleton add background with pulse animation, don't use it if image is transparent
  */
 export function NextImage({
@@ -31,12 +31,18 @@ export function NextImage({
   imgClassName,
   previewCount,
   blurClassName,
+  fill,
+  style,
+  onLoad,
   ...rest
 }: NextImageProps): JSX.Element {
   const [loading, setLoading] = useState(!!useSkeleton);
   const imageSrc = typeof src === 'string' ? publicAsset(src) : src;
 
-  const handleLoad = (): void => setLoading(false);
+  const handleLoad: NonNullable<ImageProps['onLoad']> = (event) => {
+    setLoading(false);
+    onLoad?.(event);
+  };
 
   return (
     <figure style={{ width }} className={className}>
@@ -51,11 +57,22 @@ export function NextImage({
               : 'object-cover'
         )}
         src={imageSrc}
-        width={width}
-        height={height}
+        width={fill ? undefined : width}
+        height={fill ? undefined : height}
+        fill={fill}
+        style={
+          fill
+            ? style
+            : {
+                width: '100%',
+                height: 'auto',
+                aspectRatio:
+                  width && height ? `${width} / ${height}` : undefined,
+                ...style
+              }
+        }
         alt={alt}
-        onLoadingComplete={handleLoad}
-        layout='responsive'
+        onLoad={handleLoad}
         {...rest}
       />
       {children}

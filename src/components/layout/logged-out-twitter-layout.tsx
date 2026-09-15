@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useState,
-  type FormEvent,
-  type ReactNode,
-  type JSX
-} from 'react';
+import { useState, type FormEvent, type ReactNode, type JSX } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTrends } from '@lib/api/trends';
@@ -19,64 +13,9 @@ type LoggedOutTwitterLayoutProps = {
   children: ReactNode;
 };
 
-type LoggedOutThemeBoundaryProps = LoggedOutTwitterLayoutProps & {
-  theme?: 'light' | 'dark';
-};
-
 type LoggedOutAuthActionProps = {
   openSignInModal: () => void;
 };
-
-function LoggedOutThemeBoundary({
-  theme = 'light',
-  children
-}: LoggedOutThemeBoundaryProps): JSX.Element {
-  useEffect(() => {
-    const root = document.documentElement;
-    const previousClassName = root.className;
-    const previousBackground = root.style.getPropertyValue('--main-background');
-    const previousPrimary = root.style.getPropertyValue('--main-primary');
-    const previousSecondary = root.style.getPropertyValue('--main-secondary');
-    const previousSearchBackground = root.style.getPropertyValue(
-      '--main-search-background'
-    );
-    const previousSidebarBackground = root.style.getPropertyValue(
-      '--main-sidebar-background'
-    );
-
-    if (theme === 'dark') root.classList.add('dark');
-    else root.classList.remove('dark');
-
-    root.style.setProperty('--main-background', `var(--${theme}-background)`);
-    root.style.setProperty('--main-primary', `var(--${theme}-primary)`);
-    root.style.setProperty('--main-secondary', `var(--${theme}-secondary)`);
-    root.style.setProperty(
-      '--main-search-background',
-      `var(--${theme}-search-background)`
-    );
-    root.style.setProperty(
-      '--main-sidebar-background',
-      `var(--${theme}-sidebar-background)`
-    );
-
-    return () => {
-      root.className = previousClassName;
-      root.style.setProperty('--main-background', previousBackground);
-      root.style.setProperty('--main-primary', previousPrimary);
-      root.style.setProperty('--main-secondary', previousSecondary);
-      root.style.setProperty(
-        '--main-search-background',
-        previousSearchBackground
-      );
-      root.style.setProperty(
-        '--main-sidebar-background',
-        previousSidebarBackground
-      );
-    };
-  }, [theme]);
-
-  return <>{children}</>;
-}
 
 function LoggedOutSearch(): JSX.Element {
   const [value, setValue] = useState('');
@@ -101,16 +40,16 @@ function LoggedOutSearch(): JSX.Element {
       onSubmit={handleSubmit}
     >
       <label
-        className='flex h-full items-center gap-4 rounded-full bg-[#e6ecf0] px-5 text-[#657786]
-                   focus-within:bg-white focus-within:ring-1 focus-within:ring-main-accent'
+        className='flex h-full items-center gap-4 rounded-full bg-main-search-background px-5 text-main-secondary
+                   focus-within:bg-main-background focus-within:ring-1 focus-within:ring-main-accent'
       >
         <HeroIcon
           className='h-[22px] w-[22px]'
           iconName='MagnifyingGlassIcon'
         />
         <input
-          className='min-w-0 flex-1 bg-transparent text-[17px] leading-6 text-[#14171a] outline-none
-                     placeholder:text-[#657786]'
+          className='min-w-0 flex-1 bg-transparent text-[17px] leading-6 text-main-primary outline-none
+                     placeholder:text-main-secondary'
           type='text'
           value={value}
           placeholder='Search Not Twitter'
@@ -123,7 +62,7 @@ function LoggedOutSearch(): JSX.Element {
 
 function LoggedOutTopBar(): JSX.Element {
   return (
-    <header className='border-b border-[#ccd6dd] bg-white'>
+    <header className='border-b border-light-border bg-main-background dark:border-dark-border'>
       <nav className='mx-auto flex h-14 w-full max-w-[1280px] items-center px-6'>
         <Link
           href='/'
@@ -164,12 +103,12 @@ function LoggedOutTopBar(): JSX.Element {
 
 function LoggedOutProfileSidebar(): JSX.Element {
   return (
-    <header className='hidden w-20 shrink-0 justify-end md:flex lg:w-24 xl:w-[330px]'>
+    <header className='hidden w-20 shrink-0 justify-end md:flex lg:w-24 xl:w-[275px]'>
       <div className='sticky top-0 flex h-screen w-20 flex-col px-3 py-3 xl:w-[275px]'>
         <Link
           href='/'
           className='main-tab mb-4 flex h-[50px] w-[50px] items-center justify-center rounded-full
-                     text-twitter-icon transition hover:bg-dark-primary/10'
+                     text-main-accent transition hover:bg-main-primary/10'
           aria-label='Not Twitter'
         >
           <CustomIcon className='h-[30px] w-[30px]' iconName='TwitterIcon' />
@@ -178,7 +117,7 @@ function LoggedOutProfileSidebar(): JSX.Element {
           <Link
             href='/explore'
             className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
-                       text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
+                       text-main-primary transition hover:bg-main-primary/10 xl:w-fit xl:pr-6'
           >
             <HeroIcon className='h-[27px] w-[27px]' iconName='HashtagIcon' />
             <span className='hidden xl:block'>Explore</span>
@@ -186,7 +125,7 @@ function LoggedOutProfileSidebar(): JSX.Element {
           <Link
             href='/settings'
             className='main-tab flex min-h-[50px] items-center gap-5 rounded-full px-3 text-xl
-                       text-dark-primary transition hover:bg-dark-primary/10 xl:w-fit xl:pr-6'
+                       text-main-primary transition hover:bg-main-primary/10 xl:w-fit xl:pr-6'
           >
             <HeroIcon className='h-[27px] w-[27px]' iconName='Cog6ToothIcon' />
             <span className='hidden xl:block'>Settings</span>
@@ -216,13 +155,13 @@ function LoggedOutRailSearch(): JSX.Element {
   return (
     <form className='mb-[73px] h-11' role='search' onSubmit={handleSubmit}>
       <label
-        className='flex h-full items-center gap-4 rounded-full bg-[#202327] px-4 text-dark-secondary
-                   focus-within:bg-black focus-within:ring-1 focus-within:ring-main-accent'
+        className='flex h-full items-center gap-4 rounded-full bg-main-search-background px-4 text-main-secondary
+                   focus-within:bg-main-background focus-within:ring-1 focus-within:ring-main-accent'
       >
         <HeroIcon className='h-5 w-5' iconName='MagnifyingGlassIcon' />
         <input
-          className='min-w-0 flex-1 bg-transparent text-[15px] leading-5 text-dark-primary outline-none
-                     placeholder:text-dark-secondary'
+          className='min-w-0 flex-1 bg-transparent text-[15px] leading-5 text-main-primary outline-none
+                     placeholder:text-main-secondary'
           type='text'
           value={value}
           placeholder='Search Not Twitter'
@@ -237,15 +176,15 @@ function LoggedOutSignupCard({
   openSignInModal
 }: LoggedOutAuthActionProps): JSX.Element {
   return (
-    <section className='mb-3 rounded-2xl border border-dark-border bg-black px-4 py-3'>
+    <section className='mb-3 rounded-2xl border border-light-line-reply dark:border-dark-border bg-main-background px-4 py-3'>
       <h2 className='text-xl font-extrabold leading-6'>New to Not Twitter?</h2>
-      <p className='mt-1 text-[13px] leading-4 text-dark-secondary'>
+      <p className='mt-1 text-[13px] leading-4 text-main-secondary'>
         Create your account on Bluesky, then come back here and sign in.
       </p>
       <div className='mt-4 flex flex-col gap-3'>
         <a
-          className='main-tab flex min-h-[38px] items-center justify-center rounded-full bg-white px-4
-                     text-center text-[15px] font-bold text-light-primary transition hover:bg-[#e6e6e6]'
+          className='main-tab flex min-h-[38px] items-center justify-center rounded-full bg-main-primary px-4
+                     text-center text-[15px] font-bold text-main-background transition hover:opacity-90'
           href='https://bsky.app/'
           target='_blank'
           rel='noreferrer'
@@ -253,14 +192,14 @@ function LoggedOutSignupCard({
           Create account
         </a>
         <Button
-          className='min-h-[38px] rounded-full border border-dark-border bg-black px-4 py-2 text-[15px]
-                     font-bold text-dark-primary transition hover:bg-dark-primary/10'
+          className='min-h-[38px] rounded-full border border-light-line-reply dark:border-dark-border bg-main-background px-4 py-2 text-[15px]
+                     font-bold text-main-primary transition hover:bg-main-primary/10'
           onClick={openSignInModal}
         >
           Sign in with Bluesky
         </Button>
       </div>
-      <p className='mt-3 text-[13px] leading-4 text-dark-secondary'>
+      <p className='mt-3 text-[13px] leading-4 text-main-secondary'>
         By signing in, you agree to the{' '}
         <Link href='/privacy' className='custom-underline text-main-accent'>
           Privacy Policy
@@ -279,7 +218,7 @@ function LoggedOutWhatsHappening(): JSX.Element {
   const { trends } = data ?? {};
 
   return (
-    <section className='mb-4 overflow-hidden rounded-2xl bg-[#16181c]'>
+    <section className='mb-4 overflow-hidden rounded-2xl bg-main-sidebar-background'>
       <h2 className='px-4 py-3 text-xl font-extrabold leading-6'>
         What&apos;s happening
       </h2>
@@ -301,9 +240,9 @@ function LoggedOutWhatsHappening(): JSX.Element {
               <Link
                 href={url}
                 key={`${kind}-${rank}-${query}`}
-                className='hover-animation flex flex-col gap-0.5 px-4 py-3 hover:bg-white/[0.03]'
+                className='hover-animation flex flex-col gap-0.5 px-4 py-3 hover:bg-main-primary/[0.03]'
               >
-                <p className='text-[13px] leading-4 text-dark-secondary'>
+                <p className='text-[13px] leading-4 text-main-secondary'>
                   {kind === 'topic'
                     ? category
                       ? `${category} · Trending`
@@ -315,7 +254,7 @@ function LoggedOutWhatsHappening(): JSX.Element {
                 </p>
                 {description && (
                   <p
-                    className='overflow-hidden text-[13px] leading-4 text-dark-secondary [display:-webkit-box]
+                    className='overflow-hidden text-[13px] leading-4 text-main-secondary [display:-webkit-box]
                                [-webkit-box-orient:vertical] [-webkit-line-clamp:2]'
                   >
                     {description}
@@ -326,13 +265,13 @@ function LoggedOutWhatsHappening(): JSX.Element {
           )}
           <Link
             href='/explore'
-            className='hover-animation block px-4 py-4 text-[15px] leading-5 text-main-accent hover:bg-white/[0.03]'
+            className='hover-animation block px-4 py-4 text-[15px] leading-5 text-main-accent hover:bg-main-primary/[0.03]'
           >
             Show more
           </Link>
         </>
       ) : (
-        <p className='px-4 pb-4 text-[15px] leading-5 text-dark-secondary'>
+        <p className='px-4 pb-4 text-[15px] leading-5 text-main-secondary'>
           Something went wrong. Try reloading.
         </p>
       )}
@@ -342,7 +281,7 @@ function LoggedOutWhatsHappening(): JSX.Element {
 
 function LoggedOutPublicFooter(): JSX.Element {
   return (
-    <footer className='px-4 text-[13px] leading-4 text-dark-secondary'>
+    <footer className='px-4 text-[13px] leading-4 text-main-secondary'>
       <nav className='flex flex-wrap gap-x-3 gap-y-1'>
         <Link href='/privacy' className='custom-underline'>
           Privacy Policy
@@ -376,7 +315,7 @@ function LoggedOutRightRail({
   openSignInModal
 }: LoggedOutAuthActionProps): JSX.Element {
   return (
-    <aside className='sticky top-0 hidden h-screen w-[350px] shrink-0 overflow-y-auto px-7 pb-[92px] pt-1 lg:block'>
+    <aside className='sticky top-0 hidden h-screen w-[380px] shrink-0 overflow-y-auto px-[15px] pb-[92px] pt-1 lg:block'>
       <LoggedOutRailSearch />
       <LoggedOutSignupCard openSignInModal={openSignInModal} />
       <LoggedOutWhatsHappening />
@@ -435,17 +374,17 @@ export function LoggedOutProfileLayout({
   } = useModal();
 
   return (
-    <LoggedOutThemeBoundary theme='dark'>
-      <div className='min-h-screen bg-main-background font-twitter-chirp text-dark-primary'>
-        <BlueskySignInModal open={signInOpen} closeModal={closeSignInModal} />
-        <div className='mx-auto flex w-full max-w-[1265px] justify-center'>
-          <LoggedOutProfileSidebar />
-          <div className='w-full min-w-0 max-w-xl pb-24'>{children}</div>
-          <LoggedOutRightRail openSignInModal={openSignInModal} />
+    <div className='min-h-screen bg-main-background font-twitter-chirp text-main-primary'>
+      <BlueskySignInModal open={signInOpen} closeModal={closeSignInModal} />
+      <div className='mx-auto flex w-full max-w-[1265px] justify-center'>
+        <LoggedOutProfileSidebar />
+        <div className='w-full min-w-0 max-w-[600px] pb-40 sm:pb-24'>
+          {children}
         </div>
-        <LoggedOutBottomBanner openSignInModal={openSignInModal} />
+        <LoggedOutRightRail openSignInModal={openSignInModal} />
       </div>
-    </LoggedOutThemeBoundary>
+      <LoggedOutBottomBanner openSignInModal={openSignInModal} />
+    </div>
   );
 }
 
@@ -453,11 +392,9 @@ export function LoggedOutTwitterLayout({
   children
 }: LoggedOutTwitterLayoutProps): JSX.Element {
   return (
-    <LoggedOutThemeBoundary>
-      <div className='min-h-screen bg-white font-twitter-chirp text-[#14171a]'>
-        <LoggedOutTopBar />
-        {children}
-      </div>
-    </LoggedOutThemeBoundary>
+    <div className='min-h-screen bg-main-background font-twitter-chirp text-main-primary'>
+      <LoggedOutTopBar />
+      {children}
+    </div>
   );
 }

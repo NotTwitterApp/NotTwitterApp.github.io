@@ -556,7 +556,7 @@ export default function TweetId(): JSX.Element {
               ))}
               {hasMoreThreadReplies && (
                 <div
-                  className='grid grid-cols-[auto,1fr] gap-x-3 border-b border-light-border
+                  className='grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 border-b border-light-border
                              px-4 py-3 dark:border-dark-border'
                   key='show-more-thread-replies'
                 >

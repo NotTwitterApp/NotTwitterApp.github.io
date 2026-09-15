@@ -41,8 +41,7 @@ export function Sidebar(): JSX.Element {
         'flex shrink-0 transition-opacity duration-200',
         isMobile
           ? 'w-0'
-          : `w-20 md:w-24 lg:max-w-none xl:-mr-4 xl:w-72
-             xl:max-w-[288px] xl:justify-end`
+          : 'w-20 md:w-24 xl:w-[275px] xl:justify-end'
       )}
     >
       <Modal
@@ -61,7 +60,7 @@ export function Sidebar(): JSX.Element {
           isMobile && 'left-0',
           !isMobile &&
             `top-0 h-full w-auto border-0 bg-transparent px-2 py-3 pt-2
-             md:px-4 xl:w-72`
+             md:px-4 xl:w-[275px]`
         )}
       >
         <section

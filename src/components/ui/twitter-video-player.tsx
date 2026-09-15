@@ -743,7 +743,7 @@ export function TwitterVideoPlayer({
       </video>
       <span
         className={cn(
-          `pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10
+          `pointer-events-none absolute inset-0 bg-linear-to-t from-black/70 via-black/10
            to-black/10 opacity-0 transition-opacity duration-200`,
           (!playing || settingsOpen) && 'opacity-100',
           'group-focus-within/video:opacity-100 group-hover/video:opacity-100'

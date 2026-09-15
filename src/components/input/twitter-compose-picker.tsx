@@ -8,6 +8,8 @@ import {
   useState,
   type JSX
 } from 'react';
+import { Dialog } from '@headlessui/react';
+import { Modal } from '@components/modal/modal';
 import { createPortal } from 'react-dom';
 import cn from 'clsx';
 import { getTwemojiSvgUrl } from '@lib/twemoji';
@@ -22,6 +24,7 @@ export type GifSelection = {
   title: string;
   src: string;
   preview: string;
+  previewVideo?: string;
   aspectRatio?: {
     width: number;
     height: number;
@@ -459,11 +462,73 @@ function mapKlipyGif(gif: KlipyGif): GifSelection | null {
     id: gif.id,
     title: gif.content_description?.trim() || gif.title?.trim() || 'GIF',
     src: gifMedia.url,
-    preview: previewMedia.url || gifMedia.preview || gifMedia.url,
+    preview:
+      previewMedia.preview ||
+      gifMedia.preview ||
+      previewMedia.url ||
+      gifMedia.url,
+    previewVideo:
+      gif.media_formats?.tinymp4?.url ?? gif.media_formats?.mp4?.url,
     aspectRatio: dimensions
       ? { width: dimensions[0], height: dimensions[1] }
       : null
   };
+}
+
+function GifPickerPreview({
+  gif,
+  autoplay
+}: {
+  gif: GifSelection;
+  autoplay: boolean;
+}): JSX.Element {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const freezeFrame = (): void => {
+    const image = imageRef.current;
+    const canvas = canvasRef.current;
+    if (!image?.naturalWidth || !canvas) return;
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    canvas.getContext('2d')?.drawImage(image, 0, 0);
+  };
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      if (autoplay) void video.play().catch(() => undefined);
+      else video.pause();
+    } else if (!autoplay) freezeFrame();
+  }, [autoplay]);
+  return gif.previewVideo ? (
+    <video
+      ref={videoRef}
+      className='h-full w-full object-cover'
+      src={gif.previewVideo}
+      autoPlay={autoplay}
+      loop
+      muted
+      playsInline
+      aria-label={gif.title}
+    />
+  ) : (
+    <>
+      <img
+        ref={imageRef}
+        className={cn('h-full w-full object-cover', !autoplay && 'hidden')}
+        src={gif.src}
+        alt={gif.title}
+        draggable={false}
+        onLoad={freezeFrame}
+      />
+      <canvas
+        ref={canvasRef}
+        className={cn('h-full w-full object-cover', autoplay && 'hidden')}
+        role='img'
+        aria-label={gif.title}
+      />
+    </>
+  );
 }
 
 function GifPicker({
@@ -480,6 +545,7 @@ function GifPicker({
   );
   const [results, setResults] = useState<GifSelection[]>([]);
   const [loading, setLoading] = useState(false);
+  const [autoplay, setAutoplay] = useState(true);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchQuery = searchValue.trim();
   const handleSearchChange = ({
@@ -582,7 +648,7 @@ function GifPicker({
 
   return (
     <>
-      <div className='flex h-10 items-center gap-2 bg-main-background px-2'>
+      <div className='flex h-[53px] shrink-0 items-center gap-4 bg-main-background px-4'>
         <Button
           className='accent-tab flex h-8 w-8 shrink-0 items-center justify-center rounded-full p-0 text-main-accent
                      hover:bg-main-accent/10 active:bg-main-accent/20'
@@ -596,7 +662,7 @@ function GifPicker({
           />
         </Button>
         <label
-          className='flex h-8 min-w-0 flex-1 items-center gap-2 rounded-full border border-main-accent
+          className='flex h-[38px] min-w-0 flex-1 items-center gap-2 rounded-full border border-main-accent
                      bg-main-background px-3 text-[14px] leading-none text-light-secondary
                      dark:text-dark-secondary'
         >
@@ -627,22 +693,31 @@ function GifPicker({
         </label>
       </div>
       {searchQuery && (
-        <div className='flex h-[30px] items-center justify-between bg-main-background px-2 text-[14px] text-light-secondary dark:text-dark-secondary'>
+        <div className='flex h-[30px] shrink-0 items-center justify-between bg-main-background px-2 text-[14px] text-light-secondary dark:text-dark-secondary'>
           <span>Autoplay GIFs</span>
-          <span
-            className='relative h-4 w-8 rounded-full bg-main-accent'
-            aria-hidden='true'
+          <button
+            type='button'
+            role='switch'
+            aria-checked={autoplay}
+            aria-label='Autoplay GIFs'
+            className={cn(
+              'relative h-4 w-8 rounded-full',
+              autoplay
+                ? 'bg-main-accent'
+                : 'bg-light-secondary dark:bg-dark-secondary'
+            )}
+            onClick={() => setAutoplay((value) => !value)}
           >
-            <span className='absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white' />
-          </span>
+            <span
+              className={cn(
+                'absolute top-0.5 h-3 w-3 rounded-full bg-white transition-transform',
+                autoplay ? 'left-[18px]' : 'left-0.5'
+              )}
+            />
+          </button>
         </div>
       )}
-      <div
-        className={cn(
-          'overflow-y-auto overscroll-contain bg-main-background',
-          searchQuery ? 'h-[488px]' : 'h-[520px]'
-        )}
-      >
+      <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain bg-main-background'>
         {!searchQuery ? (
           <div className='grid grid-cols-2 gap-0.5'>
             {categoryTiles.map((category, index) => {
@@ -669,19 +744,19 @@ function GifPicker({
                       className={cn(
                         'absolute inset-0',
                         index % 5 === 0 &&
-                          'bg-gradient-to-br from-accent-blue to-accent-purple',
+                          'bg-linear-to-br from-accent-blue to-accent-purple',
                         index % 5 === 1 &&
-                          'bg-gradient-to-br from-accent-orange to-accent-pink',
+                          'bg-linear-to-br from-accent-orange to-accent-pink',
                         index % 5 === 2 &&
-                          'bg-gradient-to-br from-accent-green to-accent-blue',
+                          'bg-linear-to-br from-accent-green to-accent-blue',
                         index % 5 === 3 &&
-                          'bg-gradient-to-br from-accent-purple to-accent-pink',
+                          'bg-linear-to-br from-accent-purple to-accent-pink',
                         index % 5 === 4 &&
-                          'bg-gradient-to-br from-accent-yellow to-accent-orange'
+                          'bg-linear-to-br from-accent-yellow to-accent-orange'
                       )}
                     />
                   )}
-                  <span className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent' />
+                  <span className='absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent' />
                   <span className='relative z-10 drop-shadow'>
                     {category.label}
                   </span>
@@ -710,12 +785,7 @@ function GifPicker({
                   key={gif.id}
                   style={{ aspectRatio: `${width} / ${height}` }}
                 >
-                  <img
-                    className='h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-95'
-                    src={gif.src}
-                    alt={gif.title}
-                    draggable={false}
-                  />
+                  <GifPickerPreview gif={gif} autoplay={autoplay} />
                 </button>
               );
             })}
@@ -1048,23 +1118,16 @@ export function TwitterComposePicker({
   if (!mounted) return <></>;
 
   if (isGifPicker)
-    return createPortal(
-      <div
-        className='fixed inset-0 z-[70] bg-black/40 dark:bg-[#5B7083]/40'
-        onClick={onClose}
+    return (
+      <Modal
+        open
+        closeModal={onClose}
+        className='!p-0 flex items-center justify-center sm:!p-4'
+        modalClassName='flex h-dvh w-full flex-col overflow-hidden bg-main-background text-main-primary sm:h-[min(650px,90dvh)] sm:max-w-[600px] sm:rounded-2xl'
       >
-        <div
-          className='fixed left-1/2 top-6 z-[80] w-[500px] max-w-[calc(100vw-24px)]
-                     -translate-x-1/2 overflow-hidden rounded-[6px] bg-main-background text-light-primary
-                     dark:text-dark-primary'
-          role='dialog'
-          aria-label='Choose a GIF'
-          onClick={(event): void => event.stopPropagation()}
-        >
-          <GifPicker onClose={onClose} onSelectGif={onSelectGif} />
-        </div>
-      </div>,
-      document.body
+        <Dialog.Title className='sr-only'>Choose a GIF</Dialog.Title>
+        <GifPicker onClose={onClose} onSelectGif={onSelectGif} />
+      </Modal>
     );
 
   return createPortal(
@@ -1076,7 +1139,7 @@ export function TwitterComposePicker({
       role='dialog'
       aria-label='Add an emoji'
     >
-      <div className='grid h-[53px] grid-cols-[40px,1fr,40px] items-center px-2'>
+      <div className='grid h-[53px] grid-cols-[40px_minmax(0,1fr)_40px] items-center px-2'>
         <Button
           className='accent-tab accent-bg-tab rounded-full p-2 text-light-primary
                      hover:bg-light-primary/10 active:bg-light-primary/20

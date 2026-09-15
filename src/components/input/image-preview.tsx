@@ -59,9 +59,7 @@ function clampNumber(value: number, min: number, max: number): number {
 }
 
 function isVideoMedia({ src, type }: ImageData): boolean {
-  return (
-    !!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src)
-  );
+  return (!!type?.includes('video') || /\.(m3u8|mp4|mov|m4v|webm)($|\?)/i.test(src));
 }
 
 function getSingleGifStyle(
@@ -444,7 +442,7 @@ export function ImagePreview({
                 <>
                   <Button
                     className='visible absolute top-0 right-0 z-10 -translate-x-1 translate-y-1 
-                               bg-light-primary/75 p-1 opacity-0 backdrop-blur-sm transition
+                               bg-light-primary/75 p-1 opacity-0 backdrop-blur-xs transition
                                hover:bg-image-preview-hover/75 group-hover:opacity-100 xs:invisible'
                     onClick={preventBubbling(handleSelectedImage(index))}
                   >
@@ -470,7 +468,7 @@ export function ImagePreview({
                   previewCount={
                     shouldCropImage ? undefined : visiblePreviewCount
                   }
-                  layout='fill'
+                  fill
                   src={src}
                   alt={mediaAltText || alt}
                   useSkeleton={isTweet}
@@ -481,7 +479,7 @@ export function ImagePreview({
                   className={cn(
                     `absolute bottom-0 left-0 z-10 m-2 rounded-md bg-black/70 px-2
                      py-0.5 text-[13px] font-extrabold leading-4 text-white
-                     backdrop-blur-sm transition hover:bg-black/80 focus-visible:ring-2
+                     backdrop-blur-xs transition hover:bg-black/80 focus-visible:ring-2
                      focus-visible:ring-white/70 active:bg-black/90`,
                     !mediaAltText && 'bg-black/55 text-white/90'
                   )}
@@ -501,7 +499,7 @@ export function ImagePreview({
                 <Button
                   className={cn(
                     `group absolute top-0 left-0 translate-x-1 translate-y-1
-                     bg-light-primary/75 p-1 backdrop-blur-sm hover:bg-image-preview-hover/75`,
+                     bg-light-primary/75 p-1 backdrop-blur-xs hover:bg-image-preview-hover/75`,
                     draftSingleGif &&
                       `active:bg-black/85 translate-x-2 translate-y-2 bg-black/60 text-white
                        hover:bg-black/75`

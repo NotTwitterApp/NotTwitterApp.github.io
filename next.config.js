@@ -10,6 +10,7 @@ const basePath = getBasePath();
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  ...(process.env.NEXT_STATIC_EXPORT === 'true' ? { output: 'export' } : {}),
   reactStrictMode: true,
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   trailingSlash: true,

@@ -266,10 +266,7 @@ function formatProvidedCategory(value: string): string | null {
 
   if (!normalizedCategory) return null;
 
-  return (
-    CATEGORY_DISPLAY_NAMES[normalizedCategory] ??
-    normalizedCategory.replace(/\b\w/g, (letter) => letter.toUpperCase())
-  );
+  return (CATEGORY_DISPLAY_NAMES[normalizedCategory] ?? normalizedCategory.replace(/\b\w/g, (letter) => letter.toUpperCase()));
 }
 
 function getProvidedTrendCategory(topic: TrendTopicForCategory): string | null {

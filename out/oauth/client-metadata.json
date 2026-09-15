@@ -1,9 +1,9 @@
 {
-  "client_id": "https://erickrouss.github.io/not-twitter/oauth/client-metadata.json",
+  "client_id": "https://nottwitterapp.github.io/oauth/client-metadata.json",
   "client_name": "Not Twitter",
-  "client_uri": "https://erickrouss.github.io/not-twitter",
+  "client_uri": "https://nottwitterapp.github.io",
   "redirect_uris": [
-    "https://erickrouss.github.io/not-twitter/"
+    "https://nottwitterapp.github.io/"
   ],
   "scope": "atproto transition:generic transition:chat.bsky account:email?action=manage identity:handle",
   "grant_types": [

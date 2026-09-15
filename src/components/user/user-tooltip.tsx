@@ -97,7 +97,7 @@ export function UserTooltip({
                     imgClassName='rounded-t-2xl'
                     src={coverPhotoURL}
                     alt={name}
-                    layout='fill'
+                    fill
                   />
                 </Link>
               ) : (

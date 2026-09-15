@@ -35,7 +35,7 @@ export function UserName({
          align-bottom font-bold leading-[inherit]`,
         username
           ? disableUnderline
-            ? `outline-none focus-visible:rounded-sm focus-visible:ring-2
+            ? `outline-none focus-visible:rounded-xs focus-visible:ring-2
                focus-visible:ring-main-accent/80`
             : 'custom-underline'
           : 'pointer-events-none',
@@ -52,7 +52,7 @@ export function UserName({
       {verified && (
         <i className='inline-flex shrink-0 items-center leading-none'>
           <CustomIcon
-            className={iconClassName ?? 'h-5 w-5'}
+            className={iconClassName ?? 'h-4 w-4'}
             iconName='TwitterVerifiedIcon'
           />
         </i>
