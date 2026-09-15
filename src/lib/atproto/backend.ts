@@ -4997,6 +4997,24 @@ function getExternalSourceCardData(
   };
 }
 
+export async function getStandardSiteLinkCard(
+  url: string,
+  uris: string[]
+): Promise<TweetCard | null> {
+  const response =
+    await callPublicFallbackAppQueryXrpc<AppBskyEmbedGetEmbedExternalView.OutputSchema>(
+      'app.bsky.embed.getEmbedExternalView',
+      { url, uris }
+    );
+  if (!response.view) return null;
+  return {
+    ...mapExternalCard(response.view),
+    associatedRefs: getCardAssociatedRefs(
+      response.associatedRefs ?? response.view.external.associatedRefs
+    )
+  };
+}
+
 function mapExternalCard(embed: AppBskyEmbedExternal.View): TweetCard {
   const { external } = embed;
   const youtubeInfo = getYouTubeVideoInfo(external.uri);

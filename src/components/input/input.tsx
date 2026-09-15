@@ -1,3 +1,5 @@
+import { resolveSubmissionLinkCard } from '@lib/link-card';
+import { useLinkCard } from '@lib/hooks/use-link-card';
 import {
   useLinkedTweet,
   toEmbeddedTweet as getQuotedTweetPreview
@@ -524,9 +526,15 @@ export function Input({
 
   const previewCount = imagesPreview.length;
   const isUploadingImages = !!previewCount;
+  const { card: articleCard, isLoading: articleCardLoading } = useLinkCard(
+    inputValue,
+    !isUploadingImages && !activeQuoteTweet && !selectedGifCard && !youtubeCard
+  );
   const activeExternalCard =
     selectedGifCard ??
-    (!isUploadingImages && !activeQuoteTweet ? youtubeCard : null);
+    (!isUploadingImages && !activeQuoteTweet
+      ? (youtubeCard ?? articleCard)
+      : null);
 
   const refreshAvailableDrafts = useCallback((): void => {
     setAvailableDrafts(getTweetDraftsForUser(userId, draftScope.type));
@@ -649,13 +657,20 @@ export function Input({
             )
           : []) ?? [];
 
+    // A fast Send must wait for the same metadata request as the preview.
+    const externalCard = await resolveSubmissionLinkCard({
+      text: snapshot.text,
+      card: snapshot.externalCard,
+      hasMedia: !!uploadedImages.length,
+      hasQuote: !!snapshot.quoteTweet
+    });
     const tweetData: WithFieldValue<TweetDraft> = {
       text: snapshot.text || null,
       langs: [],
       parent: snapshot.isReplying && snapshot.parent ? snapshot.parent : null,
       images: uploadedImages,
       mediaWarning: null,
-      card: snapshot.externalCard,
+      card: externalCard,
       quotedTweet,
       userLikes: [],
       createdBy: userId,
@@ -1263,14 +1278,25 @@ export function Input({
                 updateAltText={!loading ? updateImageAltText : undefined}
               />
             )}
-            {youtubeCard &&
+            {(youtubeCard || articleCard) &&
               !activeQuoteTweet &&
               !selectedGifCard &&
               !isUploadingImages && (
                 <div className='min-w-0 max-w-full overflow-hidden'>
-                  <TweetEmbed card={youtubeCard} quotedTweet={null} />
+                  <TweetEmbed
+                    card={youtubeCard ?? articleCard}
+                    quotedTweet={null}
+                  />
                 </div>
               )}
+            {articleCardLoading && (
+              <p
+                role='status'
+                className='text-sm text-light-secondary dark:text-dark-secondary'
+              >
+                Loading link preview…
+              </p>
+            )}
             {quotedTweetPreview && (
               <div className='min-w-0 max-w-full overflow-hidden'>
                 <TweetEmbed

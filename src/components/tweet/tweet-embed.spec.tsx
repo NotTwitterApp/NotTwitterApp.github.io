@@ -1,3 +1,4 @@
+import { getLinkCard } from '@lib/link-card';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { SWRConfig } from 'swr';
 import { getTweet, getUser } from '@lib/atproto/backend';
@@ -5,6 +6,10 @@ import { Timestamp } from '@lib/atproto/timestamp';
 import { TweetEmbed } from './tweet-embed';
 import type { EmbeddedTweet, TweetCard } from '@lib/types/tweet';
 
+jest.mock('@lib/link-card', () => ({
+  ...jest.requireActual('@lib/link-card'),
+  getLinkCard: jest.fn()
+}));
 jest.mock('@lib/atproto/identity', () => ({
   formatAtprotoDisplayIdentifier: (value: string) => `@${value}`
 }));
@@ -192,4 +197,41 @@ it('preserves an attached article card when the text also contains a Bluesky lin
   );
   expect(screen.getByRole('link', { name: 'Article' })).toBeTruthy();
   expect(getUser).not.toHaveBeenCalled();
+});
+
+it('recovers a Standard.site article from an older URL-only Tweet', async () => {
+  jest
+    .mocked(getLinkCard)
+    .mockResolvedValueOnce({
+      ...card,
+      title: 'Welcome',
+      associatedRefs: [
+        {
+          uri: 'at://did:plc:author/site.standard.document/3abc',
+          cid: 'document-cid'
+        }
+      ]
+    });
+  show(
+    <TweetEmbed
+      text='My new blog https://example.com/welcome'
+      card={null}
+      quotedTweet={null}
+    />
+  );
+  expect(await screen.findByRole('link', { name: 'Welcome' })).toBeTruthy();
+});
+it('does not invent an attachment for an ordinary URL-only published Tweet', async () => {
+  jest.mocked(getLinkCard).mockResolvedValueOnce(card);
+  const { container } = show(
+    <TweetEmbed
+      text='https://example.com/plain-link'
+      card={null}
+      quotedTweet={null}
+    />
+  );
+  await waitFor(() =>
+    expect(getLinkCard).toHaveBeenCalledWith('https://example.com/plain-link')
+  );
+  expect(container.querySelector('[role="link"]')).toBeNull();
 });

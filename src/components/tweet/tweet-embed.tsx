@@ -1,3 +1,4 @@
+import { useLinkCard } from '@lib/hooks/use-link-card';
 /* eslint-disable @next/next/no-img-element */
 
 import { isStandardSiteArticleCard as isStandardSiteCard } from '@lib/standard-site';
@@ -2120,7 +2121,17 @@ export function TweetEmbed({
   const linkedTweet = useLinkedTweet(linkedPost);
   const visibleQuote =
     quotedTweet ?? (linkedTweet ? toEmbeddedTweet(linkedTweet) : null);
-  const visibleCard = !hasMedia && !contextOnly && !visibleQuote ? card : null;
+  const { card: recoveredArticleCard } = useLinkCard(
+    text,
+    !card && !hasMedia && !contextOnly && !quotedTweet && !linkedPost
+  );
+  // Recover recognized articles on older URL-only posts, while respecting
+  // explicitly attached media/cards and ordinary links with no embed.
+  const articleCard = isStandardSiteCard(recoveredArticleCard)
+    ? recoveredArticleCard
+    : null;
+  const visibleCard =
+    !hasMedia && !contextOnly && !visibleQuote ? (card ?? articleCard) : null;
 
   if (!visibleCard && !visibleQuote) return null;
 
