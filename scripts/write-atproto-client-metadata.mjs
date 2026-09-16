@@ -47,7 +47,11 @@ if (!siteUrl || configuredClientId) process.exit(0);
 
 const metadataUrl = `${siteUrl}/oauth/client-metadata.json`;
 const neoFreeBirdMetadataUrl = `${siteUrl}/oauth/neofreebird-client-metadata.json`;
-const neoFreeBirdRedirectUri = 'io.github.erickrouss:/not-twitter/oauth/neofreebird-callback';
+const neoFreeBirdRedirectScheme = new URL(neoFreeBirdMetadataUrl).hostname
+  .split('.')
+  .reverse()
+  .join('.');
+const neoFreeBirdRedirectUri = `${neoFreeBirdRedirectScheme}:/not-twitter/oauth/neofreebird-callback`;
 const metadata = {
   client_id: metadataUrl,
   client_name: 'Not Twitter',
@@ -74,8 +78,14 @@ const neoFreeBirdMetadata = {
 };
 const outDir = path.join(process.cwd(), 'public', 'oauth');
 const outFile = path.join(outDir, 'client-metadata.json');
-const neoFreeBirdOutFile = path.join(outDir, 'neofreebird-client-metadata.json');
+const neoFreeBirdOutFile = path.join(
+  outDir,
+  'neofreebird-client-metadata.json'
+);
 
 await mkdir(outDir, { recursive: true });
 await writeFile(outFile, `${JSON.stringify(metadata, null, 2)}\n`);
-await writeFile(neoFreeBirdOutFile, `${JSON.stringify(neoFreeBirdMetadata, null, 2)}\n`);
+await writeFile(
+  neoFreeBirdOutFile,
+  `${JSON.stringify(neoFreeBirdMetadata, null, 2)}\n`
+);

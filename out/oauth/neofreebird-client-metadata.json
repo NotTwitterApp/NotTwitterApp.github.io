@@ -3,7 +3,7 @@
   "client_name": "NeoFreeBird",
   "client_uri": "https://nottwitterapp.github.io",
   "redirect_uris": [
-    "io.github.erickrouss:/not-twitter/oauth/neofreebird-callback"
+    "io.github.nottwitterapp:/not-twitter/oauth/neofreebird-callback"
   ],
   "scope": "atproto transition:generic transition:chat.bsky account:email?action=manage identity:handle",
   "grant_types": [
